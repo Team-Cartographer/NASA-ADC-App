@@ -87,7 +87,7 @@ def write_rect_file(data_arr):
     print("\nCreated RectangularCoordinateData.csv")
     return rect_coord_path, min_x_, min_y_, min_z_
 
-
+# TODO Could be causing Streaking, take a look at it.
 def write_astar_file(min_x_, min_y_, min_z_, temp_array):
     adj_array = []
     for i in range(len(temp_array)):
