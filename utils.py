@@ -146,7 +146,7 @@ def resize(image_path : str, new_name : str, scale : float) -> str:
 
 
 # Get Start and End Points for AStar Pathfinding
-def get_user_input() -> tuple:
+def get_pathfinding_endpts() -> tuple:
     pygame.init()
     screen_size = [638.5, 638.5]
     screen = pygame.display.set_mode(screen_size)
