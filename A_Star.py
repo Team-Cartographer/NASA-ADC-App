@@ -3,7 +3,7 @@ import heapq
 from numpy import sqrt
 import csv
 from ast import literal_eval
-from utils import show_warning, get_user_input
+from utils import show_warning, get_pathfinding_endpts
 import FolderCreator as fc
 
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
     grid = full_list
 
-    (start_x, start_y), (goal_x, goal_y) = get_user_input()
+    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpts()
 
     final_path = astar(grid,
                        (start_x, start_y, get_height_and_slope(start_x, start_y, grid)[0], get_height_and_slope(start_x, start_y, grid)[1]),
