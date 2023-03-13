@@ -5,6 +5,7 @@ import csv
 from ast import literal_eval
 from utils import show_warning
 import FolderCreator as fc
+import A_Star_Interface as interface
 
 
 class Node:
@@ -103,6 +104,8 @@ if __name__ == "__main__":
         full_list = list(csv_reader)
 
     grid = full_list
+
+    (start_x, start_y), (goal_x, goal_y) = interface.get_user_input()
 
     final_path = astar(grid,
                        (971, 940, get_height_and_slope(971, 940, grid)[0], get_height_and_slope(971, 940, grid)[1]),

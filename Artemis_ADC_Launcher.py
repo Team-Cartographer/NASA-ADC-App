@@ -20,12 +20,12 @@ if not path.exists(venv_folder):
     run([sys.executable, '-m', 'pip', 'install', 'numpy'], check=True)
     print("Installed package: numpy")
     run([sys.executable, '-m', 'pip', 'install', 'ursina'], check=True)
-    print("Installed pacakge: ursina")
+    print("Installed package: ursina")
 
 
 code_path = getcwd()
 # Checks Existence before running App Setup.
-if not path.exists(code_path + "\Data\Images\AStar_Path.png"):
+if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     print('Running Setup')
 
     # runs PathFetcher.exe
@@ -62,6 +62,7 @@ if not path.exists(code_path + "\Data\Images\AStar_Path.png"):
 
 
 print("Running Display")
+# runs Display.py
 display_path = code_path + '/Display.py'
 display_program = run([sys.executable, display_path])
 print('Ended Program')
