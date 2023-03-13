@@ -7,7 +7,6 @@ from math import atan2, sin, cos, asin
 from ast import literal_eval
 
 
-
 def file2list(path):
     with open(path) as csv_file:
         new_list = list(csv.reader(csv_file, delimiter=','))

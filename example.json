@@ -1,0 +1,9 @@
+{
+  "LATITUDE_PATH": "value",
+  "LONGITUDE_PATH": "value",
+  "HEIGHT_PATH": "value",
+  "SLOPE_PATH": "value",
+
+  "DIST_BETWEEN_POINTS": 0,
+  "SIZE_CONSTANT": 0
+}

@@ -9,6 +9,7 @@ from dotenv import load_dotenv, set_key
 from utils import show_error, show_info
 from csv import reader
 
+
 # Setting up '.env' created by PathFetcher
 if not os.path.exists(os.getcwd() + '/.env'):
 
@@ -25,46 +26,56 @@ load_dotenv()
 
 
 # Getter Functions for '.env'
-def get_latitude_file_path():
+def get_latitude_file_path() -> str:
     return os.getenv('LATITUDE_FILE_PATH').replace("\\", "/")
 
-def get_longitude_file_path():
+
+def get_longitude_file_path() -> str:
     return os.getenv('LONGITUDE_FILE_PATH').replace("\\", "/")
 
-def get_height_file_path():
+
+def get_height_file_path() -> str:
     return os.getenv('HEIGHT_FILE_PATH').replace("\\", "/")
 
-def get_slope_file_path():
+
+def get_slope_file_path() -> str:
     return os.getenv('SLOPE_FILE_PATH').replace("\\", "/")
 
-def get_dist_between_points():
+
+def get_dist_between_points() -> int:
     return int(os.getenv('DISTANCE_BETWEEN_POINTS'))
 
-def get_size_constant():
+
+def get_size_constant() -> int:
     return int(os.getenv("SIZE_CONSTANT"))
 
-def get_max_z():
+
+def get_max_z() -> int:
     return int(os.getenv("MAX_Z"))
 
-def get_min_z():
+
+def get_min_z() -> int:
     return int(os.getenv('MIN_Z'))
 
-def get_min_x():
+
+def get_min_x() -> int:
     return int(os.getenv('MIN_X'))
 
-def get_min_y():
+
+def get_min_y() -> int:
     return int(os.getenv('MIN_Y'))
 
-def get_lunar_rad():
+
+def get_lunar_rad() -> float:
     return float(os.getenv('LUNAR_RAD'))
 
 
-# Creates Data Folders and sets up Pathing for all Files
-parent_path = os.getcwd()
-data_path = os.path.join(parent_path, 'Data')
-images_path = os.path.join(data_path, 'Images')
-app_files_path = os.path.join(parent_path, 'App Files')
-archive_path = os.path.join(app_files_path, 'Archived Files')
+# IMPORTANT PATHING
+parent_path: str = os.getcwd()
+data_path: str = os.path.join(parent_path, 'Data')
+images_path: str = os.path.join(data_path, 'Images')
+app_files_path: str = os.path.join(parent_path, 'App Files')
+archive_path: str = os.path.join(app_files_path, 'Archived Files')
 
 # Creates directories and sets '.env' variables only if FolderCreator.py is running.
 # Otherwise, only helper methods are accessible.
