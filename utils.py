@@ -1,3 +1,4 @@
+from __future__ import annotations
 import csv
 import tkinter as tk
 from tkinter import messagebox
@@ -5,6 +6,9 @@ import os
 from numpy import rad2deg, deg2rad, sqrt
 from math import atan2, sin, cos, asin
 from ast import literal_eval
+from PIL import Image # of deez nuts (sorry)
+import pygame
+from pygame import gfxdraw
 
 
 def file2list(path):
@@ -123,4 +127,58 @@ def get_elevation(moon_lat, moon_long, moon_height):
     elev = asin(rz / range_)
 
     return rad2deg(elev)
+
+
+def resize(image_path : str, new_name : str, scale : float) -> str:
+    img = Image.open(f'{image_path}')
+    resized = img.resize((scale, scale)) # 1/(scale) Scaling
+
+    path = os.getcwd() + f'/Data/Images/{new_name}.png'
+    resized.save(path)
+    print(f"Created {new_name}.png")
+    return path
+
+
+# Get Start and End Points for AStar Pathfinding
+def get_user_input() -> tuple:
+    pygame.init()
+    screen_size = [638.5, 638.5]
+    screen = pygame.display.set_mode(screen_size)
+    pygame.display.set_caption("Pick Two Points. After that, Press SPACE to Confirm or LEFT_ALT to Reset")
+
+    done = False
+
+    start_pos: tuple | None = None
+    goal_pos: tuple | None = None
+
+    heightmap_img = pygame.image.load("Data/Images/interface_overlay.png")
+    screen.blit(heightmap_img, (0, 0))
+
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_pos is None:
+                    start_pos = pygame.mouse.get_pos()
+                    gfxdraw.filled_circle(screen, start_pos[0], start_pos[1], 4, (255, 0, 0))
+                    start_pos = (start_pos[0] * 2, start_pos[1] * 2)
+                elif goal_pos is None:
+                    goal_pos = pygame.mouse.get_pos()
+                    gfxdraw.filled_circle(screen, goal_pos[0], goal_pos[1], 4, (255, 0, 0))
+                    goal_pos = (goal_pos[0] * 2, goal_pos[1] * 2)
+
+            if start_pos and goal_pos:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        pygame.quit()
+                        return start_pos, goal_pos
+                    elif event.key == pygame.K_LALT:
+                        heightmap_img = pygame.image.load("Data/Images/interface_overlay.png")
+                        screen.blit(heightmap_img, (0, 0))
+                        start_pos, goal_pos = None, None
+
+
+        pygame.display.flip()
+
+
+
 

@@ -13,7 +13,7 @@ The program also downscales the final image to improve performance when used wit
 import FolderCreator as fc
 from ast import literal_eval
 from PIL import Image
-from utils import file2list
+from utils import file2list, resize
 
 astar_data_path = fc.data_path + "/AStarRawData.csv"
 full_list = file2list(astar_data_path)
@@ -99,19 +99,28 @@ if __name__ == "__main__":
     print("\nCreated heightkey_surface.png")
 
     # Image Scaling for Faster Ursina Runs
-    upscaled = Image.open(fc.images_path + '/RAW_heightmap.png')
-    downscaled = upscaled.resize((81, 81)) # 1/16th Scale
-    downscaled.save(fc.parent_path + '/processed_heightmap.png')
-    print("Created processed_heightmap.png")
+    downscaled = resize(
+        image_path=fc.images_path + '/RAW_heightmap.png', 
+        new_name='processed_heightmap', 
+        scale=81
+    )
 
-    map = Image.open('moon_surface_texture.png')
-    minimap = map.resize((127, 127)) # 1/100th Scale
-    minimap.save(fc.images_path + '/minimap.png')
-    print("Created minimap.png")
+    minimap = resize(
+        image_path='moon_surface_texture.png', 
+        new_name='minimap',
+        scale=127
+    )
+    
+    astar_texture = resize(
+        image_path='moon_surface_texture.png', 
+        new_name='AStar_Texture',
+        scale=1277
+    )
 
-    img = Image.open('moon_surface_texture.png')
-    img = img.resize((1277, 1277))
-    img.save(fc.images_path + '/AStar_Texture.png')
-
+    interface_map = resize(
+        image_path='moon_surface_texture.png',
+        new_name='interface_overlay',
+        scale=639
+    )
 
     print("Cartographer Success")

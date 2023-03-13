@@ -3,9 +3,8 @@ import heapq
 from numpy import sqrt
 import csv
 from ast import literal_eval
-from utils import show_warning
+from utils import show_warning, get_user_input
 import FolderCreator as fc
-import A_Star_Interface as interface
 
 
 class Node:
@@ -105,11 +104,11 @@ if __name__ == "__main__":
 
     grid = full_list
 
-    (start_x, start_y), (goal_x, goal_y) = interface.get_user_input()
+    (start_x, start_y), (goal_x, goal_y) = get_user_input()
 
     final_path = astar(grid,
-                       (971, 940, get_height_and_slope(971, 940, grid)[0], get_height_and_slope(971, 940, grid)[1]),
-                       (862, 1123, get_height_and_slope(862, 1123, grid)[0], get_height_and_slope(862, 1123, grid)[1]))
+                       (start_x, start_y, get_height_and_slope(start_x, start_y, grid)[0], get_height_and_slope(start_x, start_y, grid)[1]),
+                       (goal_x, goal_y, get_height_and_slope(goal_x, goal_y, grid)[0], get_height_and_slope(goal_x, goal_y, grid)[1]))
     #print("\nFinal Path: ", final_path)
 
     try:
