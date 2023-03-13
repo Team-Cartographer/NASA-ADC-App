@@ -16,6 +16,8 @@ def get_user_input() -> tuple:
     start_pos: tuple | None = None
     goal_pos: tuple | None = None
 
+    heightmap_img = pygame.image.load("moon_surface_texture.png")
+
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -31,6 +33,7 @@ def get_user_input() -> tuple:
                     print("something else happened")
                     pygame.quit()
 
+        screen.blit(heightmap_img, (0, 0))
         pygame.display.flip()
         clock.tick(60)
 
