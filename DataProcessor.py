@@ -6,6 +6,7 @@ longitude, and height to Cartesian coordinates. It then writes this data to a cs
 "RectangularCoordinateData.csv". Finally, the program sorts and formats the rectangular coordinate data in
 preparation for use in an A-star algorithm and writes it to a csv file named "AStarRawData.csv".
 """
+from __future__ import annotations
 
 from ast import literal_eval
 import csv
