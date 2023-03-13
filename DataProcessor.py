@@ -23,7 +23,7 @@ height_list: list = file2list(fc.get_height_file_path())
 slope_list: list = file2list(fc.get_slope_file_path())
 
 
-def generate_data_array() -> tuple[int, str]:
+def generate_data_array() -> tuple[int, str] | None:
     if not len(longitude_list) == len(latitude_list) == len(height_list) == len(slope_list):
         fc.show_error("ADC App Data Processing Failure", f'Data List Row Lengths are Inconsistent.')
         return
