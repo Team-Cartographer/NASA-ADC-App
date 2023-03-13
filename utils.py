@@ -3,8 +3,8 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 import os
-from numpy import rad2deg, deg2rad, sqrt
-from math import atan2, sin, cos, asin
+from numpy import rad2deg, deg2rad
+from math import atan2, sin, cos, asin, sqrt
 from ast import literal_eval
 from PIL import Image # of deez nuts (sorry)
 import pygame
