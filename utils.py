@@ -85,7 +85,13 @@ def get_azi_elev(x, y):
 
 
 def get_azimuth(moon_lat, moon_long):
-    # Azimuth Angle and Elevation Calculation for DataProcessor.py
+    """
+    Gets Azimuth based on Latitude and Longitude for DataProcessor
+
+    Keyword arguments:\n
+    moon_lat -- latitude of Player pos. in Display.py
+    moon_long -- longitude of Player pos. in Display.py
+    """
 
     # True Lunar South Pole
     lunar_south_pole_lat, lunar_south_pole_long = deg2rad(-89.54), deg2rad(0)
