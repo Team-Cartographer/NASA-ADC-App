@@ -4,7 +4,6 @@ from os import getcwd, path
 from subprocess import run
 
 
-
 # Create a new virtual environment
 venv.create('subprocess_venv', with_pip=True)
 
@@ -22,9 +21,6 @@ run([sys.executable, '-m', 'pip', 'install', 'numpy'], check=True)
 print("Installed numpy")
 run([sys.executable, '-m', 'pip', 'install', 'ursina'], check=True)
 print("Installed ursina")
-
-
-from utils import show_info
 
 
 code_path = getcwd()
@@ -60,6 +56,7 @@ a_star_program = run([sys.executable, a_star_path])
 print("A* (no QuadTree) Success")
 
 print("Running Display")
+# runs Display.py
 display_path = code_path + '/Display.py'
 display_program = run([sys.executable, display_path])
 print('Ended Program')
