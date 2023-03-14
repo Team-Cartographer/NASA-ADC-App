@@ -45,8 +45,12 @@ def generate_data_array() -> tuple[int, str] | None:
         for row in range(rows):
             for data_pt in range(cols):
                 # dataArray[k][0] = Lat, dA[k][1] = long, dA[k][2] = ht, dA[k][3] = slope
-                tmp: list = [latitude_list[row][data_pt], longitude_list[row][data_pt], height_list[row][data_pt],
-                        slope_list[row][data_pt]]
+                latitude: float = float(latitude_list[row][data_pt])
+                longitude: float = float(longitude_list[row][data_pt])
+                height: float = float(height_list[row][data_pt])
+                slope: float = float(slope_list[row][data_pt])
+
+                tmp: list = [latitude, longitude, height,slope]
                 dataArray.append(tmp)
                 csv_writer.writerow(tmp)
 
@@ -65,11 +69,11 @@ def write_rect_file(data_arr) -> tuple[str, float, float, float]:
     with open(rect_coord_path, mode="w", newline="") as datafile:
         csv_writer: csv.writer = csv.writer(datafile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for i in range(length):
-            lat: float = float(data_arr[i][0])
-            long: float = float(data_arr[i][1])
-            height: float = float(data_arr[i][2])
-            slope: float = float(data_arr[i][3])
-            height: float = fm.get_lunar_rad() + float(height) # Technically Radius
+            lat: float = data_arr[i][0]
+            long: float = data_arr[i][1]
+            height: float = data_arr[i][2]
+            slope: float = data_arr[i][3]
+            height: float = fm.get_lunar_rad() + float(height)  # Technically Radius
 
             x: float = float(get_x_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
             y: float = float(get_y_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
