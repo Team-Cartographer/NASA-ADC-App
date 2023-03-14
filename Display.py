@@ -1,4 +1,4 @@
-import FolderCreator as fc
+import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
@@ -14,7 +14,7 @@ window.exit_button.color = color.dark_gray
 
 # Display Specific Constants -------------
 Y_HEIGHT = 128  # Default Value
-SIZE_CONSTANT = fc.get_size_constant()
+SIZE_CONSTANT = fm.get_size_constant()
 EDITOR_SCALE_FACTOR = 3
 PLAYER_SCALE_FACTOR = 8
 RESET_LOC = (0, Y_HEIGHT*PLAYER_SCALE_FACTOR, 0)  # Default PLAYER Positional Value
@@ -92,8 +92,8 @@ color_key = Entity(
 
 
 # Slope and Height Toggle Image Pathing -------------
-slopemap = fc.parent_path + '/slopemap.png'
-heightkey = fc.parent_path + '/heightkey_surface.png'
+slopemap = fm.parent_path + '/slopemap.png'
+heightkey = fm.parent_path + '/heightkey_surface.png'
 
 
 

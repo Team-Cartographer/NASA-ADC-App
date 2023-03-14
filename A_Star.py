@@ -4,7 +4,7 @@ from numpy import sqrt
 import csv
 from ast import literal_eval
 from utils import show_warning, get_pathfinding_endpoints
-import FolderCreator as fc
+import FileManager as fm
 
 
 class Node:
@@ -90,13 +90,13 @@ def update_image(image_path: str, mvmt_path: list):
         x = mvmt_path[i][0]
         y = mvmt_path[i][1]
         img = add_pixel(img, x, y, color)
-    img.save(fc.images_path + "/AStar_Path.png")
+    img.save(fm.images_path + "/AStar_Path.png")
 
 
 if __name__ == "__main__":
     # Test Case
 
-    csv_path = fc.data_path + "/AStarRawData.csv"
+    csv_path = fm.data_path + "/AStarRawData.csv"
     csv_path = csv_path.replace("\\", "/")
     with open(csv_path, mode="r") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     #print("\nFinal Path: ", final_path)
 
     try:
-        update_image(fc.images_path + '/AStar_Texture.png', final_path)
+        update_image(fm.images_path + '/AStar_Texture.png', final_path)
         print("\rPath Image: ('AStar_Path.png') Created.")
     except TypeError:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")

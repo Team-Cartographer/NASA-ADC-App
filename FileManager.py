@@ -1,5 +1,5 @@
 """
-FolderCreator.py makes folders and directories for all files for the FPA Team NASA
+FileManager.py makes folders and directories for all files for the FPA Team NASA
 App Development Challenge Application.#
 """
 
@@ -77,7 +77,7 @@ images_path: str = os.path.join(data_path, 'Images')
 app_files_path: str = os.path.join(parent_path, 'App Files')
 archive_path: str = os.path.join(app_files_path, 'Archived Files')
 
-# Creates directories and sets '.env' variables only if FolderCreator.py is running.
+# Creates directories and sets '.env' variables only if FileManager.py is running.
 # Otherwise, only helper methods are accessible.
 if __name__ == '__main__':
     with open(get_slope_file_path()) as f:

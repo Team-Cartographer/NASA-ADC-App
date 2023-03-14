@@ -10,16 +10,16 @@ yellow indicating moderate slopes, and red indicating steep slopes.
 The program also downscales the final image to improve performance when used with the Ursina game engine.
 """
 
-import FolderCreator as fc
+import FileManager as fm
 from ast import literal_eval
 from PIL import Image
 from utils import file2list, resize
 
-astar_data_path = fc.data_path + "/AStarRawData.csv"
+astar_data_path = fm.data_path + "/AStarRawData.csv"
 full_list = file2list(astar_data_path)
 
-max_z = fc.get_max_z()
-SIZE_CONSTANT = fc.get_size_constant()
+max_z = fm.get_max_z()
+SIZE_CONSTANT = fm.get_size_constant()
 
 
 def calculate_color(height):
@@ -89,18 +89,18 @@ if __name__ == "__main__":
 
     canvas = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
     draw_points()
-    canvas.save(fc.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
+    canvas.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
     print("\nCreated RAW_heightmap.png")
     draw_slopes()
-    canvas.save(fc.images_path + '/slopemap.png')
+    canvas.save(fm.images_path + '/slopemap.png')
     print("\nCreated slopemap.png")
     draw_colors()
-    canvas.save(fc.images_path + '/heightkey_surface.png')
+    canvas.save(fm.images_path + '/heightkey_surface.png')
     print("\nCreated heightkey_surface.png")
 
     # Image Scaling for Faster Ursina Runs
     downscaled = resize(
-        image_path=fc.images_path + '/RAW_heightmap.png', 
+        image_path=fm.images_path + '/RAW_heightmap.png',
         new_name='processed_heightmap', 
         scale=81
     )

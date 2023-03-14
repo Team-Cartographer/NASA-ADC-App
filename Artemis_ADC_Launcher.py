@@ -35,8 +35,8 @@ if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     print("PathFetcher Success")
 
     print("Running FolderCreator")
-    # runs FolderCreator.py
-    folder_creator_path = code_path + "/FolderCreator.py"
+    # runs FileManager.py
+    folder_creator_path = code_path + "/FileManager.py"
     folder_creator_program = run([sys.executable, folder_creator_path])
     print("FolderCreator Success")
 

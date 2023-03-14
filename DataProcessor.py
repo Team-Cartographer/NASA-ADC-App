@@ -11,26 +11,26 @@ from __future__ import annotations
 from ast import literal_eval
 import csv
 from sys import exit
-import FolderCreator as fc
+import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation
 from dotenv import set_key
 
-DISTANCE_BETWEEN_POINTS: int = fc.get_dist_between_points()
-
+DISTANCE_BETWEEN_POINTS: int = fm.get_dist_between_points()
+SIZE = fm.get_size_constant()
 # Creates Lists of each Data Type from the Paths Given.
-latitude_list: list = file2list(fc.get_latitude_file_path())
-longitude_list: list = file2list(fc.get_longitude_file_path())
-height_list: list = file2list(fc.get_height_file_path())
-slope_list: list = file2list(fc.get_slope_file_path())
+latitude_list: list = file2list(fm.get_latitude_file_path())
+longitude_list: list = file2list(fm.get_longitude_file_path())
+height_list: list = file2list(fm.get_height_file_path())
+slope_list: list = file2list(fm.get_slope_file_path())
 
 
 def generate_data_array() -> tuple[int, str] | None:
     if not len(longitude_list) == len(latitude_list) == len(height_list) == len(slope_list):
-        fc.show_error("ADC App Data Processing Failure", f'Data List Row Lengths are Inconsistent.')
+        fm.show_error("ADC App Data Processing Failure", f'Data List Row Lengths are Inconsistent.')
         return
 
     if not len(longitude_list[0]) == len(latitude_list[0]) == len(height_list[0]) == len(slope_list[0]):
-        fc.show_error("ADC App Data Processing Failure", f'Data List Column Lengths are Inconsistent.')
+        fm.show_error("ADC App Data Processing Failure", f'Data List Column Lengths are Inconsistent.')
         return
 
     rows: int = len(longitude_list)
@@ -38,7 +38,7 @@ def generate_data_array() -> tuple[int, str] | None:
     xy_dim: int = len(longitude_list)
 
     # Change to {fc.archive_path} for final build.
-    data_array_path_: str = fc.data_path + "/RawDataArray.csv"
+    data_array_path_: str = fm.data_path + "/RawDataArray.csv"
 
     with open(data_array_path_, mode="w", newline="") as f:
         csv_writer: csv.writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -46,7 +46,7 @@ def generate_data_array() -> tuple[int, str] | None:
             for data_pt in range(cols):
                 # dataArray[k][0] = Lat, dA[k][1] = long, dA[k][2] = ht, dA[k][3] = slope
                 tmp: list = [latitude_list[row][data_pt], longitude_list[row][data_pt], height_list[row][data_pt],
-                       slope_list[row][data_pt]]
+                        slope_list[row][data_pt]]
                 dataArray.append(tmp)
                 csv_writer.writerow(tmp)
 
@@ -57,7 +57,7 @@ def generate_data_array() -> tuple[int, str] | None:
 
 
 def write_rect_file(data_arr) -> tuple[str, float, float, float]:
-    rect_coord_path: str = fc.data_path + "/RectangularCoordinateData.csv"
+    rect_coord_path: str = fm.data_path + "/RectangularCoordinateData.csv"
     xs: list = []
     ys: list = []
     zs: list = []
@@ -69,7 +69,7 @@ def write_rect_file(data_arr) -> tuple[str, float, float, float]:
             long: float = float(data_arr[i][1])
             height: float = float(data_arr[i][2])
             slope: float = float(data_arr[i][3])
-            height: float = fc.get_lunar_rad() + float(height) # Technically Radius
+            height: float = fm.get_lunar_rad() + float(height) # Technically Radius
 
             x: float = float(get_x_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
             y: float = float(get_y_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
@@ -107,11 +107,11 @@ def write_astar_file(min_x_, min_y_, min_z_, temp_array) -> str:
     sorted_array: list = sorted(adj_array, key=lambda x: x[1])
 
     array_to_be_written: list = []
-    for i in range(1277):
+    for i in range(SIZE):
         array_to_be_written.append([])
 
     for i in range(len(sorted_array)):
-        array_to_be_written[i // 1277].append(sorted_array[i])
+        array_to_be_written[i // SIZE].append(sorted_array[i])
 
     for i in range(len(array_to_be_written)):
         array_to_be_written[i]: list = sorted(array_to_be_written[i], key=lambda x: x[0])
@@ -122,7 +122,7 @@ def write_astar_file(min_x_, min_y_, min_z_, temp_array) -> str:
             array_to_be_written[j][i][1] = j
 
     # Retrofitted A-Star Data
-    astar_path: str = fc.data_path + "/AStarRawData.csv"
+    astar_path: str = fm.data_path + "/AStarRawData.csv"
     with open(astar_path, mode="w", newline="") as f:
         csv_writer: csv.writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in array_to_be_written:
@@ -134,7 +134,7 @@ def write_astar_file(min_x_, min_y_, min_z_, temp_array) -> str:
 
 
 def test_astar_file():
-    astar_path: str = fc.data_path + "/AStarRawData.csv"
+    astar_path: str = fm.data_path + "/AStarRawData.csv"
     with open(astar_path, mode="r", newline="") as f:
         astar_data: list = list(csv.reader(f))
 
