@@ -50,7 +50,7 @@ def generate_data_array() -> tuple[int, str] | None:
                 height: float = float(height_list[row][data_pt])
                 slope: float = float(slope_list[row][data_pt])
 
-                tmp: list = [latitude, longitude, height,slope]
+                tmp: list = [latitude, longitude, height, slope]
                 dataArray.append(tmp)
                 csv_writer.writerow(tmp)
 
@@ -73,13 +73,14 @@ def write_rect_file(data_arr) -> tuple[str, float, float, float]:
             long: float = data_arr[i][1]
             height: float = data_arr[i][2]
             slope: float = data_arr[i][3]
-            height: float = fm.get_lunar_rad() + float(height)  # Technically Radius
 
-            x: float = float(get_x_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
-            y: float = float(get_y_coord(lat, long, height)) / DISTANCE_BETWEEN_POINTS
-            z: float = float(get_z_coord(lat, height)) / DISTANCE_BETWEEN_POINTS
+            radius: float = fm.get_lunar_rad() + float(height)
+
+            x: float = float(get_x_coord(lat, long, radius)) / DISTANCE_BETWEEN_POINTS
+            y: float = float(get_y_coord(lat, long, radius)) / DISTANCE_BETWEEN_POINTS
+            z: float = float(get_z_coord(lat, radius)) / DISTANCE_BETWEEN_POINTS
             azi: float = get_azimuth(lat, long)
-            elev: float = get_elevation(lat, long, height)
+            elev: float = get_elevation(lat, long, radius)
             csv_writer.writerow([x, y, z, slope, azi, elev, lat, long])
             xs.append(x), ys.append(y), zs.append(z)
             tmpDataArray.append([x, y, z, slope, azi, elev, lat, long])
@@ -97,6 +98,7 @@ def write_rect_file(data_arr) -> tuple[str, float, float, float]:
 
     print("\nCreated RectangularCoordinateData.csv")
     return rect_coord_path, min_x_, min_y_, min_z_
+
 
 # TODO Could be causing Streaking, take a look at it.
 def write_astar_file(min_x_, min_y_, min_z_, temp_array) -> str:
