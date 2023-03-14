@@ -2,7 +2,7 @@ import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    get_radius, height_from_rect, slope_from_rect, ViewCamera
+    get_radius, height_from_rect, slope_from_rect
 from ursina.prefabs.first_person_controller import FirstPersonController
 
 # Window Declarations and Formatting -------------
@@ -19,6 +19,161 @@ EDITOR_SCALE_FACTOR = 3
 PLAYER_SCALE_FACTOR = 8
 RESET_LOC = (0, Y_HEIGHT*PLAYER_SCALE_FACTOR, 0)  # Default PLAYER Positional Value
 
+
+
+# Ursina EditorCamera Retrofit Implementation for Display (DO NOT EDIT)
+class ViewCamera(Entity):
+
+    def __init__(self, **kwargs):
+        camera.editor_position = camera.position
+        super().__init__(name='editor_camera', eternal=False)
+
+        # self.gizmo = Entity(parent=self, model='sphere', color=color.orange, scale=.025, add_to_scene_entities=False, enabled=False)
+
+        self.rotation_speed = 200
+        self.pan_speed = Vec2(5, 5)
+        self.move_speed = 10
+        self.zoom_speed = 1.25
+        self.zoom_smoothing = 8
+        self.rotate_around_mouse_hit = False
+
+        self.smoothing_helper = Entity(add_to_scene_entities=False)
+        self.rotation_smoothing = 0
+        self.look_at = self.smoothing_helper.look_at
+        self.look_at_2d = self.smoothing_helper.look_at_2d
+        self.rotate_key = 'right mouse'
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+        self.start_position = self.position
+        self.perspective_fov = camera.fov
+        self.orthographic_fov = camera.fov
+        self.on_destroy = self.on_disable
+        # Removed toggle hotkeys for EditorCamera
+        self.hotkeys = {} #{'toggle_orthographic':'shift+p', 'focus':'f', 'reset_center':'shift+f'}
+
+
+    def on_enable(self):
+        camera.org_parent = camera.parent
+        camera.org_position = camera.position
+        camera.org_rotation = camera.rotation
+        camera.parent = self
+        camera.position = camera.editor_position
+        camera.rotation = (0,0,0)
+        self.target_z = camera.z
+        self.target_fov = camera.fov
+
+
+    def on_disable(self):
+        camera.editor_position = camera.position
+        camera.parent = camera.org_parent
+        camera.position = camera.org_position
+        camera.rotation = camera.org_rotation
+
+
+    def on_destroy(self):
+        destroy(self.smoothing_helper)
+
+
+    def input(self, key):
+        combined_key = ''.join(e+'+' for e in ('control', 'shift', 'alt') if held_keys[e] and not e == key) + key
+        '''
+        if combined_key == self.hotkeys['toggle_orthographic']:
+            if not camera.orthographic:
+                self.orthographic_fov = camera.fov
+                camera.fov = self.perspective_fov
+            else:
+                self.perspective_fov = camera.fov
+                camera.fov = self.orthographic_fov
+
+            camera.orthographic = not camera.orthographic
+
+
+        elif combined_key == self.hotkeys['reset_center']:
+            self.animate_position(self.start_position, duration=.1, curve=curve.linear)
+
+        elif combined_key == self.hotkeys['focus'] and mouse.world_point:
+            self.animate_position(mouse.world_point, duration=.1, curve=curve.linear)
+        '''
+
+        if key == 'scroll up':
+            if not camera.orthographic:
+                target_position = self.world_position
+                # if mouse.hovered_entity and not mouse.hovered_entity.has_ancestor(camera):
+                #     target_position = mouse.world_point
+
+                self.world_position = lerp(self.world_position, target_position, self.zoom_speed * time.dt * 10)
+                self.target_z += self.zoom_speed * (abs(self.target_z)*.1)
+            else:
+                self.target_fov -= self.zoom_speed * (abs(self.target_fov)*.1)
+                self.target_fov = clamp(self.target_fov, 1, 200)
+
+        elif key == 'scroll down':
+            if not camera.orthographic:
+                # camera.world_position += camera.back * self.zoom_speed * 100 * time.dt * (abs(camera.z)*.1)
+                self.target_z -= self.zoom_speed * (abs(self.target_z)*.1)
+            else:
+                self.target_fov += self.zoom_speed * (abs(self.target_fov)*.1)
+                self.target_fov = clamp(self.target_fov, 1, 200)
+
+        elif key == 'right mouse down' or key == 'middle mouse down':
+            if mouse.hovered_entity and self.rotate_around_mouse_hit:
+                org_pos = camera.world_position
+                self.world_position = mouse.world_point
+                camera.world_position = org_pos
+
+
+
+    def update(self):
+        if held_keys['gamepad right stick y'] or held_keys['gamepad right stick x']:
+            self.smoothing_helper.rotation_x -= held_keys['gamepad right stick y'] * self.rotation_speed / 100
+            self.smoothing_helper.rotation_y += held_keys['gamepad right stick x'] * self.rotation_speed / 100
+
+        elif held_keys[self.rotate_key]:
+            self.smoothing_helper.rotation_x -= mouse.velocity[1] * self.rotation_speed
+            self.smoothing_helper.rotation_y += mouse.velocity[0] * self.rotation_speed
+
+            self.direction = Vec3(
+                self.forward * (held_keys['w'] - held_keys['s'])
+                + self.right * (held_keys['d'] - held_keys['a'])
+                + self.up    * (held_keys['e'] - held_keys['q'])
+                ).normalized()
+
+            self.position += self.direction * (self.move_speed + (self.move_speed * held_keys['shift']) - (self.move_speed*.9 * held_keys['alt'])) * time.dt
+
+            if self.target_z < 0:
+                self.target_z += held_keys['w'] * (self.move_speed + (self.move_speed * held_keys['shift']) - (self.move_speed*.9 * held_keys['alt'])) * time.dt
+            else:
+                self.position += camera.forward * held_keys['w'] * (self.move_speed + (self.move_speed * held_keys['shift']) - (self.move_speed*.9 * held_keys['alt'])) * time.dt
+
+            self.target_z -= held_keys['s'] * (self.move_speed + (self.move_speed * held_keys['shift']) - (self.move_speed*.9 * held_keys['alt'])) * time.dt
+
+        if mouse.middle:
+            if not camera.orthographic:
+                zoom_compensation = -self.target_z * .1
+            else:
+                zoom_compensation = camera.orthographic * camera.fov * .2
+
+            self.position -= camera.right * mouse.velocity[0] * self.pan_speed[0] * zoom_compensation
+            self.position -= camera.up * mouse.velocity[1] * self.pan_speed[1] * zoom_compensation
+
+        if not camera.orthographic:
+            camera.z = lerp(camera.z, self.target_z, time.dt*self.zoom_smoothing)
+        else:
+            camera.fov = lerp(camera.fov, self.target_fov, time.dt*self.zoom_smoothing)
+
+        if self.rotation_smoothing == 0:
+            self.rotation = self.smoothing_helper.rotation
+        else:
+            self.quaternion = slerp(self.quaternion, self.smoothing_helper.quaternion, time.dt*self.rotation_smoothing)
+            camera.world_rotation_z = 0
+
+
+    def __setattr__(self, name, value):
+        super().__setattr__(name, value)
+        if hasattr(self, 'smoothing_helper') and name in ('rotation', 'rotation_x', 'rotation_y', 'rotation_z'):
+            setattr(self.smoothing_helper, name, value)
 
 
 # Declaration of Entities -------------
@@ -119,7 +274,7 @@ sky.color = '000000' # Black
 
 vc = ViewCamera(enabled=False, zoom_speed=5, rotation_x=32.421871185302734, rotation_y=-26.388877868652344, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
-player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False)
+player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
 #player.scale = (0.5, 1, 0.5)
 player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
 
@@ -209,7 +364,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 35
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
 
     #origin = (x, y+2, z)
     #hit_info = raycast(origin=origin, direction=(0,0,-1), distance=1, traverse_target=ground_player, ignore=list(), debug=False)
@@ -219,8 +374,8 @@ def update():
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
     nx, nz = int(x / 10 + 638), abs(int(z / 10 - 638))
-    #print(f'({nx}, {nz})')
 
+    # Updating Position and Viewer Cam Position Labels
     t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
     view_cam_player_loc.position = (x / (10 / 3), 0, z / (10 / 3))
 
