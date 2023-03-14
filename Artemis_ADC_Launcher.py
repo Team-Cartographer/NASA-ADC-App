@@ -21,6 +21,8 @@ if not path.exists(venv_folder):
     print("Installed package: numpy")
     run([sys.executable, '-m', 'pip', 'install', 'ursina'], check=True)
     print("Installed package: ursina")
+    run([sys.executable, '-m', 'pip', 'install', 'pygame'], check=True)
+    print("Installed package: pygame")
 
 
 code_path = getcwd()
