@@ -84,7 +84,7 @@ def write_rect_file(data_arr) -> tuple[str, float, float, float]:
             csv_writer.writerow([x, y, z, slope, azi, elev, lat, long])
             xs.append(x), ys.append(y), zs.append(z)
             tmpDataArray.append([x, y, z, slope, azi, elev, lat, long])
-            print(f"\rCreating RectangularCoordinateData.csv. {round(i / length, 4)}% complete", end="")
+            print(f"\rCreating RectangularCoordinateData.csv. {round((i / length) * 100, 2)}% complete", end="")
 
         datafile.close()
     min_x_: float = abs(min(xs))
