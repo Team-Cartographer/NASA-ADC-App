@@ -27,7 +27,7 @@ RESET_LOC = (0, Y_HEIGHT*PLAYER_SCALE_FACTOR, 0)  # Default PLAYER Positional Va
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     texture='moon_surface_texture.png',
-    collider='box',
+    collider='mesh',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False
     )
