@@ -7,7 +7,6 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 # Window Declarations and Formatting -------------
 app = Ursina()
-window.fps_counter.disable()
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
