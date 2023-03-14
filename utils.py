@@ -9,7 +9,7 @@ from ast import literal_eval
 from PIL import Image # of deez nuts (sorry)
 import pygame
 from pygame import gfxdraw
-
+from webbrowser import open as open_page
 
 def file2list(path):
     with open(path) as csv_file:
@@ -22,6 +22,9 @@ try:
     astar_list = file2list(os.getcwd() + '/Data/AStarRawData.csv')
 except FileNotFoundError:
     pass
+
+def open_webpage(url : str) -> None:
+    open_page(url)
 
 def find_file(name, path):
     for root, dirs, files in os.walk(path):

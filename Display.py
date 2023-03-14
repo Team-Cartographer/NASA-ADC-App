@@ -2,7 +2,7 @@ import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    get_radius, height_from_rect, slope_from_rect
+    get_radius, height_from_rect, slope_from_rect, open_webpage
 from ursina.prefabs.first_person_controller import FirstPersonController
 
 # Window Declarations and Formatting -------------
@@ -125,6 +125,7 @@ player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
 
 
 
+
 # Input Functions and Toggles -------------
 def input(key):
 
@@ -160,7 +161,7 @@ def input(key):
         color_key.disable()
 
     # Toggle between Player and EditorCamera
-    if key == 'x' and start_bot.enabled is False:
+    if key == 'x' and start_button.enabled is False:
         player.enabled = not player.enabled
         ec.enabled = not ec.enabled
         ground_player.enabled = not ground_player.enabled
@@ -172,7 +173,7 @@ def input(key):
         exit(0)
 
     # Pause
-    if key == 'escape' and pause_bot.enabled is False:
+    if key == 'escape' and pause_button.enabled is False:
         t_lat.disable()
         t_lon.disable()
         t_ht.disable()
@@ -188,10 +189,12 @@ def input(key):
         minimap.disable()
         mini_dot.disable()
         t_pos.disable()
-        pause_bot.enable()
+        pause_button.enable()
         t_pause.enable()
         t_quit.enable()
         color_key.disable()
+        open_save_button.enable()
+        #github_button.enable()
 
 
 
@@ -249,7 +252,7 @@ def update():
 def start_game():
     ground_player.enable()
     player.enable()
-    start_bot.disable()
+    start_button.disable()
     t_lat.enable()
     t_lon.enable()
     t_ht.enable()
@@ -268,7 +271,7 @@ def start_game():
 def on_unpause():
     ground_player.enable()
     player.enable()
-    pause_bot.disable()
+    pause_button.disable()
     t_pause.disable()
     t_lat.enable()
     t_lon.enable()
@@ -282,20 +285,38 @@ def on_unpause():
     minimap.enable()
     mini_dot.enable()
     t_pos.enable()
+    open_save_button.disable()
+    #github_button.disable()
+    
 
 
 # Start Menu Text and Buttons -------------
 t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Application", x=-0.35, y=0.08)
 t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.07, color=color.dark_gray)
-start_bot = Button(text='Click to Begin', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05))
-start_bot.on_click = start_game
+start_button = Button(text='Click to Begin', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05))
+start_button.on_click = start_game
 
 
 # Pause Menu Text and Buttons -------------
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)
-pause_bot = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False)
+pause_button = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False)
 t_quit = Text(text="Press 'LShift+Q' to quit.", x=-0.14, y=-0.06, enabled=False)
-pause_bot.on_click = on_unpause
+pause_button.on_click = on_unpause
+
+open_save_button = Button(text='Load Previous Save', color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), enabled=False, x=0, y=-0.15)
+def open_save():
+    import tkinter as tk
+    from tkinter.filedialog import askopenfilename
+    root = tk.Tk()
+    root.withdraw() # we don't want a full GUI, so keep the root window from appearing
+    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+    print(filename)
+
+open_save_button.on_click = open_save
+
+# Testing, dw abt it for now
+#github_button = Button(text='Github', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False, x=0, y=-0.25)
+#github_button.on_click = open_webpage('https://github.com/abhi-arya1/NASA-ADC-App')
 
 # Runs Display.py -------------
 if __name__ == '__main__':
