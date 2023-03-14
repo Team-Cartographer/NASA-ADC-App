@@ -2,7 +2,7 @@ import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    get_radius, height_from_rect, slope_from_rect, open_webpage
+    get_radius, height_from_rect, slope_from_rect, ViewCamera
 from ursina.prefabs.first_person_controller import FirstPersonController
 
 # Window Declarations and Formatting -------------
@@ -27,7 +27,7 @@ RESET_LOC = (0, Y_HEIGHT*PLAYER_SCALE_FACTOR, 0)  # Default PLAYER Positional Va
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     texture='moon_surface_texture.png',
-    collider='mesh',
+    collider='box',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False
     )
@@ -41,8 +41,8 @@ ground_perspective = Entity(
     enabled=False
     )
 
-# EditorCamera Location Beacon
-editor_cam_player_loc = Entity(
+# ViewCamera Player Location Beacon
+view_cam_player_loc = Entity(
     model='cube',
     scale=(20, 1000, 20),
     color=color.red,
@@ -117,7 +117,7 @@ t_info = Text(
 sky = Sky()
 sky.color = '000000' # Black
 
-ec = EditorCamera(enabled=False, zoom_speed=5, rotation_x=32.421871185302734, rotation_y=-26.388877868652344) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
+vc = ViewCamera(enabled=False, zoom_speed=5, rotation_x=32.421871185302734, rotation_y=-26.388877868652344, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False)
 #player.scale = (0.5, 1, 0.5)
@@ -137,7 +137,7 @@ def input(key):
     if key == 'l':
         ground_player.texture = 'slopemap.png'
         ground_perspective.texture = 'slopemap.png'
-        editor_cam_player_loc.color = color.blue
+        view_cam_player_loc.color = color.blue
         color_key.enable()
         color_key.texture='slopeKey.png'
 
@@ -145,28 +145,29 @@ def input(key):
     if key == 'h':
         ground_player.texture = 'heightkey_surface.png'
         ground_perspective.texture = 'heightkey_surface.png'
-        editor_cam_player_loc.color = color.white
+        view_cam_player_loc.color = color.white
         color_key.enable()
         color_key.texture='heightKey.png'
 
     if key == 'p':
         ground_player.texture = 'AStar_Path.png'
         ground_perspective.texture = 'AStar_Path.png'
+        color_key.disable()
 
     # Moon Texture Toggle (Default)
     if key == 'm':
         ground_player.texture = 'moon_surface_texture.png'
         ground_perspective.texture = 'moon_surface_texture.png'
-        editor_cam_player_loc.color = color.red
+        view_cam_player_loc.color = color.red
         color_key.disable()
 
     # Toggle between Player and EditorCamera
     if key == 'x' and start_button.enabled is False:
         player.enabled = not player.enabled
-        ec.enabled = not ec.enabled
+        vc.enabled = not vc.enabled
         ground_player.enabled = not ground_player.enabled
         ground_perspective.enabled = not ground_perspective.enabled
-        editor_cam_player_loc.enabled = not editor_cam_player_loc.enabled
+        view_cam_player_loc.enabled = not view_cam_player_loc.enabled
 
     # Quit App
     if held_keys['left shift', 'q']:
@@ -182,10 +183,10 @@ def input(key):
         t_info.disable()
         t_elev.disable()
         player.disable()
-        ec.disable()
+        vc.disable()
         ground_player.disable()
         ground_perspective.disable()
-        editor_cam_player_loc.disable()
+        view_cam_player_loc.disable()
         minimap.disable()
         mini_dot.disable()
         t_pos.disable()
@@ -197,6 +198,8 @@ def input(key):
         #github_button.enable()
 
 
+height_vals = ground_player.model.height_values
+
 
 # Game Loop Update() Functions -------------
 def update():
@@ -206,6 +209,12 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 35
+
+    #origin = (x, y+2, z)
+    #hit_info = raycast(origin=origin, direction=(0,0,-1), distance=1, traverse_target=ground_player, ignore=list(), debug=False)
+    #if hit_info:
+    #    print('hit')
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
@@ -213,8 +222,7 @@ def update():
     #print(f'({nx}, {nz})')
 
     t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
-    editor_cam_player_loc.position = (x / (10 / 3), 0, z / (10 / 3))
-
+    view_cam_player_loc.position = (x / (10 / 3), 0, z / (10 / 3))
 
     # Calculating Data
     rad = get_radius(nx, nz)
@@ -269,6 +277,9 @@ def start_game():
 
 # Unpause Button Function -------------
 def on_unpause():
+    if str(ground_player.texture) == 'heightkey_surface.png' or str(ground_player.texture) == 'slopemap.png':
+        color_key.enable()
+
     ground_player.enable()
     player.enable()
     pause_button.disable()
@@ -286,8 +297,7 @@ def on_unpause():
     mini_dot.enable()
     t_pos.enable()
     open_save_button.disable()
-    #github_button.disable()
-    
+
 
 
 # Start Menu Text and Buttons -------------
@@ -315,9 +325,6 @@ def open_save():
 
 open_save_button.on_click = open_save
 
-# Testing, dw abt it for now
-#github_button = Button(text='Github', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False, x=0, y=-0.25)
-#github_button.on_click = open_webpage('https://github.com/abhi-arya1/NASA-ADC-App')
 
 # Runs Display.py -------------
 if __name__ == '__main__':
