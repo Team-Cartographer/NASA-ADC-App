@@ -306,11 +306,12 @@ pause_button.on_click = on_unpause
 open_save_button = Button(text='Load Previous Save', color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), enabled=False, x=0, y=-0.15)
 def open_save():
     import tkinter as tk
-    from tkinter.filedialog import askopenfilename
+    from tkinter.filedialog import askdirectory
     root = tk.Tk()
-    root.withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-    print(filename)
+    root.withdraw()
+    save_folder = askdirectory()
+    # fm.load_save(save_folder) # Proof of Concept Shtuff
+    #print(filename) # For testing
 
 open_save_button.on_click = open_save
 
