@@ -118,7 +118,7 @@ if __name__ == "__main__":
     )
 
     interface_map = resize(
-        image_path='moon_surface_texture.png',
+        image_path='Data/Images/slopemap.png',
         new_name='interface_overlay',
         scale=639
     )
