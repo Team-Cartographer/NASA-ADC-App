@@ -30,7 +30,7 @@ def process_data():
     ys: list = []
     zs: list = []
 
-    tmpDataArray: list = []
+    a_star_data_array: list = []
 
     for row in tqdm(range(rows), desc="Processing Polar to Rectangular Data"):
         for col in range(cols):
@@ -50,7 +50,7 @@ def process_data():
 
             xs.append(x), ys.append(y), zs.append(z)
 
-            tmpDataArray.append([x, y, z, slope, azi, elev, latitude, longitude])
+            a_star_data_array.append([x, y, z, slope, azi, elev, latitude, longitude])
 
     min_x_: float = abs(min(xs))
     min_y_: float = abs(min(ys))
@@ -65,12 +65,12 @@ def process_data():
     set_key('.env', 'MIN_Y', str(min_y_))
 
     adj_array: list = []
-    for i in tqdm(range(len(tmpDataArray)), desc="Creating AStar Data Array"):
+    for i in tqdm(range(len(a_star_data_array)), desc="Creating AStar Data Array"):
         # x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7]
-        tmp: list = [int(tmpDataArray[i][0] + min_x_), int(tmpDataArray[i][1] + min_y_),
-                     int(tmpDataArray[i][2] + min_z_),
-                     tmpDataArray[i][3], tmpDataArray[i][4], tmpDataArray[i][5], tmpDataArray[i][6],
-                     tmpDataArray[i][7]]
+        tmp: list = [int(a_star_data_array[i][0] + min_x_), int(a_star_data_array[i][1] + min_y_),
+                     int(a_star_data_array[i][2] + min_z_),
+                     a_star_data_array[i][3], a_star_data_array[i][4], a_star_data_array[i][5], a_star_data_array[i][6],
+                     a_star_data_array[i][7]]
         adj_array.append(tmp)
 
     sorted_array = sorted(adj_array, key=lambda arr: arr[1])
@@ -83,19 +83,19 @@ def process_data():
     for i in range(len(array_to_be_written)):
         array_to_be_written[i]: list = sorted(array_to_be_written[i], key=lambda x: x[0])
 
-
     for i in range(len(array_to_be_written)):
         for j in range(len(array_to_be_written[0])):
             array_to_be_written[j][i][0] = i
             array_to_be_written[j][i][1] = j
 
-
     astar_path: str = fm.data_path + "/AStarRawData.csv"
+
     with open(astar_path, mode="w", newline="") as f:
         csv_writer: csv.writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in tqdm(array_to_be_written, desc='Writing to AStarRawData.csv'):
             csv_writer.writerow(row)
     f.close()
+
 
 if __name__ == "__main__":
     process_data()
