@@ -6,7 +6,7 @@ import os
 from numpy import rad2deg, deg2rad
 from math import atan2, sin, cos, asin, sqrt
 from ast import literal_eval
-from PIL import Image  # of deez nuts (sorry)
+from PIL import Image
 import pygame
 from pygame import gfxdraw
 from webbrowser import open as open_page

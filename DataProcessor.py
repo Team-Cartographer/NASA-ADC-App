@@ -81,7 +81,7 @@ def process_data():
         array_to_be_written[i // SIZE].append(sorted_array[i])
 
     for i in range(len(array_to_be_written)):
-        array_to_be_written[i]: list = sorted(array_to_be_written[i], key=lambda x: x[0])
+        array_to_be_written[i]: list = sorted(array_to_be_written[i], key=lambda arr: arr[0])
 
     for i in range(len(array_to_be_written)):
         for j in range(len(array_to_be_written[0])):
