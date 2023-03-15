@@ -394,7 +394,8 @@ def update():
         player.speed = 500
 
     # Mini-Map Dot Positioning
-    mx, mz = (x/12770) + 0.5, (z/12770)-0.5
+    mmsc: int = SIZE_CONSTANT * 10  # minimap size constant
+    mx, mz = (x/mmsc) + 0.5, (z/mmsc) - 0.5
     mini_dot.position = (mx, mz, 0)
 
     # Earth Positioning
