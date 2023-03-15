@@ -16,8 +16,7 @@ Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = fm.get_size_constant()
 EDITOR_SCALE_FACTOR = 3
 PLAYER_SCALE_FACTOR = 8
-RESET_LOC = (0, Y_HEIGHT*PLAYER_SCALE_FACTOR, 0)  # Default PLAYER Positional Value
-
+RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
 
 
 # Ursina EditorCamera Retrofit Implementation for Display (DO NOT EDIT)
@@ -274,7 +273,6 @@ sky.color = '000000' # Black
 vc = ViewCamera(enabled=False, zoom_speed=5, rotation_x=32.421871185302734, rotation_y=-26.388877868652344, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
-#player.scale = (0.5, 1, 0.5)
 player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
 
 
@@ -365,10 +363,7 @@ def update():
     x, y, z = player.position.x, player.position.y, player.position.z
     player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
 
-    #origin = (x, y+2, z)
-    #hit_info = raycast(origin=origin, direction=(0,0,-1), distance=1, traverse_target=ground_player, ignore=list(), debug=False)
-    #if hit_info:
-    #    print('hit')
+
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
@@ -381,13 +376,13 @@ def update():
     # Calculating Data
     rad = get_radius(nx, nz)
     lat = float(latitude_from_rect(nx, nz, rad))
-    long = -float(longitude_from_rect(nx, nz, rad))
+    long = float(longitude_from_rect(nx, nz, rad))
     slope = slope_from_rect(nx, nz)
     height = height_from_rect(nx, nz)
     azimuth, elevation = get_azi_elev(nx, nz)
 
     # Updating Variables
-    t_lat.text = f'Latitude: {round(lat, 4)}° S'
+    t_lat.text = f'Latitude: {round(lat, 4)}° N'
     t_lon.text = f'Longitude: {round(long, 4)}° E'
     t_ht.text = 'Height: ' + str(height) + 'm'
     t_slope.text = 'Slope: ' + str(slope) + '°'
@@ -407,7 +402,6 @@ def update():
 
     # Earth Positioning
     #earth.position = (earth.x, 400*(elevation), earth.z)
-
 
 
 # Create Start Menu -------------
