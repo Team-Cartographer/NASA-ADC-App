@@ -7,10 +7,12 @@ from numpy import rad2deg, deg2rad
 from math import atan2, sin, cos, asin, sqrt
 from ast import literal_eval
 from PIL import Image
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # This hides the pygame welcome message
+
 import pygame
 from pygame import gfxdraw
 from webbrowser import open as open_page
-
 
 def file2list(path):
     with open(path) as csv_file:
