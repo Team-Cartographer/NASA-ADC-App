@@ -180,7 +180,7 @@ class ViewCamera(Entity):
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     texture='moon_surface_texture.png',
-    collider='box',
+    collider='mesh', # Must be set to 'mesh' for Raycasting to work.
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False
     )
@@ -270,7 +270,7 @@ t_info = Text(
 sky = Sky()
 sky.color = '000000' # Black
 
-vc = ViewCamera(enabled=False, zoom_speed=5, rotation_x=32.421871185302734, rotation_y=-26.388877868652344, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
+vc = ViewCamera(enabled=False, zoom_speed=2, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
@@ -363,8 +363,6 @@ def update():
     x, y, z = player.position.x, player.position.y, player.position.z
     player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
 
-
-
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
     nx, nz = int(x / 10 + 638), abs(int(z / 10 - 638))
@@ -395,13 +393,21 @@ def update():
     else:
         player.speed = 500
 
-
     # Mini-Map Dot Positioning
     mx, mz = (x/12770) + 0.5, (z/12770)-0.5
     mini_dot.position = (mx, mz, 0)
 
     # Earth Positioning
     #earth.position = (earth.x, 400*(elevation), earth.z)
+
+    # Raycasting Tests
+    #hit_z = raycast(origin=player, direction=(0, 0, 1), distance=100000, traverse_target=ground_player, ignore=list(), debug=True)
+    #hit_x = raycast(origin=player, direction=(-1, 0, 0), distance=100000, traverse_target=ground_player, ignore=list(), debug=True)
+    #if hit_z.hit:
+    #    print(f'Z: {hit_z}')
+    #if hit_x.hit:
+    #    print(f'X: {hit_x}')
+
 
 
 # Create Start Menu -------------
