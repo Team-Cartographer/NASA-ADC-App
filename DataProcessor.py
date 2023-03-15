@@ -6,13 +6,11 @@ longitude, and height to Cartesian coordinates. It then writes this data to a cs
 "RectangularCoordinateData.csv". Finally, the program sorts and formats the rectangular coordinate data in
 preparation for use in an A-star algorithm and writes it to a csv file named "AStarRawData.csv".
 """
-from __future__ import annotations
-
 import csv
 import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation
 from dotenv import set_key
-import time
+from tqdm import tqdm
 
 # Get Constants
 DISTANCE_BETWEEN_POINTS: int = fm.get_dist_between_points()
@@ -44,7 +42,7 @@ def process_data():
 
     tmpDataArray: list = []
 
-    for row in range(rows):
+    for row in tqdm(range(rows), desc="Processing Polar to Rectangular Data"):
         for col in range(cols):
             latitude: float = float(latitude_list[row][col])
             longitude: float = float(longitude_list[row][col])
@@ -64,9 +62,6 @@ def process_data():
 
             tmpDataArray.append([x, y, z, slope, azi, elev, latitude, longitude])
 
-
-    print(f"Processed RectangularCoordinateData Array in {round(time.time() - g_start, 2)}s")
-
     min_x_: float = abs(min(xs))
     min_y_: float = abs(min(ys))
     min_z_: float = abs(min(zs))
@@ -80,7 +75,7 @@ def process_data():
     set_key('.env', 'MIN_Y', str(min_y_))
 
     adj_array: list = []
-    for i in range(len(tmpDataArray)):
+    for i in tqdm(range(len(tmpDataArray)), desc="Creating AStar Data Array"):
         # x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7]
         tmp: list = [int(tmpDataArray[i][0] + min_x_), int(tmpDataArray[i][1] + min_y_),
                      int(tmpDataArray[i][2] + min_z_),
@@ -108,12 +103,9 @@ def process_data():
     astar_path: str = fm.data_path + "/AStarRawData.csv"
     with open(astar_path, mode="w", newline="") as f:
         csv_writer: csv.writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for row in array_to_be_written:
+        for row in tqdm(array_to_be_written, desc='Writing to AStarRawData.csv'):
             csv_writer.writerow(row)
     f.close()
-
-    print(f"Created AStarRawData.csv in {round(time.time() - g_start, 2)}s")
-
 
 if __name__ == "__main__":
     process_data()
