@@ -14,6 +14,7 @@ import pygame
 from pygame import gfxdraw
 from webbrowser import open as open_page
 
+
 def file2list(path):
     with open(path) as csv_file:
         new_list = list(csv.reader(csv_file, delimiter=','))
