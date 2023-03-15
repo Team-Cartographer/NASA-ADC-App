@@ -8,7 +8,7 @@ import FileManager as fm
 
 
 class Node:
-    def __init__(self, x, y, height, f, g, h, parent=None):
+    def __init__(self, x, y, height, f, g, h, parent=None, slope=None):
         self.x = x
         self.y = y
         self.height = height
@@ -16,19 +16,24 @@ class Node:
         self.g = g
         self.h = h
         self.parent = parent
+        self.slope = slope
 
     def __lt__(self, other):
         return self.f < other.f
 
 
 def get_height_and_slope(x, y, grid):
-    temp = (grid[x][y])
+    temp = (grid[y][x])
     temp = literal_eval(temp)
-    if temp == 0:
+    try:
+        if temp == 0:
 
-        print(temp)
-        print(x, y)
-        print(grid[x])
+            print(temp)
+            print(x, y)
+            print(grid[x])
+    except TypeError:
+        pass
+
     return float(temp[2]), float(temp[3])
 
 
@@ -41,9 +46,28 @@ def heuristic(x1, y1, x2, y2, h1, h2):
     return heur_rtn
 
 
+def new_g(cx, cy, ch, cs, nx, ny, nh, ns) -> float:  # c is current node, n is new node
+    # constant values:
+    k_dist = 1
+    k_slope = 0.25
+
+    slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes
+    if ns >= 20:
+        slope_penalty = 25  # TODO not have the slope penalty be random numbers. We need to curate these numbers more
+    elif ns >= 8:
+        slope_penalty = 5  # see above to do
+
+    dist = distBtw(float(cx), float(cy), float(ch), float(nx), float(ny), float(nh))
+    slope = abs(cs - ns)
+
+    eqn = k_dist * dist + k_slope * slope + slope_penalty
+    return eqn
+
+
 def astar(grid, start, goal):
     nodes = []
-    heapq.heappush(nodes, Node(start[0], start[1], start[2], 0, 0, 0))
+    h, first_slope = get_height_and_slope(start[0], start[1], grid)
+    heapq.heappush(nodes, Node(start[0], start[1], start[2], 0, 0, 0, None, first_slope))
     visited = set()
 
     while nodes:
@@ -67,11 +91,12 @@ def astar(grid, start, goal):
             y2 = current.y + dy
             if x2 >= 0 and x2 < len(grid) and y2 >= 0 and y2 < len(grid[0]):
                 h2, slope = get_height_and_slope(x2, y2, grid)
-                if slope <= 20:
-                    g = current.g + distBtw(float(current.x), float(current.y), float(current.height), float(x2), float(y2), float(h2))
-                    h = heuristic(x2, y2, goal[0], goal[1], h2, goal[2])
-                    f = g + h
-                    heapq.heappush(nodes, Node(x2, y2, h2, f, g, h, current))
+
+                g = current.g + new_g(current.x, current.y, current.height, current.slope, x2, y2, h2, slope)
+                h = heuristic(x2, y2, goal[0], goal[1], h2, goal[2])
+                f = g + h
+                heapq.heappush(nodes, Node(x2, y2, h2, f, g, h, current, slope))
+
         print(f"\r{(len(visited))/(1277 ** 2)} % complete. Visited {len(visited)} nodes", end="")
     return None
 
