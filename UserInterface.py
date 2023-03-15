@@ -1,7 +1,8 @@
+
 import PySimpleGUI as sg
 
 
-def PathFetcher():
+def path_fetcher():
     layout = [
         [
             sg.FileBrowse("Upload Latitude File", size=(20, 1), key="-LatIN-", file_types=(("CSV file", "*.csv"),)),
@@ -39,5 +40,5 @@ def PathFetcher():
 
 
 if __name__ == "__main__":
-    # PathFetcher()
+    # path_fetcher()
     pass
