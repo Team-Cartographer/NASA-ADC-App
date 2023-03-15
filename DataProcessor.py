@@ -23,8 +23,6 @@ def process_data():
     The processed data is written to a CSV file named 'AStarRawData.csv'.
     """
 
-    g_start = time.time()
-
     rows: int = len(longitude_list)
     cols: int = len(longitude_list[0])
 
