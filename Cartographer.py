@@ -14,6 +14,7 @@ import FileManager as fm
 from ast import literal_eval
 from PIL import Image
 from utils import file2list, resize
+from tqdm import tqdm
 
 astar_data_path = fm.data_path + "/AStarRawData.csv"
 full_list = file2list(astar_data_path)
@@ -39,7 +40,7 @@ def calc_rgb_color(height):
 
 
 def draw_points():
-    for i in range(len(full_list)):
+    for i in tqdm(range(len(full_list)), desc="Creating Ursina Heightmap"):
         for j in range(len(full_list[i])):
             color = calculate_color(float(literal_eval(full_list[j][i])[2]))
             x_pos = j
@@ -47,23 +48,20 @@ def draw_points():
             canvas.putpixel((int(x_pos), int(y_pos)), color)
             # note that there is a bit of data loss here.
             # Ideally, we'd make the final image have a size equal to the maximum span of the x and y data
-            print(f"\rCreating Heightmap. {round(i / len(full_list), 4)}% complete", end="")
-
 
 
 def draw_colors():
-    for i in range(len(full_list)):
+    for i in tqdm(range(len(full_list)), desc="Creating Heightkey"):
         for j in range(len(full_list[i])):
             color = calc_rgb_color(float(literal_eval(full_list[j][i])[2]))
             x_pos = j
             y_pos = i
             # print(x_pos, y_pos)
             canvas.putpixel((int(x_pos), int(y_pos)), color)
-            print(f"\rCreating Heightkey. {round(i / len(full_list), 4)}% complete", end="")
 
 
 def draw_slopes():
-    for i in range(len(full_list)):
+    for i in tqdm(range(len(full_list)), desc="Creating Slopemap"):
         for j in range(len(full_list[i])):
             color = (255, 0, 0)
             if float(literal_eval(full_list[j][i])[3]) < 20:
@@ -74,12 +72,10 @@ def draw_slopes():
             y_pos = i
             # print(x_pos, y_pos)
             canvas.putpixel((int(x_pos), int(y_pos)), color)
-            print(f"\rCreating Slopemap. {round(i / len(full_list), 4)}% complete", end="")
-
 
 
 def draw_path(path, image, color):
-    for i in range(len(path)):
+    for i in tqdm(range(len(path)), desc="Drawing A* Path"):
         image.putpixel(path[0], path[1], color)
         print(f"\rCreating Path Image. {round(i / len(path), 4)}% complete", end="")
     return image
