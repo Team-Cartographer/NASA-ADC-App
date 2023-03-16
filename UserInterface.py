@@ -36,9 +36,11 @@ def path_fetcher():
         if event == sg.WIN_CLOSED or event == "Exit":
             break
         elif event == "Submit":
+            # Latitude, Longitude, Height, Slope, Dist_Between_Points
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
+            #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
 
 if __name__ == "__main__":
-    # path_fetcher()
+    #path_fetcher()
     pass
