@@ -6,8 +6,8 @@ from tqdm import tqdm
 
 # Get Constants
 DISTANCE_BETWEEN_POINTS: int = fm.get_dist_between_points()
-SIZE = fm.get_size_constant()
-LUNAR_RAD = fm.get_lunar_rad()
+SIZE: int = fm.get_size_constant()
+LUNAR_RAD: float = fm.get_lunar_rad()
 
 # Creates Lists of each Data Type from the Paths Given.
 latitude_list: list = file2list(fm.get_latitude_file_path())
