@@ -88,10 +88,22 @@ if __name__ == "__main__":
         scale=1277
     )
 
-    interface_map = resize(
+    interface_slopemap = resize(
         image_path='Data/Images/slopemap.png',
-        new_name='interface_overlay',
-        scale=639
+        new_name='interface_slopemap',
+        scale=500
+    )
+
+    interface_texture = resize(
+        image_path='moon_surface_texture.png',
+        new_name='interface_texture',
+        scale=500
+    )
+
+    interface_heightkey = resize(
+        image_path='Data/Images/heightkey_surface.png',
+        new_name='interface_heightkey',
+        scale=500
     )
 
     print("Cartographer Success")

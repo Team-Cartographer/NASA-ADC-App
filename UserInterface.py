@@ -1,6 +1,9 @@
 
 import PySimpleGUI as sg
 from FileManager import images_path, get_size_constant
+from io import BytesIO
+from PIL import Image
+from numpy import array, uint8
 
 
 def path_fetcher():
@@ -41,6 +44,12 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
+def array_to_data(array):
+    im = Image.fromarray(array)
+    with BytesIO() as output:
+        im.save(output, format="PNG")
+        data = output.getvalue()
+    return data
 
 
 def get_pathfinding_endpoints():
@@ -64,14 +73,20 @@ def get_pathfinding_endpoints():
             sg.Button("Set", key="-GoalIN-")
         ],
         [
-            sg.Listbox(["Heightmap", "Slopemap", "Heighkey"], default_values="Slopemap",
+            sg.Listbox(["Heightmap", "Slopemap", "Heightkey"], default_values="Slopemap",
                        select_mode="LISTBOX_SELECT_MODE_SINGLE", enable_events=True, key="-Map-"),
             sg.OK("Submit", key="-Submit-")
         ]
     ]
 
+    im = Image.open(images_path + "/interface_texture.png")
+    arr = array(im, dtype=uint8)
+    data = array_to_data(arr)
+
     window = sg.Window("PathFetcher", layout)
-    #window["-GraphIN-"].draw_image(images_path + "/slopemap.png", location=(0, 0))
+    graph = window["-GraphIN-"]
+    graph.draw_image(data=data, location=(0, 500))
+    window.read()
 
     while True:
         event, values = window.read()
@@ -79,11 +94,11 @@ def get_pathfinding_endpoints():
         if event == "-Map-":
             map=values["-Map-"]
             if map == ['Heightmap']:
-                window["-GraphIN-"].draw_image(images_path + "/processed_heightmap.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
             elif map == ['Slopemap']:
-                window["-GraphIN-"].draw_image(images_path + "/slopemap.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
             elif map == ['Heightkey']:
-                window["-GraphIN-"].draw_image(images_path + "/heightkey_surface.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
 
 
         if event == "-StartIN-":
