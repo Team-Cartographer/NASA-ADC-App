@@ -1,15 +1,3 @@
-"""
-This program takes a CSV file containing terrain data and generates a heightmap and a slope map.
-
-The heightmap is a grayscale representation of the terrain's elevation, where lighter shades represent higher
-elevation and darker shades represent lower elevation.
-
-The slope map uses a color scheme to represent the steepness of the terrain, with green indicating gentle slopes,
-yellow indicating moderate slopes, and red indicating steep slopes.
-
-The program also downscales the final image to improve performance when used with the Ursina game engine.
-"""
-
 import FileManager as fm
 from ast import literal_eval
 from PIL import Image
@@ -20,58 +8,46 @@ astar_data_path = fm.data_path + "/AStarRawData.csv"
 full_list = file2list(astar_data_path)
 
 max_z = fm.get_max_z()
+CALCULATION_CONS = 255 / max_z
+ONE_THIRD = 1/3
+TWO_THIRDS = 2/3
 SIZE_CONSTANT = fm.get_size_constant()
 
 
 def calculate_color(height):
-    color = 255 - (height * 255 / max_z)
+    color = 255 - (height * CALCULATION_CONS)
     return int(color), int(color), int(color)
-
 
 def calc_rgb_color(height):
     r, g, b = 0, 0, 0
-    if height / max_z <= 1/3:
-        b = height * 255 / max_z
-    elif height / max_z <= 2/3:
-        g = height * 255 / max_z
+    if height <= ONE_THIRD * max_z:
+        b = height * CALCULATION_CONS
+    elif height <= TWO_THIRDS * max_z:
+        g = height * CALCULATION_CONS
     else:
-        r = height * 255 / max_z
+        r = height * CALCULATION_CONS
     return int(r), int(g), int(b)
 
-
-def draw_points():
-    for i in tqdm(range(len(full_list)), desc="Creating Ursina Heightmap"):
+# Creates RAW_Heightmap, Slopemap, and Heightkey
+def draw_all():
+    for i in tqdm(range(len(full_list)), desc="Creating All Images"):
         for j in range(len(full_list[i])):
-            color = calculate_color(float(literal_eval(full_list[j][i])[2]))
-            x_pos = j
-            y_pos = i
-            canvas.putpixel((int(x_pos), int(y_pos)), color)
-            # note that there is a bit of data loss here.
-            # Ideally, we'd make the final image have a size equal to the maximum span of the x and y data
+            slope = float(literal_eval(full_list[j][i])[3])
+            height = float(literal_eval(full_list[j][i])[2])
 
+            slope_color = (255, 0, 0)
+            if slope < 20:
+                slope_color = (255, 255, 0)
+            if slope < 8:
+                slope_color = (0, 255, 0)
 
-def draw_colors():
-    for i in tqdm(range(len(full_list)), desc="Creating Heightkey"):
-        for j in range(len(full_list[i])):
-            color = calc_rgb_color(float(literal_eval(full_list[j][i])[2]))
-            x_pos = j
-            y_pos = i
-            # print(x_pos, y_pos)
-            canvas.putpixel((int(x_pos), int(y_pos)), color)
+            heightkey_color = calc_rgb_color(height)
 
+            heightmap_color = calculate_color(height)
 
-def draw_slopes():
-    for i in tqdm(range(len(full_list)), desc="Creating Slopemap"):
-        for j in range(len(full_list[i])):
-            color = (255, 0, 0)
-            if float(literal_eval(full_list[j][i])[3]) < 20:
-                color = (255, 255, 0)
-            if float(literal_eval(full_list[j][i])[3]) < 8:
-                color = (0, 255, 0)
-            x_pos = j
-            y_pos = i
-            # print(x_pos, y_pos)
-            canvas.putpixel((int(x_pos), int(y_pos)), color)
+            heightmap.putpixel((j, i), heightmap_color)
+            slopemap.putpixel((j, i), slope_color)
+            heightkey.putpixel((j, i), heightkey_color)
 
 
 def draw_path(path, image, color):
@@ -83,16 +59,15 @@ def draw_path(path, image, color):
 
 if __name__ == "__main__":
 
-    canvas = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
-    draw_points()
-    canvas.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
-    print("\nCreated RAW_heightmap.png")
-    draw_slopes()
-    canvas.save(fm.images_path + '/slopemap.png')
-    print("\nCreated slopemap.png")
-    draw_colors()
-    canvas.save(fm.images_path + '/heightkey_surface.png')
-    print("\nCreated heightkey_surface.png")
+    heightmap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
+    slopemap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
+    heightkey = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
+
+    draw_all() # "Magic Function" - Efe
+
+    heightmap.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
+    slopemap.save(fm.images_path + '/slopemap.png')
+    heightkey.save(fm.images_path + '/heightkey_surface.png')
 
     # Image Scaling for Faster Ursina Runs
     downscaled = resize(
