@@ -61,7 +61,7 @@ def show_warning(title, msg):
 def are_you_sure(title, msg):
     root = tk.Tk()
     root.withdraw()
-    messagebox.askokcancel(title, msg)
+    return messagebox.askokcancel(title, msg)
 
 
 # Display Calculations (Helper Functions for Math)
@@ -208,6 +208,7 @@ def get_pathfinding_endpoints() -> tuple:
                         start_pos, goal_pos = None, None
 
         pygame.display.flip()
+
 
 
 
