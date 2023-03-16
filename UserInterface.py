@@ -1,6 +1,7 @@
 
 import PySimpleGUI as sg
 from FileManager import images_path, get_size_constant
+from utils import show_error
 
 
 def path_fetcher():
@@ -41,6 +42,7 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
+
 def get_pathfinding_endpoints():
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
     # There should be an easier way to do this, but this works for now
@@ -62,25 +64,26 @@ def get_pathfinding_endpoints():
             sg.Button("Set", key="-GoalIN-")
         ],
         [
-            sg.Listbox(["Heightmap", "Slopemap", "Heightkey"], default_values="Slopemap",
-                       select_mode="LISTBOX_SELECT_MODE_SINGLE", enable_events=True, key="-Map-"),
+            sg.Combo(["Heightmap", "Slopemap", "Heightkey"], default_value="Slopemap",
+                     enable_events=True, key="-Map-"),
             sg.OK("Submit", key="-Submit-")
         ]
     ]
 
     window = sg.Window("PathFetcher", layout, finalize=True)
-    window["-GraphIN-"].draw_image(images_path + "/interface_overlay.png", location=(0, 0))
+    window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
 
     while True:
         event, values = window.read(timeout=100)
 
         if event == "-Map-":
-            map=values["-Map-"]
-            if map == ['Heightmap']:
+            map = values["-Map-"]
+            print(map)
+            if map == 'Heightmap':
                 window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
-            elif map == ['Slopemap']:
+            elif map == 'Slopemap':
                 window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
-            elif map == ['Heightkey']:
+            elif map == 'Heightkey':
                 window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
 
 
@@ -102,12 +105,16 @@ def get_pathfinding_endpoints():
                 print(values["-GoalOUT-"])
             cur_state = 0
 
-
         if event == sg.WIN_CLOSED or event == "Exit":
+            show_error("Procedural Error", "By exiting the UI, you broke some stuff. You will have run"
+                                           " the A* program manually. After that, run the launcher again.")
             return None
 
         if event == "-Submit-":
-            return values["-StartOUT-"], values["-GoalOUT-"]
+            if values["-StartOUT-"] != "None" and values["-GoalOUT-"] != "None":
+                return values["-StartOUT-"], values["-GoalOUT-"]
+            else:
+                show_error("Incomplete Data Error", "Please select a start and end point")
 
 
 if __name__ == "__main__":
