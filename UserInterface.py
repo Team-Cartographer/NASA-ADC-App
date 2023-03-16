@@ -1,9 +1,6 @@
 
 import PySimpleGUI as sg
 from FileManager import images_path, get_size_constant
-from io import BytesIO
-from PIL import Image
-from numpy import array, uint8
 
 
 def path_fetcher():
@@ -44,14 +41,6 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
-def array_to_data(array):
-    im = Image.fromarray(array)
-    with BytesIO() as output:
-        im.save(output, format="PNG")
-        data = output.getvalue()
-    return data
-
-
 def get_pathfinding_endpoints():
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
     # There should be an easier way to do this, but this works for now
@@ -79,14 +68,7 @@ def get_pathfinding_endpoints():
         ]
     ]
 
-    im = Image.open(images_path + "/interface_texture.png")
-    arr = array(im, dtype=uint8)
-    data = array_to_data(arr)
-
     window = sg.Window("PathFetcher", layout)
-    graph = window["-GraphIN-"]
-    graph.draw_image(data=data, location=(0, 500))
-    window.read()
 
     while True:
         event, values = window.read()
