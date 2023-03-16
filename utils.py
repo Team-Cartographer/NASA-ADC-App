@@ -8,10 +8,10 @@ from math import atan2, sin, cos, asin, sqrt
 from ast import literal_eval
 from PIL import Image
 
-#os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # This hides the pygame welcome message
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # This hides the pygame welcome message
 
-#import pygame
-#from pygame import gfxdraw
+import pygame
+from pygame import gfxdraw
 from webbrowser import open as open_page
 
 
@@ -57,6 +57,11 @@ def show_warning(title, msg):
     root = tk.Tk()
     root.withdraw()
     messagebox.showwarning(title, msg)
+
+def are_you_sure(title, msg):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.askokcancel(title, msg)
 
 
 # Display Calculations (Helper Functions for Math)
@@ -163,7 +168,8 @@ def resize(image_path: str, new_name: str, scale: float) -> str:
     print(f"Created {new_name}.png")
     return path
 
-''' Deprecated by UserInterface.py
+# Deprecated by UserInterface.py
+# TODO: Mark as obsolete only after the new one is working and implemented
 # Get Start and End Points for AStar Pathfinding
 def get_pathfinding_endpoints() -> tuple:
     pygame.init()
@@ -202,6 +208,6 @@ def get_pathfinding_endpoints() -> tuple:
                         start_pos, goal_pos = None, None
 
         pygame.display.flip()
-'''
+
 
 
