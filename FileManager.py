@@ -67,7 +67,7 @@ class Save:
             height_path=heightpath, slope_path=slopepath, dist=dist_between_points,
             size_constant=len(file2list(latpath)), player_pos=None, name=name)
 
-        print(f'Saved {self.json_path}')
+        show_info("Save Success!",f'Saved {self.json_path}')
 
     #def save(self):
 
@@ -147,11 +147,9 @@ def write_json(latitude_path : str, longitude_path : str,
         name = 0
 
     folder_path = os.getcwd() + f"/Save{name}"
-    if not os.path.exists(folder_path):
-        os.mkdir(os.getcwd() + f"/Save{name}")
-    else:
-        show_warning("Save Error", f"Save with Name: '{name}' Exists.")
-        pass
+    # TODO Add an Overwrite or Failsafe Here.
+    os.mkdir(os.getcwd() + f"/Save{name}")
+
 
     data : dict = {
         "LATITUDE_PATH": latitude_path,
@@ -185,7 +183,7 @@ archive_path: str = os.path.join(app_files_path, 'Archived Files')
 if __name__ == '__main__':
 
     # Testing Saves
-    #savetest = Save('SAVETEST')
+    savetest = Save('SAVETEST')
 
     with open(get_slope_file_path()) as f:
         size_cons = len(list(reader(f)))
