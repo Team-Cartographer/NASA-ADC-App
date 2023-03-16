@@ -64,7 +64,7 @@ class Save:
         latpath, longpath, heightpath, slopepath, dist_between_points = path_fetcher()
         self.json_path, self.folder_path, self.data = write_json(
             latitude_path=latpath, longitude_path=longpath,
-            height_path=heightpath, slope_path=slopepath, dist=dist_between_points,
+            height_path=heightpath, slope_path=slopepath, dist=int(dist_between_points),
             size_constant=len(file2list(latpath)), player_pos=None, name=name)
 
         show_info("Save Success!",f'Saved {self.json_path}')
@@ -147,9 +147,8 @@ def write_json(latitude_path : str, longitude_path : str,
         name = 0
 
     folder_path = os.getcwd() + f"/Save{name}"
-    # TODO Add an Overwrite or Failsafe Here.
-    os.mkdir(os.getcwd() + f"/Save{name}")
-
+    if not os.path.exists(folder_path):
+        os.mkdir(os.getcwd() + f"/Save{name}")
 
     data : dict = {
         "LATITUDE_PATH": latitude_path,
