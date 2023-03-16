@@ -25,6 +25,8 @@ if not path.exists(venv_folder):
     print("Installed package: pygame")
     run([sys.executable, '-m', 'pip', 'install', 'PySimpleGUI'], check=True)
     print("Installed package: PySimpleGUI")
+    run([sys.executable, '-m', 'pip', 'install', 'tqdm'], check=True)
+    print("Installed package: tqdm")
 
 
 code_path = getcwd()
