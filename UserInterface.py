@@ -1,5 +1,6 @@
 
 import PySimpleGUI as sg
+from FileManager import images_path, get_size_constant
 
 
 def path_fetcher():
@@ -39,6 +40,76 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
 
 
+def get_pathfinding_endpoints():
+    cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
+    # There should be an easier way to do this, but this works for now
+    layout = [
+
+        [
+            sg.Graph(canvas_size=(500, 500), graph_top_right=(get_size_constant(), 0),
+                     graph_bottom_left=(0, get_size_constant()), background_color="green",
+                     key="-GraphIN-", enable_events=True, drag_submits=False)
+        ],
+        [
+            sg.Text("Current Start Position:"),
+            sg.Input(default_text="None", key="-StartOUT-", disabled=True),
+            sg.Button("Set", key="-StartIN-")
+        ],
+        [
+            sg.Text("Current Start Position:"),
+            sg.Input(default_text="None", key="-GoalOUT-", disabled=True),
+            sg.Button("Set", key="-GoalIN-")
+        ],
+        [
+            sg.Listbox(["Heightmap", "Slopemap", "Heighkey"], default_values="Slopemap",
+                       select_mode="LISTBOX_SELECT_MODE_SINGLE", enable_events=True, key="-Map-"),
+            sg.OK("Submit", key="-Submit-")
+        ]
+    ]
+
+    window = sg.Window("PathFetcher", layout)
+    #window["-GraphIN-"].draw_image(images_path + "/slopemap.png", location=(0, 0))
+
+    while True:
+        event, values = window.read()
+
+        if event == "-Map-":
+            map=values["-Map-"]
+            if map == ['Heightmap']:
+                window["-GraphIN-"].draw_image(images_path + "/processed_heightmap.png", location=(0, 0))
+            elif map == ['Slopemap']:
+                window["-GraphIN-"].draw_image(images_path + "/slopemap.png", location=(0, 0))
+            elif map == ['Heightkey']:
+                window["-GraphIN-"].draw_image(images_path + "/heightkey_surface.png", location=(0, 0))
+
+
+        if event == "-StartIN-":
+            cur_state = 1
+
+        if event == "-GoalIN-":
+            cur_state = 2
+
+        if event == "-GraphIN-":
+            mouse_pos = values["-GraphIN-"]
+            if cur_state == 1:
+                window["-StartOUT-"].update(value=mouse_pos)
+                event, values = window.read()
+                print(values["-StartOUT-"])
+            if cur_state == 2:
+                window["-GoalOUT-"].update(value=mouse_pos)
+                event, values = window.read()
+                print(values["-GoalOUT-"])
+            cur_state = 0
+
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            return None
+
+        if event == "-Submit-":
+            return values["-StartOUT-"], values["-GoalOUT-"]
+
+
 if __name__ == "__main__":
     # path_fetcher()
+    get_pathfinding_endpoints()
     pass
