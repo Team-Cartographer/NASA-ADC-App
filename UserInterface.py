@@ -68,10 +68,11 @@ def get_pathfinding_endpoints():
         ]
     ]
 
-    window = sg.Window("PathFetcher", layout)
+    window = sg.Window("PathFetcher", layout, finalize=True)
+    window["-GraphIN-"].draw_image(images_path + "/interface_overlay.png", location=(0, 0))
 
     while True:
-        event, values = window.read()
+        event, values = window.read(timeout=100)
 
         if event == "-Map-":
             map=values["-Map-"]
