@@ -5,7 +5,8 @@ import csv
 from utils import show_warning
 from UserInterface import get_pathfinding_endpoints
 import FileManager as fm
-import time
+from time import time
+from tqdm import tqdm
 
 
 class Node:
@@ -119,7 +120,7 @@ def update_image(image_path: str, mvmt_path: list):
 
 
 if __name__ == "__main__":
-    start_time = time.time()
+    start_time = time()
 
     csv_path = fm.data_path + "/AStarRawData.csv"
     csv_path = csv_path.replace("\\", "/")
@@ -127,27 +128,17 @@ if __name__ == "__main__":
         csv_reader = csv.reader(csv_file, delimiter=',')
         full_list = list(csv_reader)
 
-    grid = [[eval(child_str) for child_str in lst_str] for lst_str in full_list]
-    # (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
+    grid = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Initial Data Parsing")]
 
-    (start_x, start_y) = (1090, 1080)
-    (goal_x, goal_y) = (840, 214)
-
-    # Start: 1090, 1080
-    # End: 840, 214
-    # Visited notes: ~782980
-    # Original: 113 seconds
-    # V1: 111 seconds (get height and slope method call reduced)
-    # V2: 85 seconds (literal_eval changed with eval)
-    # V3: 59 seconds (eval function call moved outside the for loop)
+    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
 
     (start_height, start_slope) = get_height_and_slope(start_x, start_y, grid)
     (goal_height, goal_slope) = get_height_and_slope(goal_x, goal_y, grid)
 
     final_path = astar(grid, (start_x, start_y, start_height, start_slope), (goal_x, goal_y, goal_height, goal_slope))
 
-    end_time = time.time()
-    print(end_time - start_time, "s")
+    end_time = time()
+    print(f"\nTime Taken to run A* Pathfinding: {round(end_time - start_time, 3)}s")
 
     try:
         update_image(fm.images_path + '/AStar_Texture.png', final_path)
