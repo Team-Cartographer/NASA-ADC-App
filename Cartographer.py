@@ -30,11 +30,11 @@ def calc_rgb_color(height):
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
-    converted_a_start_array = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Parsing Arrays")]
-    for i in tqdm(range(len(converted_a_start_array)), desc="Creating All Images"):
-        for j in range(len(converted_a_start_array[i])):
-            slope = converted_a_start_array[j][i][3]
-            height = converted_a_start_array[j][i][2]
+    conv_astar_arr = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Parsing Arrays")]
+    for i in tqdm(range(len(conv_astar_arr)), desc="Creating All Images"):
+        for j in range(len(conv_astar_arr[i])):
+            slope = conv_astar_arr[j][i][3]
+            height = conv_astar_arr[j][i][2]
 
             slope_color = (255, 0, 0)
             if slope < 20:
