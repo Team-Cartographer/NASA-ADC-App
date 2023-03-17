@@ -5,7 +5,7 @@ from subprocess import run
 from time import time
 
 start_time = time()
-print("Welcome to the Setup for Team Cartographer's 2023 NASA ADC Application")
+print("Welcome to Team Cartographer's 2023 NASA ADC Application")
 print("GitHub: https://github.com/abhi-arya1/cartographerADC23")
 print("Setup Initializing...")
 # Create a new virtual environment, given that there isn't one already.
