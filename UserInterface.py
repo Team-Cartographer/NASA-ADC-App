@@ -106,9 +106,10 @@ def get_pathfinding_endpoints():
             cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            show_error("Procedural Error", "By exiting the UI, you broke some stuff. You will have run"
-                                           " the A* program manually. After that, run the launcher again.")
+            show_error("Incomplete Data Error", "By exiting the Pathfinding UI, A* did not receive endpoints for pathfinding. "
+                                                "Please manually run programs or use the Launcher again. ")
             return None
+
 
         if event == "-Submit-":
             if are_you_sure("Endpoint Submission", "Are you sure these are the points you want?"):
