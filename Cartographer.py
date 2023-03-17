@@ -1,5 +1,4 @@
 import FileManager as fm
-from ast import literal_eval
 from PIL import Image
 from utils import file2list, resize
 from tqdm import tqdm
@@ -28,12 +27,14 @@ def calc_rgb_color(height):
         r = height * CALCULATION_CONS
     return int(r), int(g), int(b)
 
+
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
-    for i in tqdm(range(len(full_list)), desc="Creating All Images"):
-        for j in range(len(full_list[i])):
-            slope = float(literal_eval(full_list[j][i])[3])
-            height = float(literal_eval(full_list[j][i])[2])
+    converted_a_start_array = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Parsing Arrays")]
+    for i in tqdm(range(len(converted_a_start_array)), desc="Creating All Images"):
+        for j in range(len(converted_a_start_array[i])):
+            slope = converted_a_start_array[j][i][3]
+            height = converted_a_start_array[j][i][2]
 
             slope_color = (255, 0, 0)
             if slope < 20:
@@ -58,12 +59,11 @@ def draw_path(path, image, color):
 
 
 if __name__ == "__main__":
-
     heightmap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
     slopemap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
     heightkey = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
 
-    draw_all() # "Magic Function" - Efe
+    draw_all()
 
     heightmap.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
     slopemap.save(fm.images_path + '/slopemap.png')
