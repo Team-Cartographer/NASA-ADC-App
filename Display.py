@@ -307,7 +307,7 @@ def load_button_init():
     #fm.load_save(save_folder) # Proof of Concept Shtuff
     #print(save_folder) # This is Reachable.
 
-print(scene.entities)
+
 # Start Menu Text and Buttons -------------
 t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Application", x=-0.35, y=0.08)
 t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.07, color=color.dark_gray)

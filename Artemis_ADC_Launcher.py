@@ -60,15 +60,15 @@ if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     cartographer_program = run([sys.executable, cartographer_path])
     print("Cartographer Success")
 
-    print("Running A* (No QuadTree)")
+    print("Running A* Pathfinding")
     # runs A_Star.py (Without quad trees)
     a_star_path = code_path + "/A_Star.py"
     a_star_program = run([sys.executable, a_star_path])
-    print("A* (no QuadTree) Success")
+    print("A* Pathfinding Success")
 
     end_time = time()
 
-    print(f'Setup Completed in {end_time - start_time}s')
+    print(f'Setup Completed in {round((end_time - start_time)/60, 2)}min')
 
 
 print("Running Display")

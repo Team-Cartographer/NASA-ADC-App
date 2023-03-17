@@ -138,7 +138,7 @@ if __name__ == "__main__":
     final_path = astar(grid, (start_x, start_y, start_height, start_slope), (goal_x, goal_y, goal_height, goal_slope))
 
     end_time = time()
-    print(f"\nTime Taken to run A* Pathfinding: {round(end_time - start_time, 3)}s")
+    print(f"\nTime Taken to run A* Pathfinding: {round((end_time - start_time)/60, 2)}s")
 
     try:
         update_image(fm.images_path + '/AStar_Texture.png', final_path)
