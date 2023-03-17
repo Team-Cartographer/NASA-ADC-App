@@ -98,7 +98,7 @@ def astar(grid, start, goal):
                 f = g + h
                 heapq.heappush(nodes, Node(x2, y2, h2, f, g, h, current, slope))
 
-        print(f"\r{(len(visited))/(1277 ** 2)} % complete. Visited {len(visited)} nodes", end="")
+        print(f"\r{round((len(visited))/(1277 ** 2), 5)} % complete. Visited {len(visited)} nodes", end="")
     return None
 
 
