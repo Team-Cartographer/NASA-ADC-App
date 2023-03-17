@@ -5,13 +5,18 @@ from subprocess import run
 from time import time
 
 start_time = time()
+
 print("Welcome to Team Cartographer's 2023 NASA ADC Application")
 print("GitHub: https://github.com/abhi-arya1/cartographerADC23")
-print("Setup Initializing...")
+
 # Create a new virtual environment, given that there isn't one already.
 venv_folder = path.join(getcwd(), 'subprocess_venv')
 if not path.exists(venv_folder):
+
+    print("Setup Initializing...")
     venv.create('subprocess_venv', with_pip=True)
+
+    print("Installing Necessary Packages...")
 
     # Activate the virtual environment
     activate_script = path.join(venv_folder, 'Scripts', 'activate.bat')
