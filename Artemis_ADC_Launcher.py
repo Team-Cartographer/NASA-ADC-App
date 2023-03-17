@@ -2,7 +2,9 @@ import sys
 import venv
 from os import getcwd, path
 from subprocess import run
+from time import time
 
+start_time = time()
 # Create a new virtual environment, given that there isn't one already.
 venv_folder = path.join(getcwd(), 'subprocess_venv')
 if not path.exists(venv_folder):
@@ -64,7 +66,9 @@ if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     a_star_program = run([sys.executable, a_star_path])
     print("A* (no QuadTree) Success")
 
-    print('Setup Complete')
+    end_time = time()
+
+    print(f'Setup Completed in {end_time - start_time}s')
 
 
 print("Running Display")
