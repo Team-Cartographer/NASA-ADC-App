@@ -2,10 +2,10 @@ from PIL import Image
 import heapq
 from numpy import sqrt
 import csv
-from ast import literal_eval
 from utils import show_warning
 from UserInterface import get_pathfinding_endpoints
 import FileManager as fm
+import time
 
 
 class Node:
@@ -24,8 +24,8 @@ class Node:
 
 
 def get_height_and_slope(x, y, grid):
-    temp = (grid[y][x])
-    temp = literal_eval(temp)
+    temp = grid[y][x]
+
     try:
         if temp == 0:
 
@@ -67,8 +67,7 @@ def new_g(cx, cy, ch, cs, nx, ny, nh, ns) -> float:  # c is current node, n is n
 
 def astar(grid, start, goal):
     nodes = []
-    h, first_slope = get_height_and_slope(start[0], start[1], grid)
-    heapq.heappush(nodes, Node(start[0], start[1], start[2], 0, 0, 0, None, first_slope))
+    heapq.heappush(nodes, Node(start[0], start[1], start[2], 0, 0, 0, None, start[3]))
     visited = set()
 
     while nodes:
@@ -90,7 +89,7 @@ def astar(grid, start, goal):
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             x2 = current.x + dx
             y2 = current.y + dy
-            if x2 >= 0 and x2 < len(grid) and y2 >= 0 and y2 < len(grid[0]):
+            if 0 <= x2 < len(grid) and 0 <= y2 < len(grid[0]):
                 h2, slope = get_height_and_slope(x2, y2, grid)
 
                 g = current.g + new_g(current.x, current.y, current.height, current.slope, x2, y2, h2, slope)
@@ -120,7 +119,7 @@ def update_image(image_path: str, mvmt_path: list):
 
 
 if __name__ == "__main__":
-    # Test Case
+    start_time = time.time()
 
     csv_path = fm.data_path + "/AStarRawData.csv"
     csv_path = csv_path.replace("\\", "/")
@@ -128,14 +127,27 @@ if __name__ == "__main__":
         csv_reader = csv.reader(csv_file, delimiter=',')
         full_list = list(csv_reader)
 
-    grid = full_list
+    grid = [[eval(child_str) for child_str in lst_str] for lst_str in full_list]
+    # (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
 
-    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
+    (start_x, start_y) = (1090, 1080)
+    (goal_x, goal_y) = (840, 214)
 
-    final_path = astar(grid,
-                       (start_x, start_y, get_height_and_slope(start_x, start_y, grid)[0], get_height_and_slope(start_x, start_y, grid)[1]),
-                       (goal_x, goal_y, get_height_and_slope(goal_x, goal_y, grid)[0], get_height_and_slope(goal_x, goal_y, grid)[1]))
-    #print("\nFinal Path: ", final_path)
+    # Start: 1090, 1080
+    # End: 840, 214
+    # Visited notes: ~782980
+    # Original: 113 seconds
+    # V1: 111 seconds (get height and slope method call reduced)
+    # V2: 85 seconds (literal_eval changed with eval)
+    # V3: 59 seconds (eval function call moved outside the for loop)
+
+    (start_height, start_slope) = get_height_and_slope(start_x, start_y, grid)
+    (goal_height, goal_slope) = get_height_and_slope(goal_x, goal_y, grid)
+
+    final_path = astar(grid, (start_x, start_y, start_height, start_slope), (goal_x, goal_y, goal_height, goal_slope))
+
+    end_time = time.time()
+    print(end_time - start_time, "s")
 
     try:
         update_image(fm.images_path + '/AStar_Texture.png', final_path)
