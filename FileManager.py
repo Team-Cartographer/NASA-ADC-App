@@ -182,7 +182,7 @@ archive_path: str = os.path.join(app_files_path, 'Archived Files')
 if __name__ == '__main__':
 
     # Testing Saves
-    savetest = Save('SAVETEST')
+    #savetest = Save('SAVETEST')
 
     with open(get_slope_file_path()) as f:
         size_cons = len(list(reader(f)))
