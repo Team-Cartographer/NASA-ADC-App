@@ -3,7 +3,8 @@ import heapq
 from numpy import sqrt
 import csv
 from ast import literal_eval
-from utils import show_warning, get_pathfinding_endpoints
+from utils import show_warning
+from UserInterface import get_pathfinding_endpoints
 import FileManager as fm
 
 

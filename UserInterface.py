@@ -1,7 +1,7 @@
 
 import PySimpleGUI as sg
 from FileManager import images_path, get_size_constant
-from utils import show_error
+from utils import show_error, are_you_sure
 
 
 def path_fetcher():
@@ -64,22 +64,22 @@ def get_pathfinding_endpoints():
             sg.Button("Set", key="-GoalIN-")
         ],
         [
-            sg.Combo(["Heightmap", "Slopemap", "Heightkey"], default_value="Slopemap",
+            sg.Combo(["Moon Texture", "Slopemap", "Heightkey"], default_value="Moon Texture",
                      enable_events=True, key="-Map-"),
             sg.OK("Submit", key="-Submit-")
         ]
     ]
 
     window = sg.Window("PathFetcher", layout, finalize=True)
-    window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
+    window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
 
     while True:
         event, values = window.read(timeout=100)
 
         if event == "-Map-":
             map = values["-Map-"]
-            print(map)
-            if map == 'Heightmap':
+            #print(map)
+            if map == 'Moon Texture':
                 window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
             elif map == 'Slopemap':
                 window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
@@ -98,11 +98,11 @@ def get_pathfinding_endpoints():
             if cur_state == 1:
                 window["-StartOUT-"].update(value=mouse_pos)
                 event, values = window.read()
-                print(values["-StartOUT-"])
+                #print(values["-StartOUT-"])
             if cur_state == 2:
                 window["-GoalOUT-"].update(value=mouse_pos)
                 event, values = window.read()
-                print(values["-GoalOUT-"])
+                #print(values["-GoalOUT-"])
             cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
@@ -111,10 +111,11 @@ def get_pathfinding_endpoints():
             return None
 
         if event == "-Submit-":
-            if values["-StartOUT-"] != "None" and values["-GoalOUT-"] != "None":
-                return values["-StartOUT-"], values["-GoalOUT-"]
-            else:
-                show_error("Incomplete Data Error", "Please select a start and end point")
+            if are_you_sure("Endpoint Submission", "Are you sure these are the points you want?"):
+                if values["-StartOUT-"] != "None" and values["-GoalOUT-"] != "None":
+                    return eval(values["-StartOUT-"]), eval(values["-GoalOUT-"])
+                else:
+                    show_error("Incomplete Data Error", "Please select a start and end point")
 
 
 if __name__ == "__main__":
