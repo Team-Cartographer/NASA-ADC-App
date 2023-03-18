@@ -103,8 +103,7 @@ def update_image(image_path: str, mvmt_path: list):
 
 if __name__ == "__main__":
 
-    # (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
-    (start_x, start_y), (goal_x, goal_y) = (1077, 1105), (957, 671)
+    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
 
     grid = fm.load_json(fm.data_path + "/AStarRawData.json")
 
