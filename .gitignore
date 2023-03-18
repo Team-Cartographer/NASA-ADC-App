@@ -1,6 +1,7 @@
 # Project folders
 App Files/
 Data/
+info.json
 
 #Images
 processed_heightmap.png
