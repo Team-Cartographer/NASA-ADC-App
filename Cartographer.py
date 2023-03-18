@@ -1,10 +1,7 @@
 import FileManager as fm
-from PIL import Image
-from utils import file2list, resize
+from PIL import Image, ImageDraw
+from utils import resize
 from tqdm import tqdm
-
-astar_data_path = fm.data_path + "/AStarRawData.csv"
-full_list = file2list(astar_data_path)
 
 max_z = fm.get_max_z()
 CALCULATION_CONS = 255 / max_z
@@ -17,6 +14,7 @@ def calculate_color(height):
     color = 255 - (height * CALCULATION_CONS)
     return int(color), int(color), int(color)
 
+
 def calc_rgb_color(height):
     r, g, b = 0, 0, 0
     if height <= ONE_THIRD * max_z:
@@ -28,14 +26,18 @@ def calc_rgb_color(height):
     return int(r), int(g), int(b)
 
 
-
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
-    conv_astar_arr = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Parsing Arrays")]
-    for i in tqdm(range(len(conv_astar_arr)), desc="Creating All Images"):
-        for j in range(len(conv_astar_arr[i])):
-            slope = conv_astar_arr[j][i][3]
-            height = conv_astar_arr[j][i][2]
+    parsed_arr = fm.load_json(fm.data_path + "/AStarRawData.json")
+
+    heightmap_draw = ImageDraw.Draw(heightmap)
+    slopemap_draw = ImageDraw.Draw(slopemap)
+    heightkey_draw = ImageDraw.Draw(heightkey)
+
+    for i in tqdm(range(len(parsed_arr)), desc="Creating All Images"):
+        for j in range(len(parsed_arr[i])):
+            slope = parsed_arr[j][i][3]
+            height = parsed_arr[j][i][2]
 
             slope_color = (255, 0, 0)
             if slope < 20:
@@ -44,12 +46,11 @@ def draw_all():
                 slope_color = (0, 255, 0)
 
             heightkey_color = calc_rgb_color(height)
-
             heightmap_color = calculate_color(height)
 
-            heightmap.putpixel((j, i), heightmap_color)
-            slopemap.putpixel((j, i), slope_color)
-            heightkey.putpixel((j, i), heightkey_color)
+            heightmap_draw.point((j, i), fill=heightmap_color)
+            slopemap_draw.point((j, i), fill=slope_color)
+            heightkey_draw.point((j, i), fill=heightkey_color)
 
 
 def draw_path(path, image, color):
@@ -73,16 +74,16 @@ if __name__ == "__main__":
     # Image Scaling for Faster Ursina Runs
     downscaled = resize(
         image_path=fm.images_path + '/RAW_heightmap.png',
-        new_name='processed_heightmap', 
+        new_name='processed_heightmap',
         scale=81
     )
 
     minimap = resize(
-        image_path='moon_surface_texture.png', 
+        image_path='moon_surface_texture.png',
         new_name='minimap',
         scale=127
     )
-    
+
     astar_texture = resize(
         image_path='moon_surface_texture.png',
         new_name='AStar_Texture',
