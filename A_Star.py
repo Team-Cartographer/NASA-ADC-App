@@ -79,9 +79,9 @@ def astar():
             for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                 x2 = current.x + dx
                 y2 = current.y + dy
-                new_node = Node(x2, y2, current)
 
                 if 0 <= x2 < len(grid) and 0 <= y2 < len(grid[0]):
+                    new_node = Node(x2, y2, current)
                     heapq.heappush(nodes, new_node)
 
             pbar.update()
