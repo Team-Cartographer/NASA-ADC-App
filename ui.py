@@ -1,4 +1,3 @@
-
 # ui -> User Interface Helper File
 
 import PySimpleGUI as sg
@@ -42,7 +41,7 @@ def path_fetcher():
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
-            #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
+            # return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
 
 def get_pathfinding_endpoints():
@@ -58,12 +57,12 @@ def get_pathfinding_endpoints():
         [
             sg.Text("Current Start Position:"),
             sg.Input(default_text="None", key="-StartOUT-", disabled=True),
-            sg.Button("Set", key="-StartIN-")
+            sg.Button("Set", key="-StartIN-", enable_events=True)
         ],
         [
             sg.Text("Current Start Position:"),
             sg.Input(default_text="None", key="-GoalOUT-", disabled=True),
-            sg.Button("Set", key="-GoalIN-")
+            sg.Button("Set", key="-GoalIN-", enable_events=True)
         ],
         [
             sg.Combo(["Moon Texture", "Slopemap", "Heightkey"], default_value="Moon Texture",
@@ -76,11 +75,11 @@ def get_pathfinding_endpoints():
     window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
 
     while True:
-        event, values = window.read(timeout=100)
+        event, values = window.read(timeout=500)
 
         if event == "-Map-":
             map = values["-Map-"]
-            #print(map)
+            # print(map)
             if map == 'Moon Texture':
                 window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
             elif map == 'Slopemap':
@@ -88,30 +87,28 @@ def get_pathfinding_endpoints():
             elif map == 'Heightkey':
                 window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
 
-
         if event == "-StartIN-":
+            print("START BUTTON")
             cur_state = 1
 
         if event == "-GoalIN-":
+            print("GOAL BUTTON")
             cur_state = 2
 
         if event == "-GraphIN-":
             mouse_pos = values["-GraphIN-"]
             if cur_state == 1:
                 window["-StartOUT-"].update(value=mouse_pos)
-                event, values = window.read()
-                #print(values["-StartOUT-"])
+                cur_state = 0
+
             if cur_state == 2:
                 window["-GoalOUT-"].update(value=mouse_pos)
-                event, values = window.read()
-                #print(values["-GoalOUT-"])
-            cur_state = 0
+                cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            show_error("Incomplete Data Error", "By exiting the Pathfinding UI, A* did not receive endpoints for pathfinding. "
-                                                "Please manually run programs or use the Launcher again. ")
+            show_error("Incomplete Data Error", "By exiting the Pathfinding UI, A* did not receive endpoints for "
+                                                "pathfinding. Please manually run programs or use the Launcher again.")
             return None
-
 
         if event == "-Submit-":
             if are_you_sure("Endpoint Submission", "Are you sure these are the points you want?"):
