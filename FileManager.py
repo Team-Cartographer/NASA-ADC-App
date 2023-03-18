@@ -193,7 +193,7 @@ def get_lunar_rad() -> float:
 
 
 # Meant for future save files, unused currently.
-def get_player_pos() -> tuple(int, int, int):
+def get_player_pos() -> tuple:
     return data["PLAYER_POSITION"]
 
 
