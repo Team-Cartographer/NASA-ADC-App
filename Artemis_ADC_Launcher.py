@@ -39,17 +39,11 @@ code_path = getcwd()
 if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     print('Running Setup')
 
-    # runs PathFetcher.exe
-    print("Running PathFetcher")
-    pathfetcher_path = code_path + "/PathFetcher/PathFetcher.exe"
-    pathfetcher_program = run(["cmd", "/c", pathfetcher_path], capture_output=True)
-    print("PathFetcher Success")
-
-    print("Running FolderCreator")
+    print("Running FileManager First-Time Setup")
     # runs FileManager.py
     folder_creator_path = code_path + "/FileManager.py"
     folder_creator_program = run([sys.executable, folder_creator_path])
-    print("FolderCreator Success")
+    print("FileManager Setup Success")
 
     print("Running DataProcessor")
     # runs DataProcessor.py
