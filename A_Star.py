@@ -120,25 +120,17 @@ def update_image(image_path: str, mvmt_path: list):
 
 
 if __name__ == "__main__":
+    # (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
+    (start_x, start_y), (goal_x, goal_y) = (1077, 1105), (957, 671)
+
     start_time = time()
 
-    csv_path = fm.data_path + "/AStarRawData.csv"
-    csv_path = csv_path.replace("\\", "/")
-    with open(csv_path, mode="r") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        full_list = list(csv_reader)
-
-    grid = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Initial Data Parsing")]
-
-    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
+    grid = fm.load_json(fm.data_path + "/AStarRawData.json")
 
     (start_height, start_slope) = get_height_and_slope(start_x, start_y, grid)
     (goal_height, goal_slope) = get_height_and_slope(goal_x, goal_y, grid)
 
     final_path = astar(grid, (start_x, start_y, start_height, start_slope), (goal_x, goal_y, goal_height, goal_slope))
-
-    end_time = time()
-    print(f"\nTime Taken to run A* Pathfinding: {round((end_time - start_time)/60, 2)}s")
 
     try:
         update_image(fm.images_path + '/AStar_Texture.png', final_path)
@@ -147,3 +139,5 @@ if __name__ == "__main__":
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
         pass
 
+    end_time = time()
+    print(f"\nTime Taken to run A* Pathfinding: {round((end_time - start_time), 2)}s")
