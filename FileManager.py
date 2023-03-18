@@ -122,7 +122,9 @@ if not os.path.exists(os.getcwd() + '/info.json'):
     LUNAR_RAD = 1737400.0
 
     # Get pathing from Path_Fetcher()
-    lat, long, ht, slope , dist = path_fetcher()
+    lat, long, ht, slope, dist = None, None, None, None, None
+    while not lat:
+        lat, long, ht, slope , dist = path_fetcher()
 
     data: dict = {
         "LATITUDE_PATH": lat,
