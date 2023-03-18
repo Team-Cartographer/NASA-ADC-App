@@ -49,6 +49,7 @@ def process_data():
             azi: float = get_azimuth(latitude, longitude)
             elev: float = get_elevation(latitude, longitude, radius)
 
+
             xs.append(x), ys.append(y), zs.append(z)
 
             a_star_data_array.append([x, y, z, slope, azi, elev, latitude, longitude])

@@ -75,7 +75,11 @@ def load_json(json_path: str) -> dict:
 # Push Dictionary of Data to Json File
 def push_to_json(jsonpath, data, custom_indent=4):
     with open(jsonpath, 'w') as f:
+        json_size = len(json.dumps(data).encode('utf-8'))
+        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Writing " + os.path.basename(jsonpath))
         json.dump(data, f, ensure_ascii=False, indent=custom_indent)
+        pbar.update(json_size)
+
 
 # Currently Disabled as Saves are not a priority task.
 ''' 

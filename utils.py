@@ -3,8 +3,7 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 import os
-from numpy import rad2deg, deg2rad
-from math import atan2, sin, cos, asin, sqrt
+from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from ast import literal_eval
 from PIL import Image
 
@@ -81,15 +80,15 @@ def height_from_rect(x: float, y: float) -> float:
 
 
 def get_x_coord(lat, long, rad):  # takes in degrees latitude and longitude
-    return rad * cos(deg2rad(lat)) * cos(deg2rad(long))
+    return rad * cos(radians(lat)) * cos(radians(long))
 
 
 def get_y_coord(lat, long, rad):
-    return rad * cos(deg2rad(lat)) * sin(deg2rad(long))
+    return rad * cos(radians(lat)) * sin(radians(long))
 
 
 def get_z_coord(lat, rad):
-    return rad * sin(deg2rad(lat))
+    return rad * sin(radians(lat))
 
 
 # ONLY FOR USE WITH DISPLAY.PY
@@ -108,9 +107,9 @@ def get_azimuth(moon_lat, moon_long):
     """
 
     # True Lunar South Pole
-    lunar_south_pole_lat, lunar_south_pole_long = deg2rad(-89.54), deg2rad(0)
-    moon_lat_radian = deg2rad(moon_lat)
-    moon_long_radian = deg2rad(moon_long)
+    lunar_south_pole_lat, lunar_south_pole_long = radians(-89.54), radians(0)
+    moon_lat_radian = radians(moon_lat)
+    moon_long_radian = radians(moon_long)
 
     # Azimuth Calculation
     c1 = sin(moon_long_radian - lunar_south_pole_long) * cos(moon_lat_radian)
@@ -118,7 +117,7 @@ def get_azimuth(moon_lat, moon_long):
                 sin(lunar_south_pole_lat) * cos(moon_lat_radian) * cos(moon_long_radian - lunar_south_pole_long))
     azi = atan2(c1, c2)
 
-    return rad2deg(azi)
+    return degrees(azi)
 
 
 def get_elevation(moon_lat, moon_long, moon_height):
@@ -130,8 +129,8 @@ def get_elevation(moon_lat, moon_long, moon_height):
     earth_y = 0
     earth_z = -42100
 
-    moon_lat_rad = deg2rad(float(moon_lat))
-    moon_long_rad = deg2rad(float(moon_long))
+    moon_lat_rad = radians(float(moon_lat))
+    moon_long_rad = radians(float(moon_long))
     moon_radius = 1737.4 * 1000 + float(moon_height)
 
     moon_x = get_x_coord(moon_lat, moon_long, moon_radius)
@@ -146,7 +145,7 @@ def get_elevation(moon_lat, moon_long, moon_height):
 
     elev = asin(rz / range_)
 
-    return rad2deg(elev)
+    return degrees(elev)
 
 
 def resize(image_path: str, new_name: str, scale: float) -> str:
