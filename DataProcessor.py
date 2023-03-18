@@ -1,7 +1,6 @@
 import csv
 import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation
-from dotenv import set_key
 from tqdm import tqdm
 
 # Get Constants
@@ -14,6 +13,8 @@ latitude_list: list = file2list(fm.get_latitude_file_path())
 longitude_list: list = file2list(fm.get_longitude_file_path())
 height_list: list = file2list(fm.get_height_file_path())
 slope_list: list = file2list(fm.get_slope_file_path())
+
+data = fm.load_json(fm.JSONPATH)
 
 
 def process_data():
@@ -56,13 +57,13 @@ def process_data():
     min_y_: float = abs(min(ys))
     min_z_: float = abs(min(zs))
 
-    max_z: str = str(round(abs(min_z_) - abs(max(zs))))
+    max_z: float = (round(abs(min_z_) - abs(max(zs))))
 
     # Update .env (Soon to be outdated with .json)
-    set_key('.env', 'MAX_Z', max_z)
-    set_key('.env', 'MIN_Z', str(min_z_))
-    set_key('.env', 'MIN_X', str(min_x_))
-    set_key('.env', 'MIN_Y', str(min_y_))
+    data["MAX_Z"] = max_z
+    data["MIN_Z"] = min_z_
+    data["MIN_Y"] = min_y_
+    data["MIN_X"] = min_x_
 
     adj_array: list = []
     for i in tqdm(range(len(a_star_data_array)), desc="Creating AStar Data Array"):
@@ -95,6 +96,9 @@ def process_data():
         for row in tqdm(array_to_be_written, desc='Writing to AStarRawData.csv'):
             csv_writer.writerow(row)
     f.close()
+
+    fm.push_to_json(fm.JSONPATH, data)
+
 
 
 if __name__ == "__main__":

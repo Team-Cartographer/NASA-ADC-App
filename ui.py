@@ -1,4 +1,6 @@
 
+# ui -> User Interface Helper File
+
 import PySimpleGUI as sg
 from FileManager import images_path, get_size_constant
 from utils import show_error, are_you_sure

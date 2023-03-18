@@ -8,12 +8,6 @@ from math import atan2, sin, cos, asin, sqrt
 from ast import literal_eval
 from PIL import Image
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # This hides the pygame welcome message
-
-import pygame
-from pygame import gfxdraw
-from webbrowser import open as open_page
-
 
 def file2list(path):
     with open(path) as csv_file:
@@ -27,10 +21,6 @@ try:
     astar_list = file2list(os.getcwd() + '/Data/AStarRawData.csv')
 except FileNotFoundError:
     pass
-
-
-def open_webpage(url: str) -> None:
-    open_page(url)
 
 
 def find_file(name, path):
@@ -102,7 +92,7 @@ def get_z_coord(lat, rad):
     return rad * sin(deg2rad(lat))
 
 
-# ONLY FOR USE WITH Display.py
+# ONLY FOR USE WITH DISPLAY.PY
 def get_azi_elev(x, y):
     data = literal_eval(astar_list[x][y])
     return round(data[4], 5), round(data[5], 5)  # azimuth and elevation, respectively
@@ -168,50 +158,6 @@ def resize(image_path: str, new_name: str, scale: float) -> str:
     print(f"Created {new_name}.png")
     return path
 
-
-
-'''
-# Deprecated by UserInterface.py
-# TODO: Mark as obsolete only after the new one is working and implemented
-# Get Start and End Points for AStar Pathfinding
-def get_pathfinding_endpoints() -> tuple:
-    pygame.init()
-    screen_size = [638.5, 638.5]
-    screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption("Pick Two Points. After that, Press SPACE to Confirm or LEFT_ALT to Reset")
-
-    done = False
-
-    start_pos: tuple | None = None
-    goal_pos: tuple | None = None
-
-    heightmap_img = pygame.image.load("Data/Images/interface_overlay.png")
-    screen.blit(heightmap_img, (0, 0))
-
-    while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_pos is None:
-                    start_pos = pygame.mouse.get_pos()
-                    gfxdraw.filled_circle(screen, start_pos[0], start_pos[1], 4, (255, 0, 0))
-                    start_pos = (start_pos[0] * 2, start_pos[1] * 2)
-                elif goal_pos is None:
-                    goal_pos = pygame.mouse.get_pos()
-                    gfxdraw.filled_circle(screen, goal_pos[0], goal_pos[1], 4, (255, 0, 0))
-                    goal_pos = (goal_pos[0] * 2, goal_pos[1] * 2)
-
-            if start_pos and goal_pos:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        pygame.quit()
-                        return start_pos, goal_pos
-                    elif event.key == pygame.K_LALT:
-                        heightmap_img = pygame.image.load("Data/Images/interface_overlay.png")
-                        screen.blit(heightmap_img, (0, 0))
-                        start_pos, goal_pos = None, None
-
-        pygame.display.flip()
-'''
-
-
-
+if __name__ == "__main__":
+    # Do Nothing
+    pass

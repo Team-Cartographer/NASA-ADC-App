@@ -3,7 +3,7 @@ import heapq
 from numpy import sqrt
 import csv
 from utils import show_warning
-from UserInterface import get_pathfinding_endpoints
+from ui import get_pathfinding_endpoints
 import FileManager as fm
 from time import time
 from tqdm import tqdm

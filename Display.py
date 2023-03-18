@@ -5,7 +5,7 @@ from utils import get_azi_elev, \
     get_radius, height_from_rect, slope_from_rect
 from display_utils import ViewCamera
 from ursina.prefabs.first_person_controller import FirstPersonController
-from ursina.application import quit # USE THIS, not PYTHON quit()
+from ursina.application import quit # USE THIS, NOT PYTHON quit()
 
 # Window Declarations and Formatting -------------
 app = Ursina()
@@ -303,7 +303,8 @@ def load_button_init():
     root = tk.Tk()
     root.withdraw()
     save_folder = askdirectory()
-    quit() # USE URSINA QUIT, NOT PYTHON QUIT.
+    # This currently does nothing, just leave it here for saves later on.
+    #quit() # USE URSINA QUIT, NOT PYTHON QUIT.
     #fm.load_save(save_folder) # Proof of Concept Shtuff
     #print(save_folder) # This is Reachable.
 
