@@ -1,143 +1,119 @@
 from PIL import Image
 import heapq
 from numpy import sqrt
-import csv
 from utils import show_warning
 from ui import get_pathfinding_endpoints
 import FileManager as fm
-from time import time
 from tqdm import tqdm
 
 
 class Node:
-    def __init__(self, x, y, height, f, g, h, parent=None, slope=None):
+    def __init__(self, x, y, parent=None):
         self.x = x
         self.y = y
-        self.height = height
-        self.f = f
-        self.g = g
-        self.h = h
+
         self.parent = parent
-        self.slope = slope
+
+        self.height = grid[y][x][2]
+        self.slope = grid[y][x][3]
+
+        self.g = 0
+        self.h = 0
+        self.f = 0
+
+        if parent is not None:
+            self.g = parent.new_g(self)
+            self.h = self.heuristic(goal_node)
+            self.f = self.g + self.h
 
     def __lt__(self, other):
         return self.f < other.f
 
+    def heuristic(self, other):
+        return self.dist_btw(other)
 
-def get_height_and_slope(x, y, grid):
-    temp = grid[y][x]
+    def dist_btw(self, other):
+        return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.h - other.h) ** 2)
 
-    try:
-        if temp == 0:
+    def new_g(self, other) -> float:
+        # constant values:
+        k_dist = 1
+        k_slope = 0.25
 
-            print(temp)
-            print(x, y)
-            print(grid[x])
-    except TypeError:
-        pass
+        slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes
+        if other.slope >= 20:
+            slope_penalty = 25
+        elif other.slope >= 8:
+            slope_penalty = 5  # see above to do
 
-    return float(temp[2]), float(temp[3])
+        dist = self.dist_btw(other)
+        slope = abs(self.slope - other.slope)
 
-
-def distBtw(x1, y1, h1, x2, y2, h2):
-    return sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (h1 - h2) ** 2)
-
-
-def heuristic(x1, y1, x2, y2, h1, h2):
-    heur_rtn = distBtw(x1, y1, h1, x2, y2, h2)
-    return heur_rtn
-
-
-def new_g(cx, cy, ch, cs, nx, ny, nh, ns) -> float:  # c is current node, n is new node
-    # constant values:
-    k_dist = 1
-    k_slope = 0.25
-
-    slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes
-    if ns >= 20:
-        slope_penalty = 25  # TODO not have the slope penalty be random numbers. We need to curate these numbers more
-    elif ns >= 8:
-        slope_penalty = 5  # see above to do
-
-    dist = distBtw(float(cx), float(cy), float(ch), float(nx), float(ny), float(nh))
-    slope = abs(cs - ns)
-
-    eqn = k_dist * dist + k_slope * slope + slope_penalty
-    return eqn
+        eqn = k_dist * dist + k_slope * slope + slope_penalty
+        return eqn
 
 
-def astar(grid, start, goal):
+def astar():
     nodes = []
-    heapq.heappush(nodes, Node(start[0], start[1], start[2], 0, 0, 0, None, start[3]))
+
+    heapq.heappush(nodes, start_node)
     visited = set()
 
-    while nodes:
-        current = heapq.heappop(nodes)
+    with tqdm(total=None, desc='A* algorithm', unit=" Nodes") as pbar:
+        while nodes:
+            current = heapq.heappop(nodes)
 
-        if (current.x, current.y) in visited:
-            continue
-        visited.add((current.x, current.y))
+            if (current.x, current.y) in visited:
+                continue
+            visited.add((current.x, current.y))
 
-        if current.x == goal[0] and current.y == goal[1] and current.height == goal[2]:
-            path = []
-            while current.parent:
-                path.append((current.x, current.y, current.height))
-                current = current.parent
-            path.append((start[0], start[1], start[2]))
-            path.reverse()
-            return path
+            if current.x == goal_node.x and current.y == goal_node.y and current.height == goal_node.height:
+                path = []
+                while current.parent:
+                    path.append((current.x, current.y, current.height))
+                    current = current.parent
+                path.append((start_node.x, start_node.y, start_node.height))
+                path.reverse()
+                return path
 
-        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            x2 = current.x + dx
-            y2 = current.y + dy
-            if 0 <= x2 < len(grid) and 0 <= y2 < len(grid[0]):
-                h2, slope = get_height_and_slope(x2, y2, grid)
+            for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                x2 = current.x + dx
+                y2 = current.y + dy
+                new_node = Node(x2, y2, current)
 
-                g = current.g + new_g(current.x, current.y, current.height, current.slope, x2, y2, h2, slope)
-                h = heuristic(x2, y2, goal[0], goal[1], h2, goal[2])
-                f = g + h
-                heapq.heappush(nodes, Node(x2, y2, h2, f, g, h, current, slope))
+                if 0 <= x2 < len(grid) and 0 <= y2 < len(grid[0]):
+                    heapq.heappush(nodes, new_node)
 
-        print(f"\r{round((len(visited))/(1277 ** 2), 5)} % complete. Visited {len(visited)} nodes", end="")
+            pbar.update()
     return None
-
-
-def add_pixel(img, x, y, color):
-    img.putpixel((x, y), color)
-    return img
 
 
 def update_image(image_path: str, mvmt_path: list):
     path = image_path
     img = Image.open(path)
+
     color = (0, 0, 128)
-    for i in range(len(mvmt_path)):
-        print(f"\rUpdating image. {round(i/len(mvmt_path), 8)}% complete", end="")
+    for i in tqdm(range(len(mvmt_path)), desc="Updating image"):
         x = mvmt_path[i][0]
         y = mvmt_path[i][1]
-        img = add_pixel(img, x, y, color)
+        img.putpixel((x, y), color)
+
     img.save(fm.images_path + "/AStar_Path.png")
 
 
 if __name__ == "__main__":
+
     # (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints()
     (start_x, start_y), (goal_x, goal_y) = (1077, 1105), (957, 671)
 
-    start_time = time()
-
     grid = fm.load_json(fm.data_path + "/AStarRawData.json")
 
-    (start_height, start_slope) = get_height_and_slope(start_x, start_y, grid)
-    (goal_height, goal_slope) = get_height_and_slope(goal_x, goal_y, grid)
+    start_node = Node(start_x, start_y)
+    goal_node = Node(goal_x, goal_y)
 
-    final_path = astar(grid, (start_x, start_y, start_height, start_slope), (goal_x, goal_y, goal_height, goal_slope))
+    final_path = astar()
 
-    try:
+    if final_path is not None:
         update_image(fm.images_path + '/AStar_Texture.png', final_path)
-        print("\rPath Image: ('AStar_Path.png') Created.")
-    except TypeError:
+    else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
-        pass
-
-    end_time = time()
-    print(f"\nTime Taken to run A* Pathfinding: {round((end_time - start_time), 2)}s")

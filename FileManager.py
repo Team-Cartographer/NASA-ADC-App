@@ -8,6 +8,7 @@ from utils import show_info
 from csv import reader
 import json
 import PySimpleGUI as sg
+from tqdm import tqdm
 
 JSONPATH = os.getcwd() + '/info.json'
 
@@ -60,11 +61,15 @@ def file2list(path):
 
     return new_list
 
+
 # Load data from Json File
-def load_json(json_path : str) -> dict:
+def load_json(json_path: str) -> dict:
     with open(json_path, 'r') as f:
-        jsondata = json.load(f)
-    return jsondata
+        json_size = os.path.getsize(json_path)
+        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Loading " + os.path.basename(json_path))
+        json_data = json.load(f)
+        pbar.update(json_size)
+    return json_data
 
 
 # Push Dictionary of Data to Json File
