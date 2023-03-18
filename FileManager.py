@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 JSONPATH = os.getcwd() + '/info.json'
 
+
 # Needed here from UserInterface to avoid Circular Import
 def path_fetcher():
     layout = [
@@ -48,9 +49,9 @@ def path_fetcher():
             break
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points
-            #print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
+    window.close()
     return None
 
 # Converts a CSV File to an Array, taken from Utils to avoid Circular Import
@@ -232,5 +233,3 @@ if __name__ == '__main__':
         # If Directories exist, Notify User.
         show_info('ADC App Installation Update',
                   "Folder Already Exists on " + parent_path + '\nFiles have been updated.')
-
-

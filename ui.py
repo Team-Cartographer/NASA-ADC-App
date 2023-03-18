@@ -44,6 +44,7 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
+    window.close()
 
 def get_pathfinding_endpoints():
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
@@ -116,6 +117,7 @@ def get_pathfinding_endpoints():
         if event == "-Submit-":
             if are_you_sure("Endpoint Submission", "Are you sure these are the points you want?"):
                 if values["-StartOUT-"] != "None" and values["-GoalOUT-"] != "None":
+                    window.close()
                     return eval(values["-StartOUT-"]), eval(values["-GoalOUT-"])
                 else:
                     show_error("Incomplete Data Error", "Please select a start and end point")
