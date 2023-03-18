@@ -9,6 +9,7 @@ from csv import reader
 import json
 import PySimpleGUI as sg
 from tqdm import tqdm
+from msgspec.json import decode
 
 JSONPATH = os.getcwd() + '/info.json'
 
@@ -66,10 +67,8 @@ def file2list(path):
 # Load data from Json File
 def load_json(json_path: str) -> dict:
     with open(json_path, 'r') as f:
-        json_size = os.path.getsize(json_path)
-        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Loading " + os.path.basename(json_path))
-        json_data = json.load(f)
-        pbar.update(json_size)
+        with open(json_path, "rb") as f:
+            json_data = decode(f.read())
     return json_data
 
 
