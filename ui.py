@@ -44,7 +44,6 @@ def path_fetcher():
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
             #return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
-    window.close()
 
 def get_pathfinding_endpoints():
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
