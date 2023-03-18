@@ -1,4 +1,3 @@
-import csv
 import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation
 from tqdm import tqdm
@@ -48,7 +47,6 @@ def process_data():
 
             azi: float = get_azimuth(latitude, longitude)
             elev: float = get_elevation(latitude, longitude, radius)
-
 
             xs.append(x), ys.append(y), zs.append(z)
 
