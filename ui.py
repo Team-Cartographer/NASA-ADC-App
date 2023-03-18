@@ -88,11 +88,9 @@ def get_pathfinding_endpoints():
                 window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
 
         if event == "-StartIN-":
-            print("START BUTTON")
             cur_state = 1
 
         if event == "-GoalIN-":
-            print("GOAL BUTTON")
             cur_state = 2
 
         if event == "-GraphIN-":
