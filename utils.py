@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 from math import atan2, sin, cos, asin, sqrt, radians, degrees
-from ast import literal_eval
 from PIL import Image
 
 
@@ -14,12 +13,6 @@ def file2list(path):
         csv_file.close()
 
     return new_list
-
-
-try:
-    astar_list = file2list(os.getcwd() + '/Data/AStarRawData.csv')
-except FileNotFoundError:
-    pass
 
 
 def find_file(name, path):
@@ -58,24 +51,24 @@ def get_radius(x: float, y: float) -> float:
     return sqrt((x ** 2) + (y ** 2))
 
 
-def latitude_from_rect(x: float, y: float, radius: float) -> float:
+def latitude_from_rect(x: float, y: float, radius: float, data) -> float:
     # lat, _, _ = (radius/(30366 + (1/9))) - 90, x, y
-    lat = literal_eval(astar_list[x][y])[6]
+    lat = data[x][y][6]
     return lat
 
 
-def longitude_from_rect(x: float, y: float, radius: float) -> float:
+def longitude_from_rect(x: float, y: float, radius: float, data) -> float:
     # long, _ = rad2deg(arccos(x/radius)), y
-    long = literal_eval(astar_list[x][y])[7]
+    long = data[x][y][7]
     return long
 
 
-def slope_from_rect(x: float, y: float) -> float:
-    return literal_eval(astar_list[x][y])[3]
+def slope_from_rect(x: float, y: float, data) -> float:
+    return data[x][y][3]
 
 
-def height_from_rect(x: float, y: float) -> float:
-    height = float(os.getenv("MAX_Z")) - literal_eval(astar_list[x][y])[2]
+def height_from_rect(x: float, y: float, data, infodata) -> float:
+    height = float(infodata["MAX_Z"] - data[x][y][3])
     return height
 
 
@@ -92,9 +85,9 @@ def get_z_coord(lat, rad):
 
 
 # ONLY FOR USE WITH DISPLAY.PY
-def get_azi_elev(x, y):
-    data = literal_eval(astar_list[x][y])
-    return round(data[4], 5), round(data[5], 5)  # azimuth and elevation, respectively
+def get_azi_elev(x, y, data):
+    row = data[x][y]
+    return round(row[4], 5), round(row[5], 5)  # azimuth and elevation, respectively
 
 
 def get_azimuth(moon_lat, moon_long):
