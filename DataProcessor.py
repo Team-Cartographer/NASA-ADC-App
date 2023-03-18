@@ -90,15 +90,6 @@ def process_data():
             array_to_be_written[j][i][1] = j
 
     fm.push_to_json(fm.data_path + "/AStarRawData.json", array_to_be_written, None)
-
-    astar_path: str = fm.data_path + "/AStarRawData.csv"
-
-    with open(astar_path, mode="w", newline="") as f:
-        csv_writer: csv.writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for row in tqdm(array_to_be_written, desc='Writing to AStarRawData.csv'):
-            csv_writer.writerow(row)
-    f.close()
-
     fm.push_to_json(fm.JSONPATH, data)
 
 
