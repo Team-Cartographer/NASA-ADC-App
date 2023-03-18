@@ -66,10 +66,11 @@ def load_json(json_path : str) -> dict:
         jsondata = json.load(f)
     return jsondata
 
+
 # Push Dictionary of Data to Json File
-def push_to_json(jsonpath, data):
+def push_to_json(jsonpath, data, custom_indent=4):
     with open(jsonpath, 'w') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump(data, f, ensure_ascii=False, indent=custom_indent)
 
 # Currently Disabled as Saves are not a priority task.
 ''' 

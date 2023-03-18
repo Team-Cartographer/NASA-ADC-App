@@ -84,7 +84,7 @@ if __name__ == "__main__":
     )
     
     astar_texture = resize(
-        image_path='moon_surface_texture.png', 
+        image_path='moon_surface_texture.png',
         new_name='AStar_Texture',
         scale=1277
     )
