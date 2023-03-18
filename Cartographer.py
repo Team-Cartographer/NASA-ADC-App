@@ -107,4 +107,3 @@ if __name__ == "__main__":
         scale=500
     )
 
-    print("Cartographer Success")
