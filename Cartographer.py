@@ -28,6 +28,7 @@ def calc_rgb_color(height):
     return int(r), int(g), int(b)
 
 
+
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
     conv_astar_arr = [[eval(child_str) for child_str in lst_str] for lst_str in tqdm(full_list, desc="Parsing Arrays")]

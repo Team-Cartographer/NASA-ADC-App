@@ -168,6 +168,8 @@ def resize(image_path: str, new_name: str, scale: float) -> str:
     print(f"Created {new_name}.png")
     return path
 
+
+
 '''
 # Deprecated by UserInterface.py
 # TODO: Mark as obsolete only after the new one is working and implemented
