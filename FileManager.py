@@ -4,8 +4,7 @@ App Development Challenge Application.#
 """
 
 import os
-from utils import show_info
-from csv import reader
+from utils import show_info, file2list
 import json
 import PySimpleGUI as sg
 from tqdm import tqdm
@@ -54,14 +53,6 @@ def path_fetcher():
 
     window.close()
     return None
-
-# Converts a CSV File to an Array, taken from Utils to avoid Circular Import
-def file2list(path):
-    with open(path) as csv_file:
-        new_list = list(reader(csv_file, delimiter=','))
-        csv_file.close()
-
-    return new_list
 
 
 # Load data from Json File
