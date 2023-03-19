@@ -57,9 +57,8 @@ def path_fetcher():
 
 # Load data from Json File
 def load_json(json_path: str) -> dict:
-    with open(json_path, 'r') as f:
-        with open(json_path, "rb") as f:
-            json_data = decode(f.read())
+    with open(json_path, "rb") as f:
+        json_data = decode(f.read())
     return json_data
 
 
