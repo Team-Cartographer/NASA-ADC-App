@@ -231,8 +231,8 @@ def update():
 
     # Calculating Data
     rad = get_radius(nx, nz)
-    lat = float(latitude_from_rect(nx, nz, rad, AStarData))
-    long = float(longitude_from_rect(nx, nz, rad, AStarData))
+    lat = float(latitude_from_rect(nx, nz, AStarData))
+    long = float(longitude_from_rect(nx, nz, AStarData))
     slope = slope_from_rect(nx, nz, AStarData)
     height = height_from_rect(nx, nz, AStarData, infodata)
     azimuth, elevation = get_azi_elev(nx, nz, AStarData)

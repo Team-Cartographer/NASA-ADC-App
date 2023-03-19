@@ -41,7 +41,6 @@ def path_fetcher():
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points
             print(values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"])
-            # return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
 
 
 def get_pathfinding_endpoints():
@@ -78,13 +77,13 @@ def get_pathfinding_endpoints():
         event, values = window.read(timeout=500)
 
         if event == "-Map-":
-            map = values["-Map-"]
-            # print(map)
-            if map == 'Moon Texture':
+            map_canvas = values["-Map-"]
+
+            if map_canvas == 'Moon Texture':
                 window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
-            elif map == 'Slopemap':
+            elif map_canvas == 'Slopemap':
                 window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
-            elif map == 'Heightkey':
+            elif map_canvas == 'Heightkey':
                 window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
 
         if event == "-StartIN-":

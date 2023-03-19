@@ -43,6 +43,7 @@ def show_warning(title, msg):
     root.withdraw()
     messagebox.showwarning(title, msg)
 
+
 def are_you_sure(title, msg):
     root = tk.Tk()
     root.withdraw()
@@ -54,13 +55,13 @@ def get_radius(x: float, y: float) -> float:
     return sqrt((x ** 2) + (y ** 2))
 
 
-def latitude_from_rect(x: float, y: float, radius: float, data) -> float:
+def latitude_from_rect(x: float, y: float, data) -> float:
     # lat, _, _ = (radius/(30366 + (1/9))) - 90, x, y
     lat = data[x][y][6]
     return lat
 
 
-def longitude_from_rect(x: float, y: float, radius: float, data) -> float:
+def longitude_from_rect(x: float, y: float, data) -> float:
     # long, _ = rad2deg(arccos(x/radius)), y
     long = data[x][y][7]
     return long
@@ -70,8 +71,8 @@ def slope_from_rect(x: float, y: float, data) -> float:
     return data[x][y][3]
 
 
-def height_from_rect(x: float, y: float, data, infodata) -> float:
-    height = float(infodata["MAX_Z"] - data[x][y][3])
+def height_from_rect(x: float, y: float, data, info_data) -> float:
+    height = float(info_data["MAX_Z"] - data[x][y][3])
     return height
 
 
@@ -146,12 +147,13 @@ def get_elevation(moon_lat, moon_long, moon_height):
 
 def resize(image_path: str, new_name: str, scale: float) -> str:
     img = Image.open(f'{image_path}')
-    resized = img.resize((scale, scale))  # 1/(scale) Scaling
+    resized = img.resize((int(scale), int(scale)))  # 1/(scale) Scaling
 
     path = os.getcwd() + f'/Data/Images/{new_name}.png'
     resized.save(path)
     print(f"Created {new_name}.png")
     return path
+
 
 def timeit(method: Callable) -> Callable:
     def timed(*args, **kw) -> Any:
@@ -162,6 +164,7 @@ def timeit(method: Callable) -> Callable:
         return result
 
     return timed
+
 
 if __name__ == "__main__":
     # Do Nothing

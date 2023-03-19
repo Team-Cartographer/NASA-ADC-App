@@ -52,6 +52,7 @@ class Node:
         eqn = k_dist * dist + k_slope * slope + slope_penalty
         return eqn
 
+
 @timeit
 def astar():
     nodes = []

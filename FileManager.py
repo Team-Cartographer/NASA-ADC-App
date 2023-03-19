@@ -63,11 +63,11 @@ def load_json(json_path: str) -> dict:
 
 
 # Push Dictionary of Data to Json File
-def push_to_json(jsonpath, data, custom_indent=4):
-    with open(jsonpath, 'w') as f:
-        json_size = len(json.dumps(data).encode('utf-8'))
-        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Writing " + os.path.basename(jsonpath))
-        json.dump(data, f, ensure_ascii=False, indent=custom_indent)
+def push_to_json(json_path, json_data, custom_indent=4):
+    with open(json_path, 'w') as f:
+        json_size = len(json.dumps(json_data).encode('utf-8'))
+        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Writing " + os.path.basename(json_path))
+        json.dump(json_data, f, ensure_ascii=False, indent=custom_indent)
         pbar.update(json_size)
 
 
@@ -122,8 +122,8 @@ if not os.path.exists(os.getcwd() + '/info.json'):
     LUNAR_RAD = 1737400.0
 
     # Get pathing from Path_Fetcher()
-    #TODO Fix issue where closing path_fetcher throws errors
-    lat, long, ht, slope , dist = path_fetcher()
+    # TODO Fix issue where closing path_fetcher throws errors
+    lat, long, ht, slope, dist = path_fetcher()
 
     data: dict = {
         "LATITUDE_PATH": lat,
@@ -207,13 +207,10 @@ app_files_path: str = os.path.join(parent_path, 'App Files')
 # Creates directories and sets 'info.json' variables only if FileManager.py is running.
 # Otherwise, only helper methods are accessible.
 if __name__ == '__main__':
-
     # Save File proof of concept, disregard currently.
-    #savetest = Save('SAVETEST')
-
+    # savetest = Save('SAVETEST')
 
     # json is automatically created and/or overwritten on every run of FileManager.
-
     if not os.path.exists(os.path.join(parent_path, 'Data')):
         os.mkdir(data_path)
         os.mkdir(app_files_path)
