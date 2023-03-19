@@ -1,7 +1,7 @@
 from PIL import Image
 import heapq
 from numpy import sqrt
-from utils import show_warning
+from utils import show_warning, timeit
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
@@ -52,7 +52,7 @@ class Node:
         eqn = k_dist * dist + k_slope * slope + slope_penalty
         return eqn
 
-
+@timeit
 def astar():
     nodes = []
 

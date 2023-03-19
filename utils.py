@@ -4,6 +4,9 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 from math import atan2, sin, cos, asin, sqrt, radians, degrees
+from typing import Callable, Any
+from time import time
+
 from PIL import Image
 
 
@@ -149,6 +152,16 @@ def resize(image_path: str, new_name: str, scale: float) -> str:
     resized.save(path)
     print(f"Created {new_name}.png")
     return path
+
+def timeit(method: Callable) -> Callable:
+    def timed(*args, **kw) -> Any:
+        time_start = time()
+        result = method(*args, **kw)
+        time_end = time()
+        print(f"\nFunction '{method.__name__}' executed in {time_end - time_start:.3f}s")
+        return result
+
+    return timed
 
 if __name__ == "__main__":
     # Do Nothing
