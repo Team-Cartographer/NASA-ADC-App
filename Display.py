@@ -5,6 +5,7 @@ from utils import get_azi_elev, \
     get_radius, height_from_rect, slope_from_rect
 from display_utils import ViewCamera
 from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.shaders import lit_with_shadows_shader
 from ursina.application import quit # USE THIS, NOT PYTHON quit()
 
 # Window Declarations and Formatting -------------
@@ -37,19 +38,24 @@ except FileNotFoundError:
 # FirstPersonController Ground Plane
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
+    #color = color.gray,
     texture='moon_surface_texture.png',
     collider='mesh', # Must be set to 'mesh' for Raycasting to work.
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
-    enabled=False
+    enabled=False,
+    shader=lit_with_shadows_shader
     )
+
 
 # EditorCamera Ground Plane
 ground_perspective = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
+    #color=color.gray,
     texture='moon_surface_texture.png',
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
-    enabled=False
+    enabled=False,
+    shader=lit_with_shadows_shader
     )
 
 # ViewCamera Player Location Beacon
