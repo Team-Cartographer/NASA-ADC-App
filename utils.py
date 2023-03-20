@@ -72,7 +72,7 @@ def slope_from_rect(x: float, y: float, data) -> float:
 
 
 def height_from_rect(x: float, y: float, data, info_data) -> float:
-    height = float(info_data["MAX_Z"] - data[x][y][3])
+    height = data[x][y][8]
     return height
 
 

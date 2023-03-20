@@ -234,7 +234,8 @@ def update():
     lat = float(latitude_from_rect(nx, nz, AStarData))
     long = float(longitude_from_rect(nx, nz, AStarData))
     slope = slope_from_rect(nx, nz, AStarData)
-    height = height_from_rect(nx, nz, AStarData, infodata)
+    # height = height_from_rect(nx, nz, AStarData, infodata)
+    height = AStarData[nx][nz][8]
     azimuth, elevation = get_azi_elev(nx, nz, AStarData)
 
     # Updating Variables
