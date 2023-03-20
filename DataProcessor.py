@@ -41,9 +41,9 @@ def process_data():
 
             radius: float = LUNAR_RAD + float(height)
 
-            x: float = float(get_x_coord(latitude, longitude, radius)) / DISTANCE_BETWEEN_POINTS
-            y: float = float(get_y_coord(latitude, longitude, radius)) / DISTANCE_BETWEEN_POINTS
-            z: float = float(get_z_coord(latitude, radius)) / DISTANCE_BETWEEN_POINTS
+            x: float = float(get_x_coord(latitude, longitude, radius))
+            y: float = float(get_y_coord(latitude, longitude, radius))
+            z: float = float(get_z_coord(latitude, radius))
 
             azi: float = get_azimuth(latitude, longitude)
             elev: float = get_elevation(latitude, longitude, radius)
