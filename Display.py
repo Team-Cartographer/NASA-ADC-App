@@ -2,8 +2,7 @@ import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    get_radius, height_from_rect, slope_from_rect
-from display_utils import ViewCamera
+    height_from_rect, slope_from_rect
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader
 from ursina.application import quit # USE THIS, NOT PYTHON quit()
@@ -32,6 +31,11 @@ try:
 except FileNotFoundError:
     pass
 
+# ViewCamera Declaration (DO NOT EDIT)
+from ursina import *
+
+
+# This File is meant for any Ursina Helper Methods/Classes
 
 # Declaration of Entities -------------
 
@@ -42,8 +46,7 @@ ground_player = Entity(
     texture='moon_surface_texture.png',
     collider='mesh',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
-    enabled=False,
-    shader=lit_with_shadows_shader
+    enabled=False
     )
 
 
@@ -54,8 +57,7 @@ ground_perspective = Entity(
     texture='moon_surface_texture.png',
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
-    enabled=False,
-    shader=lit_with_shadows_shader
+    enabled=False
     )
 
 # ViewCamera Player Location Beacon
@@ -127,12 +129,11 @@ t_info = Text(
     x=-.15, y=-.45, scale=1.1, color=color.black, enabled=False)
 
 
-
 # Player Interactable Declarations -------------
 sky = Sky()
 sky.color = '000000' # Black
 
-vc = ViewCamera(enabled=False, zoom_speed=2, hotkeys={}) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
+vc = EditorCamera(enabled=False, zoom_speed=2) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
@@ -214,11 +215,11 @@ height_vals = ground_player.model.height_values
 def update():
     # Map Failsafe
     bound = SIZE_CONSTANT*10/2 - 200
-    if -bound > player.position.x or player.position.x > bound or -bound > player.position.heights or player.position.heights > bound:
+    if -bound > player.position.x or player.position.x > bound or -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
 
     # Positions
-    x, y, z = player.position.x, player.position.y, player.position.heights
+    x, y, z = player.position.x, player.position.y, player.position.z
     player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
 
     # Corrected X and Z values for Calculations
@@ -230,12 +231,10 @@ def update():
     view_cam_player_loc.position = (x / (10 / EDITOR_SCALE_FACTOR), 0, z / (10 / EDITOR_SCALE_FACTOR))
 
     # Calculating Data
-    rad = get_radius(nx, nz)
     lat = float(latitude_from_rect(nx, nz, AStarData))
     long = float(longitude_from_rect(nx, nz, AStarData))
     slope = slope_from_rect(nx, nz, AStarData)
-    # height = height_from_rect(nx, nz, AStarData, infodata)
-    height = AStarData[nx][nz][8]
+    height = height_from_rect(nx, nz, AStarData, infodata)
     azimuth, elevation = get_azi_elev(nx, nz, AStarData)
 
     # Updating Variables
@@ -342,7 +341,7 @@ start_button.on_click = main_menu_init
 # For Main Menu
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
-load_button = Button( text="Load A Site", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
+load_button = Button(text="Load A Site", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
 
 launch_button.on_click = start_game
 load_button.on_click = load_button_init
@@ -364,11 +363,7 @@ def main_menu_returner():
     t_pause.disable()
     return_button.disable()
 
-
-
 return_button.on_click = main_menu_returner
-
-
 
 # Runs Display.py -------------
 if __name__ == '__main__':
