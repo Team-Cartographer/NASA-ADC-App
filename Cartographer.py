@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw
 from utils import resize
 from tqdm import tqdm
 
-max_z = fm.get_max_z()
+max_z = fm.get_max_height()
 CALCULATION_CONS = 255 / max_z
 ONE_THIRD = 1/3
 TWO_THIRDS = 2/3
@@ -45,7 +45,7 @@ def draw_all():
             if slope < 8:
                 slope_color = (0, 255, 0)
 
-            heightkey_color = calc_rgb_color(height)
+            heightkey_color = calc_rgb_color(height + fm.get_min_height())
             heightmap_color = calculate_color(height)
 
             heightmap_draw.point((j, i), fill=heightmap_color)

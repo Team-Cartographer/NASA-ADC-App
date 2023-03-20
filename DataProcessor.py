@@ -75,7 +75,7 @@ def process_data():
         tmp: list = [int(a_star_data_array[i][0] + min_x_), int(a_star_data_array[i][1] + min_y_),
                      int(a_star_data_array[i][2] + min_z_),
                      a_star_data_array[i][3], a_star_data_array[i][4], a_star_data_array[i][5], a_star_data_array[i][6],
-                     a_star_data_array[i][7], a_star_data_array[i][8] + min_height_]
+                     a_star_data_array[i][7], a_star_data_array[i][8]]
         adj_array.append(tmp)
 
     sorted_array = sorted(adj_array, key=lambda arr: arr[1])
