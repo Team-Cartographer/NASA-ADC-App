@@ -1,5 +1,5 @@
 import FileManager as fm
-from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation
+from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation, timeit
 from tqdm import tqdm
 
 # Get Constants
@@ -15,7 +15,7 @@ slope_list: list = file2list(fm.get_slope_file_path())
 
 data = fm.load_json(fm.JSONPATH)
 
-
+@timeit
 def process_data():
     """
     Processes the input data lists containing latitude, longitude, height, and slope values,
