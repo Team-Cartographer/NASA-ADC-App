@@ -11,7 +11,7 @@ parsed_arr = np.array(fm.load_json(fm.data_path + "/AStarRawData.json"))
 
 # Extract the height values
 z = parsed_arr[:, :, 8]
-print(np.max(z))
+#print(np.max(z))
 # Create the x and y coordinate arrays
 x, y = np.meshgrid(range(z.shape[0]), range(z.shape[1]))
 
