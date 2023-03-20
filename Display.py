@@ -40,7 +40,7 @@ ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     #color = color.gray,
     texture='moon_surface_texture.png',
-    collider='mesh', # Must be set to 'mesh' for Raycasting to work.
+    collider='mesh',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False,
     shader=lit_with_shadows_shader
@@ -111,7 +111,6 @@ color_key = Entity(
 # Slope and Height Toggle Image Pathing -------------
 slopemap = fm.parent_path + '/slopemap.png'
 heightkey = fm.parent_path + '/heightkey_surface.png'
-
 
 
 # Textboxes  -------------
@@ -214,7 +213,8 @@ def input(key):
 height_vals = ground_player.model.height_values
 def update():
     # Map Failsafe
-    if -6150 > player.position.x or player.position.x > 6150 or -6150 > player.position.z or player.position.z > 6150:
+    bound = SIZE_CONSTANT*10/2 - 200
+    if -bound > player.position.x or player.position.x > bound or -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
 
     # Positions
@@ -223,11 +223,11 @@ def update():
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
-    nx, nz = int(x / 10 + 638), abs(int(z / 10 - 638))
+    nx, nz = int(x / 10 + int(SIZE_CONSTANT/2)), abs(int(z / 10 - int(SIZE_CONSTANT)/2))
 
     # Updating Position and Viewer Cam Position Labels
     t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
-    view_cam_player_loc.position = (x / (10 / 3), 0, z / (10 / 3))
+    view_cam_player_loc.position = (x / (10 / EDITOR_SCALE_FACTOR), 0, z / (10 / EDITOR_SCALE_FACTOR))
 
     # Calculating Data
     rad = get_radius(nx, nz)
