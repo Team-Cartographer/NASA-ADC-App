@@ -4,7 +4,7 @@ import numpy as np
 import FileManager as fm
 
 parsed_arr = np.array(fm.load_json(fm.data_path + "/AStarRawData.json"))
-# x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7]
+# x[0], y[1], z[2], slope[3], azi[4], elev[5], lat[6], long[7], height[8]
 
 # Create the array of height values
 # heights = np.array([[[x, y, x**2 + y**2] for x in range(20)] for y in range(20)])
