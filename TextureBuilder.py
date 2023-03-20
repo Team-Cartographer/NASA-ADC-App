@@ -1,15 +1,30 @@
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-from perlin_noise import PerlinNoise
+import numpy as np
+import FileManager as fm
 
+parsed_arr = np.array(fm.load_json(fm.data_path + "/AStarRawData.json"))
+# x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7]
 
-def generate_noisemap():
-    noise = PerlinNoise(octaves=5, seed=50)
-    xpix, ypix = 100, 100
-    pic = [[noise([i/xpix, j/ypix]) for j in range(xpix)] for i in range(ypix)]
+# Create the array of height values
+# heights = np.array([[[x, y, x**2 + y**2] for x in range(20)] for y in range(20)])
 
-    plt.imshow(pic, cmap='gray')
-    plt.show()
+# Extract the height values
+z = parsed_arr[:, :, 8]
+print(np.max(z))
+# Create the x and y coordinate arrays
+x, y = np.meshgrid(range(z.shape[0]), range(z.shape[1]))
 
+# Show height map in 3D
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(x, y, z)
+plt.title('z as 3d height map')
+plt.show()
 
-if __name__ == "__main__":
-    generate_noisemap()
+# Show height map in 2D
+plt.figure()
+plt.title('z as 2d heat map')
+p = plt.imshow(z)
+plt.colorbar(p)
+plt.show()

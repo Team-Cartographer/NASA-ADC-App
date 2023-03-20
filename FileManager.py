@@ -177,6 +177,10 @@ def get_max_z() -> int:
     return data["MAX_Z"]
 
 
+def get_max_height() -> int:
+    return data["MAX_HEIGHT"]
+
+
 def get_min_z() -> int:
     return data["MIN_Z"]
 

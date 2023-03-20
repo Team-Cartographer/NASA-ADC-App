@@ -37,7 +37,7 @@ def draw_all():
     for i in tqdm(range(len(parsed_arr)), desc="Creating All Images"):
         for j in range(len(parsed_arr[i])):
             slope = parsed_arr[j][i][3]
-            height = parsed_arr[j][i][2]
+            height = parsed_arr[j][i][8]
 
             slope_color = (255, 0, 0)
             if slope < 20:

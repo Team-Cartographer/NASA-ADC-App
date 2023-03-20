@@ -29,6 +29,7 @@ def process_data():
     xs: list = []
     ys: list = []
     zs: list = []
+    heights: list = []
 
     a_star_data_array: list = []
 
@@ -48,29 +49,33 @@ def process_data():
             azi: float = get_azimuth(latitude, longitude)
             elev: float = get_elevation(latitude, longitude, radius)
 
-            xs.append(x), ys.append(y), zs.append(z)
+            xs.append(x), ys.append(y), zs.append(z), heights.append(height)
 
-            a_star_data_array.append([x, y, z, slope, azi, elev, latitude, longitude])
+            a_star_data_array.append([x, y, z, slope, azi, elev, latitude, longitude, height])
 
     min_x_: float = abs(min(xs))
     min_y_: float = abs(min(ys))
     min_z_: float = abs(min(zs))
+    min_height_: float = abs(min(heights))
 
     max_z: float = (round(abs(min_z_) - abs(max(zs))))
+    max_height_: float = (round(min_height_ + abs(max(heights))))
 
     # Update .env (Soon to be outdated with .json)
     data["MAX_Z"] = max_z
     data["MIN_Z"] = min_z_
     data["MIN_Y"] = min_y_
     data["MIN_X"] = min_x_
+    data["MIN_HEIGHT"] = min_height_
+    data["MAX_HEIGHT"] = max_height_
 
     adj_array: list = []
     for i in tqdm(range(len(a_star_data_array)), desc="Creating AStar Data Array"):
-        # x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7]
+        # x[0], y[1], z(height)[2], slope[3], azi[4], elev[5], lat[6], long[7], height[8]
         tmp: list = [int(a_star_data_array[i][0] + min_x_), int(a_star_data_array[i][1] + min_y_),
                      int(a_star_data_array[i][2] + min_z_),
                      a_star_data_array[i][3], a_star_data_array[i][4], a_star_data_array[i][5], a_star_data_array[i][6],
-                     a_star_data_array[i][7]]
+                     a_star_data_array[i][7], a_star_data_array[i][8] + min_height_]
         adj_array.append(tmp)
 
     sorted_array = sorted(adj_array, key=lambda arr: arr[1])
