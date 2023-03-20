@@ -1,11 +1,13 @@
+import matplotlib.colors
+
 import FileManager as fm
-from PIL import Image, ImageDraw
+from PIL import Image
 from utils import resize, timeit, load_json, get_specific_from_json
 from tqdm import tqdm
-import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from os import getcwd
+from shutil import move
 
 max_z = fm.get_max_height()
 CALCULATION_CONS = 255 / max_z
@@ -18,43 +20,48 @@ def calculate_color(height):
     color = 255 - (height * CALCULATION_CONS)
     return int(color), int(color), int(color)
 
+@timeit
+def sns_heatmap(arr, cmap, save):
 
-def calc_rgb_color(height):
-    r, g, b = 0, 0, 0
-    if height <= ONE_THIRD * max_z:
-        b = height * CALCULATION_CONS
-    elif height <= TWO_THIRDS * max_z:
-        g = height * CALCULATION_CONS
-    else:
-        r = height * CALCULATION_CONS
-    return int(r), int(g), int(b)
+    # cmap reference: https://matplotlib.org/stable/gallery/color/colormap_reference.html
+
+    heatmap = sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
+                     yticklabels=False, cmap=cmap)
+    plt.savefig(save, dpi=2048,transparent=True, format='png', bbox_inches='tight')
+
+    # Convert to RGBA for Ursina.
+    Image.open(save).convert('RGBA').save(save)
+    print(f'{save} created.')
+
 
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey
+@timeit
 def draw_all():
     parsed_arr = load_json(fm.data_path + "/AStarRawData.json")
 
-    heightmap_draw = ImageDraw.Draw(heightmap)
-    slopemap_draw = ImageDraw.Draw(slopemap)
-    heightkey_draw = ImageDraw.Draw(heightkey)
+    # Create Heightmap for Ursina
+    sns_heatmap(
+        arr=get_specific_from_json(8, fm.data_path + "/AStarRawData.json"),
+        cmap="Greys",
+        save= fm.images_path + '/RAW_heightmap.png'
+    )
 
-    for i in tqdm(range(len(parsed_arr)), desc="Creating All Images"):
-        for j in range(len(parsed_arr[i])):
-            slope = parsed_arr[j][i][3]
-            height = parsed_arr[j][i][8]
+    # Create Heightkey
+    sns_heatmap(
+        arr=get_specific_from_json(8, fm.data_path + "/AStarRawData.json"),
+        cmap="gist_rainbow_r",
+        save=fm.images_path + '/heightkey_surface.png'
+    )
 
-            slope_color = (255, 0, 0)
-            if slope < 20:
-                slope_color = (255, 255, 0)
-            if slope < 8:
-                slope_color = (0, 255, 0)
+    # Create Slopemap
+    sns_heatmap(
+        arr=get_specific_from_json(3, fm.data_path + "/AStarRawData.json"),
+        cmap="gist_rainbow_r",
+        save=fm.images_path + '/slopemap.png'
+    )
 
-            heightkey_color = calc_rgb_color(height + fm.get_min_height())
-            heightmap_color = calculate_color(height)
 
-            heightmap_draw.point((j, i), fill=heightmap_color)
-            slopemap_draw.point((j, i), fill=slope_color)
-            heightkey_draw.point((j, i), fill=heightkey_color)
 
 
 def draw_path(path, image, color):
@@ -64,28 +71,8 @@ def draw_path(path, image, color):
     return image
 
 
-@timeit
-def new_heightmap():
-    hts = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
-
-    ax = sns.heatmap(hts, square=True, cbar=False, xticklabels=False,
-                     yticklabels=False, cmap="gist_rainbow_r")
-    plt.savefig(getcwd() + 'NEWMAP.png', dpi=2048,
-                transparent=True, format='png', bbox_inches='tight')
-
-
 if __name__ == "__main__":
-    '''
-    heightmap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
-    slopemap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
-    heightkey = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
-
     draw_all()
-    new_heightmap()
-
-    heightmap.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
-    slopemap.save(fm.images_path + '/slopemap.png')
-    heightkey.save(fm.images_path + '/heightkey_surface.png')
 
     # Image Scaling for Faster Ursina Runs
     downscaled = resize(
@@ -93,6 +80,8 @@ if __name__ == "__main__":
         new_name='processed_heightmap',
         scale=81
     )
+
+    move(fm.images_path + '/processed_heightmap.png', getcwd() + '/processed_heightmap.png')
 
     minimap = resize(
         image_path='moon_surface_texture.png',
@@ -123,5 +112,5 @@ if __name__ == "__main__":
         new_name='interface_heightkey',
         scale=500
     )
-    '''
-    new_heightmap()
+
+
