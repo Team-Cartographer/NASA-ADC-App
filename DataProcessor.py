@@ -1,5 +1,7 @@
 import FileManager as fm
-from utils import file2list, get_x_coord, get_y_coord, get_z_coord, get_azimuth, get_elevation, timeit
+from utils import file2list, get_x_coord, get_y_coord, \
+    get_z_coord, get_azimuth, get_elevation, timeit, \
+    load_json
 from tqdm import tqdm
 
 # Get Constants
@@ -13,7 +15,7 @@ longitude_list: list = file2list(fm.get_longitude_file_path())
 height_list: list = file2list(fm.get_height_file_path())
 slope_list: list = file2list(fm.get_slope_file_path())
 
-data = fm.load_json(fm.JSONPATH)
+data = load_json(fm.JSONPATH)
 
 @timeit
 def process_data():

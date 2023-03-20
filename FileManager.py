@@ -4,11 +4,10 @@ App Development Challenge Application.#
 """
 
 import os
-from utils import show_info, file2list
+from utils import show_info, file2list, load_json
 import json
 import PySimpleGUI as sg
 from tqdm import tqdm
-from msgspec.json import decode
 
 JSONPATH = os.getcwd() + '/info.json'
 
@@ -53,13 +52,6 @@ def path_fetcher():
 
     window.close()
     return None
-
-
-# Load data from Json File
-def load_json(json_path: str) -> dict:
-    with open(json_path, "rb") as f:
-        json_data = decode(f.read())
-    return json_data
 
 
 # Push Dictionary of Data to Json File

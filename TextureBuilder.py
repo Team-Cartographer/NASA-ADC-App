@@ -10,21 +10,21 @@ parsed_arr = np.array(fm.load_json(fm.data_path + "/AStarRawData.json"))
 # heights = np.array([[[x, y, x**2 + y**2] for x in range(20)] for y in range(20)])
 
 # Extract the height values
-z = parsed_arr[:, :, 8]
+heights = parsed_arr[:, :, 8]
 #print(np.max(z))
 # Create the x and y coordinate arrays
-x, y = np.meshgrid(range(z.shape[0]), range(z.shape[1]))
+x, y = np.meshgrid(range(heights.shape[0]), range(heights.shape[1]))
 
 # Show height map in 3D
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.plot_surface(x, y, z)
+ax.plot_surface(x, y, heights)
 plt.title('z as 3d height map')
 plt.show()
 
 # Show height map in 2D
 plt.figure()
 plt.title('z as 2d heat map')
-p = plt.imshow(z)
+p = plt.imshow(heights)
 plt.colorbar(p)
 plt.show()

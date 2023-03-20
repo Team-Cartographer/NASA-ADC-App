@@ -214,11 +214,11 @@ height_vals = ground_player.model.height_values
 def update():
     # Map Failsafe
     bound = SIZE_CONSTANT*10/2 - 200
-    if -bound > player.position.x or player.position.x > bound or -bound > player.position.z or player.position.z > bound:
+    if -bound > player.position.x or player.position.x > bound or -bound > player.position.heights or player.position.heights > bound:
         player.set_position(RESET_LOC)
 
     # Positions
-    x, y, z = player.position.x, player.position.y, player.position.z
+    x, y, z = player.position.x, player.position.y, player.position.heights
     player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
 
     # Corrected X and Z values for Calculations

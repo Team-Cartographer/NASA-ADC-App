@@ -1,7 +1,11 @@
 import FileManager as fm
 from PIL import Image, ImageDraw
-from utils import resize
+from utils import resize, timeit, load_json, get_specific_from_json
 from tqdm import tqdm
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from os import getcwd
 
 max_z = fm.get_max_height()
 CALCULATION_CONS = 255 / max_z
@@ -28,7 +32,7 @@ def calc_rgb_color(height):
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
-    parsed_arr = fm.load_json(fm.data_path + "/AStarRawData.json")
+    parsed_arr = load_json(fm.data_path + "/AStarRawData.json")
 
     heightmap_draw = ImageDraw.Draw(heightmap)
     slopemap_draw = ImageDraw.Draw(slopemap)
@@ -60,12 +64,24 @@ def draw_path(path, image, color):
     return image
 
 
+@timeit
+def new_heightmap():
+    hts = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
+
+    ax = sns.heatmap(hts, square=True, cbar=False, xticklabels=False,
+                     yticklabels=False, cmap="gist_rainbow_r")
+    plt.savefig(getcwd() + 'NEWMAP.png', dpi=2048,
+                transparent=True, format='png', bbox_inches='tight')
+
+
 if __name__ == "__main__":
+    '''
     heightmap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
     slopemap = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
     heightkey = Image.new('RGBA', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
 
     draw_all()
+    new_heightmap()
 
     heightmap.save(fm.images_path + '/RAW_heightmap.png')  # must save here for a proper read from Ursina
     slopemap.save(fm.images_path + '/slopemap.png')
@@ -107,3 +123,5 @@ if __name__ == "__main__":
         new_name='interface_heightkey',
         scale=500
     )
+    '''
+    new_heightmap()

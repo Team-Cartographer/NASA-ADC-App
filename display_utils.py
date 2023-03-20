@@ -44,7 +44,7 @@ class ViewCamera(Entity):
         camera.parent = self
         camera.position = camera.editor_position
         camera.rotation = (0,0,0)
-        self.target_z = camera.z
+        self.target_z = camera.heights
         self.target_fov = camera.fov
 
 
@@ -142,7 +142,7 @@ class ViewCamera(Entity):
             self.position -= camera.up * mouse.velocity[1] * self.pan_speed[1] * zoom_compensation
 
         if not camera.orthographic:
-            camera.z = lerp(camera.z, self.target_z, time.dt*self.zoom_smoothing)
+            camera.heights = lerp(camera.heights, self.target_z, time.dt * self.zoom_smoothing)
         else:
             camera.fov = lerp(camera.fov, self.target_fov, time.dt*self.zoom_smoothing)
 

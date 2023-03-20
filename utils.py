@@ -6,9 +6,15 @@ import os
 from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from typing import Callable, Any
 from time import time
+from msgspec.json import decode
+import numpy as np
 
 from PIL import Image
 
+def load_json(json_path: str) -> dict:
+    with open(json_path, "rb") as f:
+        json_data = decode(f.read())
+    return json_data
 
 def file2list(path):
     with open(path) as csv_file:
@@ -87,6 +93,11 @@ def get_y_coord(lat, long, rad):
 def get_z_coord(lat, rad):
     return rad * sin(radians(lat))
 
+def get_specific_from_json(index, jsonpath):
+    # x[0], y[1], z[2], slope[3], azi[4], elev[5], lat[6], long[7], height[8]
+    parsed_arr = np.array(load_json(jsonpath))
+    arr = parsed_arr[:, :, index]
+    return arr
 
 # ONLY FOR USE WITH DISPLAY.PY
 def get_azi_elev(x, y, data):
