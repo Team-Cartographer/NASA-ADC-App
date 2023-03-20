@@ -1,8 +1,6 @@
-import matplotlib.colors
-
 import FileManager as fm
 from PIL import Image
-from utils import resize, timeit, load_json, get_specific_from_json
+from utils import resize, timeit, get_specific_from_json
 from tqdm import tqdm
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -11,8 +9,8 @@ from shutil import move
 
 max_z = fm.get_max_height()
 CALCULATION_CONS = 255 / max_z
-ONE_THIRD = 1/3
-TWO_THIRDS = 2/3
+ONE_THIRD = 1 / 3
+TWO_THIRDS = 2 / 3
 SIZE_CONSTANT = fm.get_size_constant()
 
 
@@ -20,31 +18,28 @@ def calculate_color(height):
     color = 255 - (height * CALCULATION_CONS)
     return int(color), int(color), int(color)
 
+
 @timeit
 def sns_heatmap(arr, cmap, save):
-
     # cmap reference: https://matplotlib.org/stable/gallery/color/colormap_reference.html
 
-    heatmap = sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
-                     yticklabels=False, cmap=cmap)
-    plt.savefig(save, dpi=2048,transparent=True, format='png', bbox_inches='tight')
+    sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
+                yticklabels=False, cmap=cmap)
+    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight')
 
     # Convert to RGBA for Ursina.
     Image.open(save).convert('RGBA').save(save)
     print(f'{save} created.')
 
 
-
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 @timeit
 def draw_all():
-    parsed_arr = load_json(fm.data_path + "/AStarRawData.json")
-
     # Create Heightmap for Ursina
     sns_heatmap(
         arr=get_specific_from_json(8, fm.data_path + "/AStarRawData.json"),
-        cmap="Greys",
-        save= fm.images_path + '/RAW_heightmap.png'
+        cmap="gist_gray",
+        save=fm.images_path + '/RAW_heightmap.png'
     )
 
     # Create Heightkey
@@ -62,8 +57,6 @@ def draw_all():
     )
 
 
-
-
 def draw_path(path, image, color):
     for i in tqdm(range(len(path)), desc="Drawing A* Path"):
         image.putpixel(path[0], path[1], color)
@@ -78,7 +71,7 @@ if __name__ == "__main__":
     downscaled = resize(
         image_path=fm.images_path + '/RAW_heightmap.png',
         new_name='processed_heightmap',
-        scale=81
+        scale=128
     )
 
     move(fm.images_path + '/processed_heightmap.png', getcwd() + '/processed_heightmap.png')
@@ -112,5 +105,3 @@ if __name__ == "__main__":
         new_name='interface_heightkey',
         scale=500
     )
-
-
