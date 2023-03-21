@@ -26,6 +26,8 @@ def path_fetcher():
         ], [
             sg.FileBrowse("Upload Slope File", size=(20, 1), key="-SlopeIN-", file_types=(("CSV file", "*.csv"),)),
             sg.Input(size=(100, 1), disabled=True)
+        ], [
+            sg.OK("Submit")
         ]
     ]
     '''[
