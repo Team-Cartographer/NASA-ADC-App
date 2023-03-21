@@ -64,8 +64,8 @@ def draw_all():
     arr = get_specific_from_json(2, fm.data_path + "/AStarRawData.json")
     abs_max_z = max_z + abs(min_z)
 
-    for y in arr:
-        for x in arr[y]:
+    for y in range(len(arr)):
+        for x in range(len(arr[y])):
             iterations = int((arr[y][x] + abs(min_z)) / abs_max_z) * 10
             color = get_height_color(iterations)
             terrain.putpixel((x, y), color)
