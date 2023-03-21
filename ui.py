@@ -112,12 +112,38 @@ def get_pathfinding_endpoints():
             if cur_state == 1:
                 window["-StartOUT-"].update(value=mouse_pos)
                 start_circle_pos = mouse_pos
+                map_canvas = values["-Map-"]
+
+                if map_canvas == 'Moon Texture':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
+                elif map_canvas == 'Slopemap':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
+                elif map_canvas == 'Heightkey':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
+                if start_circle_pos is not None:
+                    window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
+                if end_circle_pos is not None:
+                    window["-GraphIN-"].draw_circle(end_circle_pos, radius=10, fill_color="blue")
+
                 window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
                 cur_state = 0
 
             if cur_state == 2:
                 window["-GoalOUT-"].update(value=mouse_pos)
                 end_circle_pos = mouse_pos
+                map_canvas = values["-Map-"]
+
+                if map_canvas == 'Moon Texture':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
+                elif map_canvas == 'Slopemap':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
+                elif map_canvas == 'Heightkey':
+                    window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
+                if start_circle_pos is not None:
+                    window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
+                if end_circle_pos is not None:
+                    window["-GraphIN-"].draw_circle(end_circle_pos, radius=10, fill_color="blue")
+
                 window["-GraphIN-"].draw_circle(end_circle_pos, radius=10, fill_color="blue")
                 cur_state = 0
 
