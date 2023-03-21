@@ -31,9 +31,6 @@ try:
 except FileNotFoundError:
     pass
 
-# ViewCamera Declaration (DO NOT EDIT)
-from ursina import *
-
 
 # This File is meant for any Ursina Helper Methods/Classes
 
