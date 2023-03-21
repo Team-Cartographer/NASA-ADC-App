@@ -6,56 +6,10 @@ App Development Challenge Application.#
 import os
 from utils import show_info, file2list, load_json
 import json
-import PySimpleGUI as sg
 from tqdm import tqdm
+import ui
 
 JSONPATH = os.getcwd() + '/info.json'
-
-
-def path_fetcher():
-    layout = [
-        [
-            sg.FileBrowse("Upload Latitude File", size=(20, 1), key="-LatIN-", file_types=(("CSV file", "*.csv"),)),
-            sg.Input(size=(100, 1), disabled=True)
-        ], [
-            sg.FileBrowse("Upload Longitude File", size=(20, 1), key="-LongIN-", file_types=(("CSV file", "*.csv"),)),
-            sg.Input(size=(100, 1), disabled=True)
-        ], [
-            sg.FileBrowse("Upload Height File", size=(20, 1), key="-HeightIN-", file_types=(("CSV file", "*.csv"),)),
-            sg.Input(size=(100, 1), disabled=True)
-        ], [
-            sg.FileBrowse("Upload Slope File", size=(20, 1), key="-SlopeIN-", file_types=(("CSV file", "*.csv"),)),
-            sg.Input(size=(100, 1), disabled=True)
-        ]
-    ]
-    '''[
-            sg.Text("Enter Distance Between Points (in meters)")
-        ], [
-            sg.InputText(size=(20, 1), key="-DistIN-", enable_events=True),
-            sg.OK("Submit")
-        ]
-        '''
-
-
-    window = sg.Window("PathFetcher", layout)
-
-    while True:
-        event, values = window.read()
-
-        '''
-        if event == '-DistIN-' and values['-DistIN-'] and values['-DistIN-'][-1] not in "0123456789.":
-            window['-DistIN-'].update(values['-DistIN-'][:-1])
-        elif len(values['-DistIN-']) > 10:
-            window['-DistIN-'].update(values['-DistIN-'][:-1])
-        '''
-
-        if event == sg.WIN_CLOSED or event == "Exit":
-            break
-        elif event == "Submit":
-            # Latitude, Longitude, Height, Slope, Dist_Between_Points
-            return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
-
-    return None
 
 
 # Push Dictionary of Data to Json File
@@ -111,7 +65,6 @@ class Save:
     return jsonpath, folder_path, data
 '''
 
-
 # Sets up Json File.
 if not os.path.exists(os.getcwd() + '/info.json'):
 
@@ -119,7 +72,7 @@ if not os.path.exists(os.getcwd() + '/info.json'):
 
     # Get pathing from Path_Fetcher()
     # TODO Fix issue where closing path_fetcher throws errors
-    lat, long, ht, slope = path_fetcher()
+    lat, long, ht, slope = ui.path_fetcher()
 
     data: dict = {
         "LATITUDE_PATH": lat,

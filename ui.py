@@ -1,7 +1,6 @@
 # ui -> User Interface Helper File
 
 import PySimpleGUI as sg
-from FileManager import images_path, get_size_constant
 from utils import show_error, are_you_sure
 
 
@@ -19,28 +18,16 @@ def path_fetcher():
         ], [
             sg.FileBrowse("Upload Slope File", size=(20, 1), key="-SlopeIN-", file_types=(("CSV file", "*.csv"),)),
             sg.Input(size=(100, 1), disabled=True)
-        ]
-    ]
-    '''[
-            sg.Text("Enter Distance Between Points (in meters)")
         ], [
-            sg.InputText(size=(20, 1), key="-DistIN-", enable_events=True),
             sg.OK("Submit")
-        ]
-        '''
+        ],
+    ]
 
 
     window = sg.Window("PathFetcher", layout)
 
     while True:
         event, values = window.read()
-
-        '''
-        if event == '-DistIN-' and values['-DistIN-'] and values['-DistIN-'][-1] not in "0123456789.":
-            window['-DistIN-'].update(values['-DistIN-'][:-1])
-        elif len(values['-DistIN-']) > 10:
-            window['-DistIN-'].update(values['-DistIN-'][:-1])
-        '''
 
         if event == sg.WIN_CLOSED or event == "Exit":
             break
@@ -49,7 +36,7 @@ def path_fetcher():
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
 
 
-def get_pathfinding_endpoints():
+def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
     # There should be an easier way to do this, but this works for now
 
@@ -58,8 +45,8 @@ def get_pathfinding_endpoints():
     layout = [
 
         [
-            sg.Graph(canvas_size=(500, 500), graph_top_right=(get_size_constant(), 0),
-                     graph_bottom_left=(0, get_size_constant()), background_color="green",
+            sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
+                     graph_bottom_left=(0, SIZE_CONSTANT), background_color="green",
                      key="-GraphIN-", enable_events=True, drag_submits=False)
         ],
         [
@@ -80,7 +67,7 @@ def get_pathfinding_endpoints():
     ]
 
     window = sg.Window("PathFetcher", layout, finalize=True)
-    window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
+    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
 
     while True:
         event, values = window.read(timeout=500)
@@ -89,11 +76,11 @@ def get_pathfinding_endpoints():
             map_canvas = values["-Map-"]
 
             if map_canvas == 'Moon Texture':
-                window["-GraphIN-"].draw_image(images_path + "/interface_texture.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
             elif map_canvas == 'Slopemap':
-                window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_slopemap.png", location=(0, 0))
             elif map_canvas == 'Heightkey':
-                window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_heightkey.png", location=(0, 0))
             if start_circle_pos is not None:
                 window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
             if end_circle_pos is not None:
@@ -134,6 +121,6 @@ def get_pathfinding_endpoints():
 
 
 if __name__ == "__main__":
-    path_fetcher()
+    # path_fetcher()
     # get_pathfinding_endpoints()
     pass
