@@ -4,7 +4,6 @@ from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect
 from ursina.prefabs.first_person_controller import FirstPersonController
-from ursina.shaders import lit_with_shadows_shader
 from ursina.application import quit # USE THIS, NOT PYTHON quit()
 
 # Window Declarations and Formatting -------------
@@ -40,7 +39,7 @@ except FileNotFoundError:
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     #color = color.gray,
-    texture='test_texture.png',
+    texture='moon_surface_texture.png',
     collider='mesh',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False
@@ -51,7 +50,7 @@ ground_player = Entity(
 ground_perspective = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     #color=color.gray,
-    texture='test_texture.png',
+    texture='moon_surface_texture.png',
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
     enabled=False

@@ -93,7 +93,7 @@ def update_image(image_path: str, mvmt_path: list):
     path = image_path
     img = Image.open(path)
 
-    color = (0, 0, 128)
+    color = (255, 0, 0)
     for i in tqdm(range(len(mvmt_path)), desc="Updating image"):
         x = mvmt_path[i][0]
         y = mvmt_path[i][1]
