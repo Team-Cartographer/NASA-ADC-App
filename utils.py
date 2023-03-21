@@ -160,13 +160,24 @@ def get_elevation(moon_lat, moon_long, moon_height):
     return degrees(elev)
 
 
-def resize(image_path: str, new_name: str, scale: float) -> str:
-    img = Image.open(f'{image_path}')
-    resized = img.resize((int(scale), int(scale)))  # 1/(scale) Scaling
+def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str:
+    start = time()
 
+    # Scale Images to Given Scale
+    img = Image.open(f'{image_path}')
+    img = img.resize((int(scale), int(scale)))  # 1/(scale) Scaling
+
+    if transpose:
+        # Transpose Images
+        img = img.transpose(method=Image.FLIP_TOP_BOTTOM).rotate(-90)
+
+    width, height = img.size
+    processed = img.crop((1, 1, width - 2, height - 2))
+
+    # Save Image and Return Path
     path = os.getcwd() + f'/Data/Images/{new_name}.png'
-    resized.save(path)
-    print(f"Created {new_name}.png")
+    processed.save(path)
+    print(f"Resized {new_name}.png in {round(time() - start, 2)}s")
     return path
 
 

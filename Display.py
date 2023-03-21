@@ -44,7 +44,7 @@ ground_player = Entity(
     #color = color.gray,
     texture='moon_surface_texture.png',
     collider='mesh',
-    scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
+    scale=(SIZE_CONSTANT*PLAYER_SCALE_FACTOR, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*PLAYER_SCALE_FACTOR),
     enabled=False
     )
 
@@ -219,7 +219,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 35 # Sets correct height
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 50 # Sets correct height
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.

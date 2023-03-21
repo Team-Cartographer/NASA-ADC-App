@@ -114,6 +114,6 @@ if __name__ == "__main__":
     final_path = astar()
 
     if final_path is not None:
-        update_image(fm.images_path + '/AStar_Texture.png', final_path)
+        update_image(fm.images_path + '/moon_surface_texture.png', final_path)
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")

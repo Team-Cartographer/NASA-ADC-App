@@ -46,7 +46,7 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
 
         [
             sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
-                     graph_bottom_left=(0, SIZE_CONSTANT), background_color="green",
+                     graph_bottom_left=(0, SIZE_CONSTANT), background_color=None,
                      key="-GraphIN-", enable_events=True, drag_submits=False)
         ],
         [
