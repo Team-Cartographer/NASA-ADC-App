@@ -6,8 +6,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from os import getcwd
 from shutil import move
+import random
+
 
 max_z = fm.get_max_height()
+min_z = fm.get_min_height()
 CALCULATION_CONS = 255 / max_z
 ONE_THIRD = 1 / 3
 TWO_THIRDS = 2 / 3
@@ -55,6 +58,27 @@ def draw_all():
         cmap="gist_rainbow_r",
         save=fm.images_path + '/slopemap.png'
     )
+
+    # Create Terrain
+    terrain = Image.new("RGB", (SIZE_CONSTANT, SIZE_CONSTANT))
+    arr = get_specific_from_json(2, fm.data_path + "/AStarRawData.json")
+    abs_max_z = max_z + abs(min_z)
+
+    for y in arr:
+        for x in arr[y]:
+            iterations = int((arr[y][x] + abs(min_z)) / abs_max_z) * 10
+            color = get_height_color(iterations)
+            terrain.putpixel((x, y), color)
+    terrain.save(fm.images_path + "/Texture.png")
+
+
+def get_height_color(iterations: int) -> tuple:
+    my_color = 0
+    for i in range(iterations):
+        my_color += int(random.randint(0, 10) * (255 / 10))
+    my_color = 255 - my_color
+
+    return my_color, my_color, my_color
 
 
 def draw_path(path, image, color):
