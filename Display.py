@@ -17,7 +17,7 @@ window.exit_button.color = color.dark_gray
 Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = fm.get_size_constant()
 EDITOR_SCALE_FACTOR = 3
-PLAYER_SCALE_FACTOR = 8
+PLAYER_SCALE_FACTOR = 10
 RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
 
 # Load the Data
@@ -40,7 +40,7 @@ except FileNotFoundError:
 ground_player = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     #color = color.gray,
-    texture='moon_surface_texture.png',
+    texture='test_texture.png',
     collider='mesh',
     scale=(SIZE_CONSTANT*10, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*10),
     enabled=False
@@ -51,7 +51,7 @@ ground_player = Entity(
 ground_perspective = Entity(
     model=Terrain(heightmap='processed_heightmap.png'),
     #color=color.gray,
-    texture='moon_surface_texture.png',
+    texture='test_texture.png',
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
     enabled=False
