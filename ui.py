@@ -46,6 +46,9 @@ def path_fetcher():
 def get_pathfinding_endpoints():
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
     # There should be an easier way to do this, but this works for now
+
+    start_circle_pos = None
+    end_circle_pos = None
     layout = [
 
         [
@@ -85,6 +88,10 @@ def get_pathfinding_endpoints():
                 window["-GraphIN-"].draw_image(images_path + "/interface_slopemap.png", location=(0, 0))
             elif map_canvas == 'Heightkey':
                 window["-GraphIN-"].draw_image(images_path + "/interface_heightkey.png", location=(0, 0))
+            if start_circle_pos is not None:
+                window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
+            if end_circle_pos is not None:
+                window["-GraphIN-"].draw_circle(end_circle_pos, radius=10, fill_color="blue")
 
         if event == "-StartIN-":
             cur_state = 1
@@ -96,10 +103,14 @@ def get_pathfinding_endpoints():
             mouse_pos = values["-GraphIN-"]
             if cur_state == 1:
                 window["-StartOUT-"].update(value=mouse_pos)
+                start_circle_pos = mouse_pos
+                window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
                 cur_state = 0
 
             if cur_state == 2:
                 window["-GoalOUT-"].update(value=mouse_pos)
+                end_circle_pos = mouse_pos
+                window["-GraphIN-"].draw_circle(end_circle_pos, radius=10, fill_color="blue")
                 cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
@@ -118,5 +129,5 @@ def get_pathfinding_endpoints():
 
 if __name__ == "__main__":
     # path_fetcher()
-    # get_pathfinding_endpoints()
+    get_pathfinding_endpoints()
     pass
