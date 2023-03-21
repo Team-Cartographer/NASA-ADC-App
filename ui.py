@@ -19,6 +19,8 @@ def path_fetcher():
         ], [
             sg.FileBrowse("Upload Slope File", size=(20, 1), key="-SlopeIN-", file_types=(("CSV file", "*.csv"),)),
             sg.Input(size=(100, 1), disabled=True)
+        ], [
+            sg.OK("Submit")
         ]
     ]
     '''[
@@ -134,6 +136,6 @@ def get_pathfinding_endpoints():
 
 
 if __name__ == "__main__":
-    path_fetcher()
-    # get_pathfinding_endpoints()
+    # path_fetcher()
+    get_pathfinding_endpoints()
     pass
