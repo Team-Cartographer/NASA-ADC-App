@@ -2,7 +2,7 @@ import FileManager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    height_from_rect, slope_from_rect
+    height_from_rect, slope_from_rect, show_error
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.application import quit # USE THIS, NOT PYTHON quit()
 
@@ -23,12 +23,15 @@ RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
 try:
     AStarData = fm.load_json("Data/AStarRawData.json")
 except FileNotFoundError:
-    pass
+    show_error("Display Error", "Data Not Processed!")
+    quit()
+
 
 try:
     infodata = fm.load_json("info.json")
 except FileNotFoundError:
-    pass
+    show_error("Display Error", "Data Not Processed!")
+    quit()
 
 
 # This File is meant for any Ursina Helper Methods/Classes
