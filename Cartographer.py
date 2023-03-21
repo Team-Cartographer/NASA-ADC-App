@@ -55,14 +55,16 @@ def draw_all():
     #TODO Add Reduced Opacity Feature to Original Texture for this
     sns_heatmap(
         arr=heights,
-        cmap="gist_rainbow_r",
+        #cmap="gist_rainbow_r",
+        cmap='viridis',
         save=fm.images_path + '/heightkey_surface.png'
     )
 
     # Create Slopemap
     sns_heatmap(
         arr=slopes,
-        cmap="gist_rainbow_r",
+        #cmap="gist_rainbow_r",
+        cmap='inferno',
         save=fm.images_path + '/slopemap.png'
     )
 
