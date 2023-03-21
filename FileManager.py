@@ -12,7 +12,6 @@ from tqdm import tqdm
 JSONPATH = os.getcwd() + '/info.json'
 
 
-# Needed here from UserInterface to avoid Circular Import
 def path_fetcher():
     layout = [
         [
@@ -27,30 +26,35 @@ def path_fetcher():
         ], [
             sg.FileBrowse("Upload Slope File", size=(20, 1), key="-SlopeIN-", file_types=(("CSV file", "*.csv"),)),
             sg.Input(size=(100, 1), disabled=True)
-        ], [
+        ]
+    ]
+    '''[
             sg.Text("Enter Distance Between Points (in meters)")
         ], [
             sg.InputText(size=(20, 1), key="-DistIN-", enable_events=True),
             sg.OK("Submit")
         ]
-    ]
+        '''
+
 
     window = sg.Window("PathFetcher", layout)
+
     while True:
         event, values = window.read()
 
+        '''
         if event == '-DistIN-' and values['-DistIN-'] and values['-DistIN-'][-1] not in "0123456789.":
             window['-DistIN-'].update(values['-DistIN-'][:-1])
-        elif len(values['-DistIN-']) > 5:
+        elif len(values['-DistIN-']) > 10:
             window['-DistIN-'].update(values['-DistIN-'][:-1])
+        '''
 
         if event == sg.WIN_CLOSED or event == "Exit":
             break
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points
-            return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"], values["-DistIN-"]
+            return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
 
-    window.close()
     return None
 
 
@@ -115,7 +119,7 @@ if not os.path.exists(os.getcwd() + '/info.json'):
 
     # Get pathing from Path_Fetcher()
     # TODO Fix issue where closing path_fetcher throws errors
-    lat, long, ht, slope, dist = path_fetcher()
+    lat, long, ht, slope = path_fetcher()
 
     data: dict = {
         "LATITUDE_PATH": lat,
@@ -123,7 +127,6 @@ if not os.path.exists(os.getcwd() + '/info.json'):
         "HEIGHT_PATH": ht,
         "SLOPE_PATH": slope,
 
-        "DIST_BETWEEN_POINTS": int(dist),
         "SIZE_CONSTANT": len(file2list(lat)),
         "PLAYER_POSITION": None,
         "LUNAR_RAD": LUNAR_RAD,
@@ -157,8 +160,9 @@ def get_slope_file_path() -> str:
     return data["SLOPE_PATH"].replace("\\", "/")
 
 
-def get_dist_between_points() -> int:
-    return data["DIST_BETWEEN_POINTS"]
+# Legacy
+#def get_dist_between_points() -> int:
+#    return data["DIST_BETWEEN_POINTS"]
 
 
 def get_size_constant() -> int:
