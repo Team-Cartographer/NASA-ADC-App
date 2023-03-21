@@ -70,7 +70,7 @@ if not os.path.exists(os.getcwd() + '/info.json'):
 
     LUNAR_RAD = 1737400.0
 
-    # Get pathing from Path_Fetcher()
+    # Get pathing from Path_Fetcher() #
     # TODO Fix issue where closing path_fetcher throws errors
     lat, long, ht, slope = ui.path_fetcher()
 

@@ -40,7 +40,7 @@ class Node:
         k_dist = 1
         k_slope = 0.25
 
-        slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes
+        slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes #
         if other.slope >= 20:
             slope_penalty = 25
         elif other.slope >= 8:
