@@ -129,5 +129,5 @@ def get_pathfinding_endpoints():
 
 if __name__ == "__main__":
     # path_fetcher()
-    get_pathfinding_endpoints()
+    # get_pathfinding_endpoints()
     pass
