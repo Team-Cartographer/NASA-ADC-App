@@ -33,7 +33,7 @@ def path_fetcher():
 
         if event == '-DistIN-' and values['-DistIN-'] and values['-DistIN-'][-1] not in "0123456789.":
             window['-DistIN-'].update(values['-DistIN-'][:-1])
-        elif len(values['-DistIN-']) > 5:
+        elif len(values['-DistIN-']) > 10:
             window['-DistIN-'].update(values['-DistIN-'][:-1])
 
         if event == sg.WIN_CLOSED or event == "Exit":
