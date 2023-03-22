@@ -139,7 +139,7 @@ vc = EditorCamera(enabled=False, zoom_speed=2) # Note: THIS MUST BE INITIALIZED 
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
 
-track_list = ['Audio/track_1.mp3', 'Audio/track_2.mp3', 'Audio/track_3.mp3', 'Audio/bouyer_sonata_csharp_minor.mp3']
+track_list = ['Audio/track_1.mp3', 'Audio/track_2.mp3', 'Audio/track_3.mp3']
 menu_track_list = ['Audio/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
 run_music = Audio(
     # TODO Make a Tracklist Randomizer
