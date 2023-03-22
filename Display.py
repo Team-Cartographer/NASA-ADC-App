@@ -216,7 +216,7 @@ def input(key):
         exit(0)
 
     # Pause
-    if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False:
+    if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
         t_lat.disable()
         t_lon.disable()
         t_ht.disable()
@@ -411,10 +411,10 @@ load_button.on_click = load_button_init
 # Pause Menu Text and Buttons -------------
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)
 pause_button = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False)
-t_quit = Text(text="Press 'LShift+Q' to quit.", x=-0.14, y=-0.17, enabled=False)
+t_quit = Text(text="Press 'LShift+Q' to quit.", x=-0.14, y=-0.135, enabled=False)
 pause_button.on_click = on_unpause
 
-return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.06)
+return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.07)
 return_button.on_click = main_menu_returner
 
 # Runs Display.py -------------
