@@ -37,15 +37,20 @@ heights = get_specific_from_json(8, fm.data_path + "/AStarRawData.json")
 slopes = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
 
 
+def create_surface_texture():
+    texture = Image.new("RGB", (SIZE_CONSTANT, SIZE_CONSTANT))
+    for y in tqdm(range(len(slopes)), desc='Creating Surface Texture'):
+        for x in range(len(slopes[y])):
+            color = 255
+            # color logic here
+            for i in range(int(slopes[y][x])):
+                color -= random.randint(2, 5)
+            texture.putpixel((x, y), (color, color, color))
+    texture.save(fm.images_path + "/moon_surface_texture.png")
+
+
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
-
-    # Creates Texture
-    sns_heatmap(
-        arr=slopes,
-        cmap="gist_gray_r",
-        save= fm.images_path + '/moon_surface_texture.png'
-    )
 
     # Creates Heightmap for Ursina
     sns_heatmap(
@@ -71,18 +76,8 @@ def draw_all():
         save=fm.images_path + '/slopemap.png'
     )
 
-    # Creates Texture
-    texture = Image.new("RGB", (SIZE_CONSTANT, SIZE_CONSTANT))
-    slope_arr = get_specific_from_json(3, fm.ASTAR_JSONPATH)
-    for y in range(len(slope_arr)):
-        for x in range(len(slope_arr[y])):
-            print(x, y)
-            color = 255
-            # color logic here
-            for i in range(int(slope_arr[y][x])):
-                color -= random.randint(2, 5)
-            texture.putpixel((x, y), (color, color, color))
-    texture.save(fm.images_path+"/test_texture.png")
+    # Creates Surface Texture
+    create_surface_texture()
 
 
 def draw_path(path, image, color):
