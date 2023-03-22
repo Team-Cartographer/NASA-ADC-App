@@ -364,6 +364,14 @@ def main_menu_returner():
 
 return_button.on_click = main_menu_returner
 
+track_list = ['Audio/track_1.mp3', 'Audio/track_2.mp3', 'Audio/track_3.mp3']
+music = Audio(
+    # TODO Make a Tracklist Randomizer
+    track_list[2], # Change this for different tracks.
+    volume=0.15,
+    loop=True,
+)
+
 # Runs Display.py -------------
 if __name__ == '__main__':
     app.run(info=False)
