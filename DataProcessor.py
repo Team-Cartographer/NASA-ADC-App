@@ -19,7 +19,7 @@ longitude_list: list = file2list(fm.get_longitude_file_path())
 height_list: list = file2list(fm.get_height_file_path())
 slope_list: list = file2list(fm.get_slope_file_path())
 
-data = load_json(fm.JSONPATH)
+data = load_json(fm.INFO_JSONPATH)
 
 @timeit
 def process_data():
