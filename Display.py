@@ -6,11 +6,12 @@ from utils import get_azi_elev, \
 from ursina.prefabs.first_person_controller import FirstPersonController
 from random import choice 
 from ursina.application import quit  # USE THIS, NOT PYTHON quit()
+from A_Star import run_astar
 
 # Window Declarations and Formatting -------------
 app = Ursina()
 window.set_title('Team Cartographer\'s ADC Application')
-window.cog_button.disable()
+#window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Display Specific Constants -------------
@@ -325,7 +326,7 @@ def start_game():
     minimap.enable()
     mini_dot.enable()
     t_pos.enable()
-    load_button.disable()
+    repath_button.disable()
     launch_button.disable()
     t_current_site.disable()
     volume_slider.disable()
@@ -359,16 +360,11 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
-def load_button_init():
-    import tkinter as tk
-    from tkinter.filedialog import askdirectory
-    root = tk.Tk()
-    root.withdraw()
-    save_folder = askdirectory()
-    # This currently does nothing, just leave it here for saves later on.
-    #quit() # USE URSINA QUIT, NOT PYTHON QUIT.
-    #fm.load_save(save_folder) # Proof of Concept Shtuff
-    #print(save_folder) # This is Reachable.
+
+def repath_init():
+    run_astar()
+    application.hot_reloader.reload_textures
+
 
 
 # Start Menu Text and Buttons -------------
@@ -382,7 +378,7 @@ def main_menu_returner():
     start_menu_music.stop(destroy=False)
     t_current_site.enable()
     launch_button.enable()
-    load_button.enable()
+    repath_button.enable()
     pause_button.disable()
     t_quit.disable()
     t_pause.disable()
@@ -409,12 +405,12 @@ def sens_change():
 
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
-load_button = Button(text="Load A Site", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
+repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
 volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
 sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True, on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
 
 launch_button.on_click = start_game
-load_button.on_click = load_button_init
+repath_button.on_click = repath_init
 
 
 # Pause Menu Text and Buttons -------------

@@ -54,7 +54,7 @@ class Node:
 
 
 @timeit
-def astar():
+def astar(start_node, goal_node, grid):
     nodes = []
 
     heapq.heappush(nodes, start_node)
@@ -117,9 +117,7 @@ def line_to_earth(x, y):
     b = -m*x + y
     return int(m), int(b)
 
-
-if __name__ == "__main__":
-
+def run_astar():
     (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
     grid = load_json(fm.ASTAR_JSONPATH)
@@ -131,7 +129,7 @@ if __name__ == "__main__":
     start_node = Node(start_x, start_y)
     goal_node = Node(goal_x, goal_y)
 
-    final_path = astar()
+    final_path = astar(start_node, goal_node, grid)
 
     if final_path is not None:
         update_image(fm.TEXTURE_PATH, final_path)
@@ -144,5 +142,10 @@ if __name__ == "__main__":
     m, b = line_to_earth(divided_points[0][0], divided_points[0][2])
     # Slope of a line spanning from a point to the relative position of earth.
     print(f'y = {m}x + {b}')
+
+
+
+if __name__ == "__main__":
+    run_astar()
 
 
