@@ -402,7 +402,7 @@ def volume_change():
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
 load_button = Button(text="Load A Site", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
-volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.2, y=-0.2)
+volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
 
 launch_button.on_click = start_game
 load_button.on_click = load_button_init
