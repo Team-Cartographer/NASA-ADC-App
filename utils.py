@@ -186,7 +186,7 @@ def timeit(method: Callable) -> Callable:
         time_start = time()
         result = method(*args, **kw)
         time_end = time()
-        print(f"\nFunction '{method.__name__}' executed in {time_end - time_start:.3f}s")
+        print(f"Function '{method.__name__}' executed in {time_end - time_start:.3f}s")
         return result
 
     return timed
