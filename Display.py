@@ -304,7 +304,6 @@ def update():
     #if hit_x.hit:
     #    print(f'X: {hit_x}')
 
-    print(volume_slider.value)
 
 
 
