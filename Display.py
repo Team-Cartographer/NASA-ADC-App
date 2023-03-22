@@ -5,7 +5,7 @@ from utils import get_azi_elev, \
     height_from_rect, slope_from_rect, show_error
 from ursina.prefabs.first_person_controller import FirstPersonController
 from random import choice 
-from ursina.application import quit # USE THIS, NOT PYTHON quit()
+from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 
 # Window Declarations and Formatting -------------
 app = Ursina()

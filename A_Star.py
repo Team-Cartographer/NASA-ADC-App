@@ -107,9 +107,10 @@ def div_10_points(final_path : list) -> list:
     dist = round(len(final_path) / 11)
     for i in range(11):
         comm_points.append(final_path[i * dist])
-    comm_points.pop(10)
+
     comm_points.pop(0)
     return comm_points
+
 
 def line_to_earth(x, y):
     m = (y-1250)/(x-638)
@@ -123,6 +124,10 @@ if __name__ == "__main__":
 
     grid = load_json(fm.data_path + "/AStarRawData.json")
 
+    # Testing. To be removed later
+    # start_x, start_y = 0, 0
+    # goal_x, goal_y = 100, 100
+
     start_node = Node(start_x, start_y)
     goal_node = Node(goal_x, goal_y)
 
@@ -134,9 +139,10 @@ if __name__ == "__main__":
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 
     # For Relative Earth position Pathfinding Calculation ---
-    # divided_points = div_10_points(final_path)
-    # m, b = line_to_earth(divided_points[0][0], divided_points[0][2])
-    # # Slope of a line spanning from a point to the relative position of earth.
-    # print(f'y = {m}x + {b}')
+    divided_points = div_10_points(final_path)
+
+    m, b = line_to_earth(divided_points[0][0], divided_points[0][2])
+    # Slope of a line spanning from a point to the relative position of earth.
+    print(f'y = {m}x + {b}')
 
 
