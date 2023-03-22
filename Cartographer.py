@@ -45,7 +45,7 @@ def create_surface_texture():
             for i in range(int(slopes[y][x])):
                 color -= random.randint(2, 5)
             texture.putpixel((x, y), (color, color, color))
-    texture.save(fm.images_path + "/moon_surface_texture.png")
+    texture.save(fm.TEXTURE_PATH)
 
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey
@@ -55,7 +55,7 @@ def draw_all():
     sns_heatmap(
         arr=heights,
         cmap="gist_gray",
-        save=fm.images_path + '/RAW_heightmap.png'
+        save=fm.RAW_HEIGHTMAP_PATH
     )
 
     # Creates Heightkey
@@ -63,14 +63,14 @@ def draw_all():
     sns_heatmap(
         arr=heights,
         cmap='viridis',
-        save=fm.images_path + '/heightkey_surface.png'
+        save=fm.SURFACE_HEIGHTKEY_PATH
     )
 
     # Creates Slopemap
     sns_heatmap(
         arr=slopes,
         cmap='inferno',
-        save=fm.images_path + '/slopemap.png'
+        save=fm.SLOPEMAP_PATH
     )
 
     # Creates Surface Texture
@@ -93,15 +93,15 @@ if __name__ == "__main__":
 
     # Image Scaling for Faster Ursina Runs, as well as proper dimensions.
     proper_heightmap = resize(
-        image_path=fm.images_path + '/RAW_heightmap.png',
+        image_path=fm.RAW_HEIGHTMAP_PATH,
         new_name='processed_heightmap',
         scale=128,
         transpose=True
     )
-    move(fm.images_path + '/processed_heightmap.png', getcwd() + '/processed_heightmap.png')
+    move(fm.PROCESSED_HEIGHTMAP_PATH, getcwd() + '/processed_heightmap.png')
 
     proper_surface_texture = resize(
-        image_path='Data/Images/moon_surface_texture.png',
+        image_path=fm.TEXTURE_PATH,
         new_name='moon_surface_texture',
         scale=SIZE_CONSTANT,
         transpose=True

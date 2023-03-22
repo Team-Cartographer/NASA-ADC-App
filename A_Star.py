@@ -99,7 +99,7 @@ def update_image(image_path: str, mvmt_path: list):
         y = mvmt_path[i][1]
         img.putpixel((x, y), color)
 
-    img.save(fm.images_path + "/AStar_Path.png")
+    img.save(fm.ASTAR_PATH)
 
 
 def div_10_points(final_path : list) -> list:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
-    grid = load_json(fm.data_path + "/AStarRawData.json")
+    grid = load_json(fm.ASTAR_JSONPATH)
 
     # Testing. To be removed later
     # start_x, start_y = 0, 0
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     final_path = astar()
 
     if final_path is not None:
-        update_image(fm.images_path + '/moon_surface_texture.png', final_path)
+        update_image(fm.TEXTURE_PATH, final_path)
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 

@@ -42,7 +42,7 @@ except FileNotFoundError:
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
-    model=Terrain(heightmap='processed_heightmap.png'),
+    model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
     #color = color.gray,
     texture='moon_surface_texture.png',
     collider='mesh',
@@ -53,7 +53,7 @@ ground_player = Entity(
 
 # EditorCamera Ground Plane
 ground_perspective = Entity(
-    model=Terrain(heightmap='processed_heightmap.png'),
+    model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
     #color=color.gray,
     texture='moon_surface_texture.png',
     collider='box',
@@ -112,8 +112,8 @@ color_key = Entity(
 
 
 # Slope and Height Toggle Image Pathing -------------
-slopemap = fm.parent_path + '/slopemap.png'
-heightkey = fm.parent_path + '/heightkey_surface.png'
+SLOPEMAP = fm.SLOPEMAP_PATH
+HEIGHTKEY = fm.SURFACE_HEIGHTKEY_PATH
 
 
 # Textboxes  -------------
