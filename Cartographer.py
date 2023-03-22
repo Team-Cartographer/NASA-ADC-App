@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from os import getcwd
 from shutil import move
 from time import time
+import random
 
 max_z = fm.get_max_height()
 CALCULATION_CONS = 255 / max_z
@@ -37,21 +38,21 @@ slopes = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
 
-    # Create Texture
+    # Creates Texture
     sns_heatmap(
         arr=slopes,
         cmap="gist_gray_r",
         save= fm.images_path + '/moon_surface_texture.png'
     )
 
-    # Create Heightmap for Ursina
+    # Creates Heightmap for Ursina
     sns_heatmap(
         arr=heights,
         cmap="gist_gray",
         save=fm.images_path + '/RAW_heightmap.png'
     )
 
-    # Create Heightkey
+    # Creates Heightkey
     #TODO Add Reduced Opacity Feature to Original Texture for this
     sns_heatmap(
         arr=heights,
@@ -60,13 +61,23 @@ def draw_all():
         save=fm.images_path + '/heightkey_surface.png'
     )
 
-    # Create Slopemap
+    # Creates Slopemap
     sns_heatmap(
         arr=slopes,
         #cmap="gist_rainbow_r",
         cmap='inferno',
         save=fm.images_path + '/slopemap.png'
     )
+
+    # Creates Texture
+    texture = Image.new("RGB", (SIZE_CONSTANT, SIZE_CONSTANT))
+    slope_arr = get_specific_from_json(3, fm.ASTAR_JSONPATH)
+    for y in range(len(slope_arr)):
+        for x in range(len(slope_arr[y])):
+            color: int
+            # color logic here
+            texture.putpixel((x, y), (color, color, color))
+    texture.save(fm.images_path+"test_texture.png")
 
 
 def draw_path(path, image, color):
