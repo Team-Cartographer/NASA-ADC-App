@@ -32,8 +32,10 @@ def sns_heatmap(arr, cmap, save):
     #Image.open(save).convert('RGBA').save(save)
     print(f'{save} created in {round(time()-start, 2)}s')
 
+
 heights = get_specific_from_json(8, fm.data_path + "/AStarRawData.json")
 slopes = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
+
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey
 def draw_all():
@@ -74,10 +76,13 @@ def draw_all():
     slope_arr = get_specific_from_json(3, fm.ASTAR_JSONPATH)
     for y in range(len(slope_arr)):
         for x in range(len(slope_arr[y])):
-            color: int
+            print(x, y)
+            color = 255
             # color logic here
+            for i in range(int(slope_arr[y][x])):
+                color -= random.randint(2, 5)
             texture.putpixel((x, y), (color, color, color))
-    texture.save(fm.images_path+"test_texture.png")
+    texture.save(fm.images_path+"/test_texture.png")
 
 
 def draw_path(path, image, color):
