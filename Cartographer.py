@@ -27,8 +27,8 @@ def sns_heatmap(arr, cmap, save):
     print(f'{save} created in {round(time()-start, 2)}s')
 
 
-heights = get_specific_from_json(8, fm.data_path + "/AStarRawData.json")
-slopes = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
+heights = get_specific_from_json(8, fm.ASTAR_JSONPATH)
+slopes = get_specific_from_json(3, fm.ASTAR_JSONPATH)
 
 
 def create_surface_texture():
