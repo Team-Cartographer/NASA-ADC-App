@@ -145,7 +145,7 @@ if __name__ == "__main__":
         scale=500
     )
 
-    print(f'{round(time()-start, 2)}s taken.')
+    print(f'Cartographer ran in {round(time()-start, 2)}s')
 
 
 
