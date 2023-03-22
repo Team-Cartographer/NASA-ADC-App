@@ -90,7 +90,7 @@ if not os.path.exists(os.getcwd() + '/info.json'):
         "MIN_X": None
     }
 
-    push_to_json(JSONPATH, data)
+    push_to_json(INFO_JSONPATH, data)
 
 
 # Data is a dictionary load that is standardized for all saves.
