@@ -179,7 +179,7 @@ def input(key):
     if key == 'l':
         ground_player.texture = 'slopemap.png'
         ground_perspective.texture = 'slopemap.png'
-        view_cam_player_loc.color = color.blue
+        view_cam_player_loc.color = color.green
         color_key.enable()
         color_key.texture='slopeKey.png'
 
@@ -249,6 +249,7 @@ def update():
     pause_music.volume = VOLUME
     start_menu_music.volume = VOLUME
     run_music.volume = VOLUME
+
 
     # Map Failsafe
     bound = SIZE_CONSTANT*10/2 - 200
@@ -328,6 +329,7 @@ def start_game():
     launch_button.disable()
     t_current_site.disable()
     volume_slider.disable()
+    sens_slider.disable()
     play_run_music()
     pause_music.stop(destroy=False)
 
@@ -387,6 +389,8 @@ def main_menu_returner():
     return_button.disable()
     pause_music.play()
     volume_slider.enable()
+    sens_slider.enable()
+
 
 start_button.on_click = main_menu_returner
 
@@ -399,10 +403,15 @@ def creds_init():
 def volume_change():
     return volume_slider.value
 
+def sens_change():
+    sens = sens_slider.value * 65 # Sensitivity Scaler
+    player.mouse_sensitivity = Vec2(sens, sens)
+
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
 load_button = Button(text="Load A Site", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
 volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
+sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True, on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
 
 launch_button.on_click = start_game
 load_button.on_click = load_button_init

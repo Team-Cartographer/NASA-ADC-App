@@ -26,10 +26,9 @@ def sns_heatmap(arr, cmap, save):
     sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
                 yticklabels=False, cmap=cmap)
     plt.tight_layout()
-    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight')
+    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
 
     # Convert to RGBA for Ursina.
-    #Image.open(save).convert('RGBA').save(save)
     print(f'{save} created in {round(time()-start, 2)}s')
 
 
@@ -38,7 +37,7 @@ slopes = get_specific_from_json(3, fm.data_path + "/AStarRawData.json")
 
 
 def create_surface_texture():
-    texture = Image.new("RGB", (SIZE_CONSTANT, SIZE_CONSTANT))
+    texture = Image.new("RGBA", (SIZE_CONSTANT, SIZE_CONSTANT))
     for y in tqdm(range(len(slopes)), desc='Creating Surface Texture'):
         for x in range(len(slopes[y])):
             color = 255
@@ -63,7 +62,6 @@ def draw_all():
     #TODO Add Reduced Opacity Feature to Original Texture for this
     sns_heatmap(
         arr=heights,
-        #cmap="gist_rainbow_r",
         cmap='viridis',
         save=fm.images_path + '/heightkey_surface.png'
     )
@@ -71,7 +69,6 @@ def draw_all():
     # Creates Slopemap
     sns_heatmap(
         arr=slopes,
-        #cmap="gist_rainbow_r",
         cmap='inferno',
         save=fm.images_path + '/slopemap.png'
     )
@@ -95,7 +92,7 @@ if __name__ == "__main__":
     draw_all()
 
     # Image Scaling for Faster Ursina Runs, as well as proper dimensions.
-    downscaled = resize(
+    proper_heightmap = resize(
         image_path=fm.images_path + '/RAW_heightmap.png',
         new_name='processed_heightmap',
         scale=128,
