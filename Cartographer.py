@@ -95,28 +95,28 @@ if __name__ == "__main__":
     proper_surface_texture = resize(
         image_path='Data/Images/moon_surface_texture.png',
         new_name='moon_surface_texture',
-        scale=1277,
+        scale=SIZE_CONSTANT,
         transpose=True
     )
 
     flipped_slopemap = resize(
         image_path='Data/Images/slopemap.png',
         new_name='slopemap',
-        scale=1277,
+        scale=SIZE_CONSTANT,
         transpose=True
     )
 
     flipped_heightmap = resize(
         image_path='Data/Images/heightkey_surface.png',
         new_name='heightkey_surface',
-        scale=1277,
+        scale=SIZE_CONSTANT,
         transpose=True
     )
 
     minimap = resize(
         image_path='Data/Images/moon_surface_texture.png',
         new_name='minimap',
-        scale=127
+        scale=128
     )
 
     interface_slopemap = resize(
