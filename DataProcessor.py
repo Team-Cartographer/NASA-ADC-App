@@ -100,7 +100,7 @@ def process_data():
             array_to_be_written[j][i][1] = j
 
     fm.push_to_json(fm.data_path + "/AStarRawData.json", array_to_be_written, None)
-    fm.push_to_json(fm.JSONPATH, data)
+    fm.push_to_json(fm.ASTAR_JSONPATH, data)
 
 
 if __name__ == "__main__":
