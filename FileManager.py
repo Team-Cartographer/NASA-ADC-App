@@ -9,7 +9,8 @@ import json
 from tqdm import tqdm
 import ui
 
-JSONPATH = os.getcwd() + '/info.json'
+INFO_JSONPATH = os.getcwd() + '/info.json'
+ASTAR_JSONPATH = 'Data/AStarRawData.json'
 
 
 # Push Dictionary of Data to Json File
