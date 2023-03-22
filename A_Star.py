@@ -113,6 +113,7 @@ def div_10_points(final_path : list) -> list:
 
 
 def line_to_earth(x, y):
+    # Currently Hardcoded, Fix once we get it working with Regional Site.
     m = (y-1250)/(x-638)
     b = -m*x + y
     return int(m), int(b)
