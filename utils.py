@@ -7,15 +7,32 @@ from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from typing import Callable, Any
 from time import time
 from msgspec.json import decode
+import json
 import numpy as np
-
 from PIL import Image
+
+
+def timeit(method: Callable) -> Callable:
+    def timed(*args, **kw) -> Any:
+        time_start = time()
+        result = method(*args, **kw)
+        time_end = time()
+        print(f"Function '{method.__name__}' executed in {time_end - time_start:.3f}s")
+        return result
+
+    return timed
 
 
 def load_json(json_path: str) -> dict:
     with open(json_path, "rb") as f:
         json_data = decode(f.read())
     return json_data
+
+
+@timeit
+def push_to_json(json_path, json_data, custom_indent=4):
+    with open(json_path, 'w') as f:
+        json.dump(json_data, f, ensure_ascii=False, indent=custom_indent)
 
 
 def file2list(path):
@@ -179,17 +196,6 @@ def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str
     processed.save(path)
     print(f"Resized {new_name}.png in {round(time() - start, 2)}s")
     return path
-
-
-def timeit(method: Callable) -> Callable:
-    def timed(*args, **kw) -> Any:
-        time_start = time()
-        result = method(*args, **kw)
-        time_end = time()
-        print(f"Function '{method.__name__}' executed in {time_end - time_start:.3f}s")
-        return result
-
-    return timed
 
 
 if __name__ == "__main__":

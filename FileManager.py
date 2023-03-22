@@ -4,22 +4,11 @@ App Development Challenge Application.#
 """
 
 import os
-from utils import show_info, file2list, load_json
-import json
-from tqdm import tqdm
+from utils import show_info, file2list, load_json, push_to_json
 import ui
 
 INFO_JSONPATH = os.getcwd() + '/info.json'
 ASTAR_JSONPATH = 'Data/AStarRawData.json'
-
-
-# Push Dictionary of Data to Json File
-def push_to_json(json_path, json_data, custom_indent=4):
-    with open(json_path, 'w') as f:
-        json_size = len(json.dumps(json_data).encode('utf-8'))
-        pbar = tqdm(total=json_size, unit='B', unit_scale=True, desc="Writing " + os.path.basename(json_path))
-        json.dump(json_data, f, ensure_ascii=False, indent=custom_indent)
-        pbar.update(json_size)
 
 
 # Currently Disabled as Saves are not a priority task.
