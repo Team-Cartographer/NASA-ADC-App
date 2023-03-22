@@ -1,7 +1,7 @@
 from PIL import Image
 import heapq
 from numpy import sqrt
-from utils import show_warning, timeit, load_json
+from utils import show_warning, load_json
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
@@ -53,8 +53,7 @@ class Node:
         return eqn
 
 
-@timeit
-def astar(start_node, goal_node, grid):
+def astar():
     nodes = []
 
     heapq.heappush(nodes, start_node)
@@ -118,19 +117,18 @@ def line_to_earth(x, y):
     b = -m*x + y
     return int(m), int(b)
 
+
 def run_astar():
     (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
+    global grid
     grid = load_json(fm.ASTAR_JSONPATH)
 
-    # Testing. To be removed later
-    # start_x, start_y = 0, 0
-    # goal_x, goal_y = 100, 100
-
+    global start_node, goal_node
     start_node = Node(start_x, start_y)
     goal_node = Node(goal_x, goal_y)
 
-    final_path = astar(start_node, goal_node, grid)
+    final_path = astar()
 
     if final_path is not None:
         update_image(fm.TEXTURE_PATH, final_path)
