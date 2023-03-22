@@ -179,7 +179,7 @@ def input(key):
     if key == 'l':
         ground_player.texture = 'slopemap.png'
         ground_perspective.texture = 'slopemap.png'
-        view_cam_player_loc.color = color.blue
+        view_cam_player_loc.color = color.green
         color_key.enable()
         color_key.texture='slopeKey.png'
 

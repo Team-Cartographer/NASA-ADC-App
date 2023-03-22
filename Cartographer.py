@@ -26,7 +26,7 @@ def sns_heatmap(arr, cmap, save):
     sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
                 yticklabels=False, cmap=cmap)
     plt.tight_layout()
-    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight')
+    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
 
     # Convert to RGBA for Ursina.
     print(f'{save} created in {round(time()-start, 2)}s')
