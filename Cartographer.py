@@ -9,14 +9,9 @@ from shutil import move
 from time import time
 import random
 
-max_z = fm.get_max_height()
-CALCULATION_CONS = 255 / max_z
-ONE_THIRD = 1 / 3
-TWO_THIRDS = 2 / 3
+
 SIZE_CONSTANT = fm.get_size_constant()
-
 Image.MAX_IMAGE_PIXELS = None
-
 
 def sns_heatmap(arr, cmap, save):
     start = time()
