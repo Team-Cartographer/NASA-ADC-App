@@ -11,7 +11,7 @@ from A_Star import run_astar
 # Window Declarations and Formatting -------------
 app = Ursina()
 window.set_title('Team Cartographer\'s ADC Application')
-#window.cog_button.disable()
+window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Display Specific Constants -------------
@@ -363,8 +363,7 @@ def on_unpause():
 
 def repath_init():
     run_astar()
-    application.hot_reloader.reload_textures
-
+    application.hot_reloader.reload_textures()
 
 
 # Start Menu Text and Buttons -------------
