@@ -1,7 +1,7 @@
 import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, \
     get_z_coord, get_azimuth, get_elevation, timeit, \
-    load_json
+    load_json, push_to_json
 from tqdm import tqdm
 
 # Get Constants
@@ -99,8 +99,8 @@ def process_data():
             array_to_be_written[j][i][0] = i
             array_to_be_written[j][i][1] = j
 
-    fm.push_to_json(fm.ASTAR_JSONPATH, array_to_be_written)
-    fm.push_to_json(fm.INFO_JSONPATH, data)
+    push_to_json(fm.ASTAR_JSONPATH, array_to_be_written)
+    push_to_json(fm.INFO_JSONPATH, data)
 
 
 if __name__ == "__main__":

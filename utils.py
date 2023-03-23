@@ -6,8 +6,7 @@ import os
 from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from typing import Callable, Any
 from time import time
-from msgspec.json import decode
-import json
+import orjson as oj
 import numpy as np
 from PIL import Image
 
@@ -23,16 +22,18 @@ def timeit(method: Callable) -> Callable:
     return timed
 
 
-def load_json(json_path: str) -> dict:
-    with open(json_path, "rb") as f:
-        json_data = decode(f.read())
-    return json_data
+@timeit
+def load_json(json_path: str):
+    with open(json_path, 'rb') as f:
+        data = oj.loads(f.read())
+    return data
 
 
 @timeit
-def push_to_json(json_path, json_data, custom_indent=4):
-    with open(json_path, 'w') as f:
-        json.dump(json_data, f, ensure_ascii=False, indent=custom_indent)
+def push_to_json(json_path, json_data):
+    json_data = oj.dumps(json_data)
+    with open(json_path, 'wb') as f:
+        f.write(json_data)
 
 
 def file2list(path):

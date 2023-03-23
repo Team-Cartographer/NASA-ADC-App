@@ -259,7 +259,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 50 # Sets correct height
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 55 # Sets correct height
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
