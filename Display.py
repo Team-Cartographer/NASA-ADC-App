@@ -25,19 +25,11 @@ VOLUME = 0.15
 # Load the Data
 try:
     AStarData = fm.load_json("Data/AStarRawData.json")
-except FileNotFoundError:
-    show_error("Display Error", "Data Not Processed!")
-    quit()
-
-
-try:
     infodata = fm.load_json("info.json")
 except FileNotFoundError:
     show_error("Display Error", "Data Not Processed!")
     quit()
 
-
-# This File is meant for any Ursina Helper Methods/Classes
 
 # Declaration of Entities -------------
 
@@ -103,13 +95,13 @@ color_key = Entity(
 )
 
 # Earth Entity (Scales to Player Position)
-# earth = Entity(
-#    model='sphere',
-#    scale=(1000, 1000, 1000),
-#    position=(0, 600, -9000),
-#    texture='earth_texture.jpg',
-#    enabled=True
-#    )
+earth = Entity(
+   model='sphere',
+   scale=(500, 500, 500),
+   position=(0, 600, -9000),
+   texture='earth_texture.jpg',
+   enabled=True
+   )
 
 
 # Slope and Height Toggle Image Pathing -------------
@@ -296,17 +288,11 @@ def update():
     mini_dot.position = (mx, mz, 0)
 
     # Earth Positioning
-    #earth.position = (earth.x, 400*(elevation), earth.z)
-
-    # Raycasting Tests
-    #hit_z = raycast(origin=player, direction=(0, 0, 1), distance=100000, traverse_target=ground_player, ignore=list(), debug=True)
-    #hit_x = raycast(origin=player, direction=(-1, 0, 0), distance=100000, traverse_target=ground_player, ignore=list(), debug=True)
-    #if hit_z.hit:
-    #    print(f'Z: {hit_z}')
-    #if hit_x.hit:
-    #    print(f'X: {hit_x}')
-
-
+    earth.position = (earth.x, 600+elevation, earth.z)
+    if view_cam_player_loc.enabled is True:
+        earth.z = -4000
+    else:
+        earth.z = -9000
 
 
 # Create Start Menu -------------
