@@ -9,7 +9,7 @@ from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from A_Star import run_astar
 
 # Window Declarations and Formatting -------------
-app = Ursina()#development_mode=False) # adding dev=False defaults the app to full screen.
+app = Ursina()  # development_mode=False) # adding dev=False defaults the app to full screen.
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
@@ -44,7 +44,7 @@ except FileNotFoundError:
 # FirstPersonController Ground Plane
 ground_player = Entity(
     model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
-    #color = color.gray,
+    # color = color.gray,
     texture='moon_surface_texture.png',
     collider='mesh',
     scale=(SIZE_CONSTANT*PLAYER_SCALE_FACTOR, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*PLAYER_SCALE_FACTOR),
@@ -55,7 +55,7 @@ ground_player = Entity(
 # EditorCamera Ground Plane
 ground_perspective = Entity(
     model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
-    #color=color.gray,
+    # color=color.gray,
     texture='moon_surface_texture.png',
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
@@ -103,7 +103,7 @@ color_key = Entity(
 )
 
 # Earth Entity (Scales to Player Position)
-#earth = Entity(
+# earth = Entity(
 #    model='sphere',
 #    scale=(1000, 1000, 1000),
 #    position=(0, 600, -9000),
@@ -126,7 +126,7 @@ t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
 t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
 t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
 t_info = Text(
-    #text='M for Moon, L for Slopemap, H for Heightmap, Esc for Pause, X for Switch',
+    # text='M for Moon, L for Slopemap, H for Heightmap, Esc for Pause, X for Switch',
     text='',
     x=-.15, y=-.45, scale=1.1, color=color.black, enabled=False)
 
@@ -165,7 +165,7 @@ start_menu_music = Audio(
 )
 
 def play_run_music():
-    #run_music.clip(choice(track_list))
+    # run_music.clip(choice(track_list))
     run_music.play()
 
 
