@@ -143,7 +143,6 @@ def run_astar():
     print(f'y = {m}x + {b}')
 
 
-
 if __name__ == "__main__":
     run_astar()
 
