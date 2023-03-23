@@ -287,8 +287,8 @@ def update():
     mx, mz = (x/mmsc) + 0.5, (z/mmsc) - 0.5
     mini_dot.position = (mx, mz, 0)
 
-    # Earth Positioning
-    earth.position = (earth.x, 600+elevation, earth.z)
+    # Earth Positioning (haha funny number)
+    earth.position = (earth.x, 420+elevation*100, earth.z)
     if view_cam_player_loc.enabled is True:
         earth.z = -4000
     else:
