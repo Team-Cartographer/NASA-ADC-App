@@ -93,7 +93,7 @@ if __name__ == "__main__":
         scale=128,
         transpose=True
     )
-    move(fm.PROCESSED_HEIGHTMAP_PATH, getcwd() + '/processed_heightmap.png')
+    move(fm.images_path + fm.PROCESSED_HEIGHTMAP_PATH, getcwd() + '/processed_heightmap.png')
 
     proper_surface_texture = resize(
         image_path=fm.TEXTURE_PATH,
