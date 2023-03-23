@@ -10,7 +10,7 @@ SIZE: int = fm.get_size_constant()
 LUNAR_RAD: float = fm.get_lunar_rad()
 
 # Legacy Constants
-#DISTANCE_BETWEEN_POINTS: int = fm.get_dist_between_points()
+# DISTANCE_BETWEEN_POINTS: int = fm.get_dist_between_points()
 
 
 # Creates Lists of each Data Type from the Paths Given.
@@ -20,6 +20,7 @@ height_list: list = file2list(fm.get_height_file_path())
 slope_list: list = file2list(fm.get_slope_file_path())
 
 data = load_json(fm.INFO_JSONPATH)
+
 
 @timeit
 def process_data():
