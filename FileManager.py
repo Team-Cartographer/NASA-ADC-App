@@ -115,7 +115,6 @@ def get_player_pos() -> tuple:
     return data["PLAYER_POSITION"]
 
 
-
 # Creates directories and sets 'info.json' variables only if FileManager.py is running.
 # Otherwise, only helper methods are accessible.
 if __name__ == '__main__':
