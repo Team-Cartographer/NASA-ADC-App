@@ -84,6 +84,7 @@ mini_dot = Entity(
     enabled=False
     )
 
+# TODO Fix Color Keys in Photoshop
 # Color Key Entity (Activates on Heightmap/Slopemap Toggle)
 color_key = Entity(
     parent=camera.ui,
@@ -169,7 +170,7 @@ def input(key):
         player.set_position(RESET_LOC)
 
     # Slopemap Toggle
-    if key == 'l':
+    if key == '4':
         ground_player.texture = 'slopemap.png'
         ground_perspective.texture = 'slopemap.png'
         view_cam_player_loc.color = color.green
@@ -177,20 +178,20 @@ def input(key):
         color_key.texture='slopeKey.png'
 
     # Heightkey Toggle
-    if key == 'h':
+    if key == '3':
         ground_player.texture = 'heightkey_surface.png'
         ground_perspective.texture = 'heightkey_surface.png'
         view_cam_player_loc.color = color.white
         color_key.enable()
         color_key.texture='heightKey.png'
 
-    if key == 'p':
+    if key == '2':
         ground_player.texture = 'AStar_Path.png'
         ground_perspective.texture = 'AStar_Path.png'
         color_key.disable()
 
     # Moon Texture Toggle (Default)
-    if key == 'm':
+    if key == '1':
         ground_player.texture = 'moon_surface_texture.png'
         ground_perspective.texture = 'moon_surface_texture.png'
         view_cam_player_loc.color = color.red
