@@ -5,6 +5,7 @@ from utils import show_warning, load_json
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
+from Display import line_of_sight
 
 
 class Node:
@@ -101,7 +102,7 @@ def update_image(image_path: str, mvmt_path: list):
     img.save(fm.ASTAR_PATH)
 
 
-def div_10_points(final_path : list) -> list:
+def div_10_points(final_path: list) -> list:
     comm_points = []
     dist = round(len(final_path) / 11)
     for i in range(11):
@@ -119,7 +120,7 @@ def line_to_earth(x, y):
 
 
 def run_astar():
-    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
+    (start_x, start_y), (goal_x, goal_y), find_comm_checkpoints = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
     global grid
     grid = load_json(fm.ASTAR_JSONPATH)
@@ -130,8 +131,12 @@ def run_astar():
 
     final_path = astar()
 
-    if final_path is not None:
+    if final_path is not None and not find_comm_checkpoints:
         update_image(fm.TEXTURE_PATH, final_path)
+    elif final_path is not None and find_comm_checkpoints:
+        possible_comm = div_10_points(final_path)
+        for point in possible_comm:
+            pass
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 

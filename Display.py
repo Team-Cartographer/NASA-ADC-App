@@ -408,6 +408,16 @@ pause_button.on_click = on_unpause
 return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.07)
 return_button.on_click = main_menu_returner
 
+
+# Pathfinding Helper Functions
+def line_of_sight(player_x: int, player_y: int) -> bool:
+    # Raycasing here.
+    #if (intersection logic here):
+        # return False
+    return True
+
+
+
 # Runs Display.py -------------
 if __name__ == '__main__':
     app.run(info=False)
