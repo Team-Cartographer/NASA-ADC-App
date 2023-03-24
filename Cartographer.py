@@ -13,6 +13,7 @@ import random
 SIZE_CONSTANT = fm.get_size_constant()
 Image.MAX_IMAGE_PIXELS = None
 
+
 def sns_heatmap(arr, cmap, save):
     start = time()
 
@@ -54,7 +55,7 @@ def draw_all():
     )
 
     # Creates Heightkey
-    #TODO Add Reduced Opacity Feature to Original Texture for this
+    # TODO Add Reduced Opacity Feature to Original Texture for this
     sns_heatmap(
         arr=heights,
         cmap='viridis',
