@@ -103,15 +103,15 @@ def height_from_rect(x: float, y: float, data, info_data) -> float:
 
 
 def get_x_coord(lat, long, rad):  # takes in degrees latitude and longitude
-    return rad * cos(radians(lat)) * cos(radians(long))
+    return rad * cos(lat) * cos(long)
 
 
 def get_y_coord(lat, long, rad):
-    return rad * cos(radians(lat)) * sin(radians(long))
+    return rad * cos(lat) * sin(long)
 
 
 def get_z_coord(lat, rad):
-    return rad * sin(radians(lat))
+    return rad * sin(lat)
 
 
 def get_specific_from_json(index, jsonpath):
@@ -138,8 +138,8 @@ def get_azimuth(moon_lat, moon_long):
 
     # True Lunar South Pole
     lunar_south_pole_lat, lunar_south_pole_long = radians(-89.54), radians(0)
-    moon_lat_radian = radians(moon_lat)
-    moon_long_radian = radians(moon_long)
+    moon_lat_radian = moon_lat
+    moon_long_radian = moon_long
 
     # Azimuth Calculation
     c1 = sin(moon_long_radian - lunar_south_pole_long) * cos(moon_lat_radian)
@@ -150,7 +150,8 @@ def get_azimuth(moon_lat, moon_long):
     return degrees(azi)
 
 
-def get_elevation(moon_lat, moon_long, moon_height):
+def get_elevation(moon_lat, moon_long, moon_x, moon_y, moon_z):
+    # Latitude and Longitude are already in radians.
     # Elevation Calculation for DataProcessor.py
     # Earth Cartesian Position with respect to Lunar Fixed Frame at a single time instant
     # [X, Y, Z] = [361000, 0, –42100] km.
@@ -159,19 +160,11 @@ def get_elevation(moon_lat, moon_long, moon_height):
     earth_y = 0
     earth_z = -42100
 
-    moon_lat_rad = radians(float(moon_lat))
-    moon_long_rad = radians(float(moon_long))
-    moon_radius = 1737.4 * 1000 + float(moon_height)
-
-    moon_x = get_x_coord(moon_lat, moon_long, moon_radius)
-    moon_y = get_y_coord(moon_lat, moon_long, moon_radius)
-    moon_z = get_z_coord(moon_lat, moon_long)
-
     dists = [earth_x - moon_x, earth_y - moon_y, earth_z - moon_z]
     range_ = sqrt((dists[0] ** 2) + (dists[1] ** 2) + (dists[2] ** 2))
 
-    rz = dists[0] * cos(moon_lat_rad) * cos(moon_long_rad) + dists[1] * cos(moon_lat_rad) * sin(moon_long_rad) + dists[
-        2] * sin(moon_lat_rad)
+    rz = dists[0] * cos(moon_lat) * cos(moon_long) + dists[1] * cos(moon_lat) * sin(moon_long) + dists[
+        2] * sin(moon_lat)
 
     elev = asin(rz / range_)
 
