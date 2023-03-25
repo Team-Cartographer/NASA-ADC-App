@@ -1,9 +1,11 @@
+import sys
+
 import FileManager as fm
 from utils import file2list, get_x_coord, get_y_coord, \
     get_z_coord, get_azimuth, get_elevation, timeit, \
     load_json, push_to_json
 from tqdm import tqdm
-from math import radians, degrees
+from math import sin, cos, radians, degrees, atan2, asin, sqrt
 
 # Get Constants
 
@@ -22,6 +24,10 @@ slope_list: list = file2list(fm.get_slope_file_path())
 
 data = load_json(fm.INFO_JSONPATH)
 
+
+earth_x = 361000  # IN KM (p 17)
+earth_y = 0  # IN KM (p 17)
+earth_z = -42100  # IN KM (p 17)
 
 @timeit
 def process_data():
@@ -53,22 +59,48 @@ def process_data():
             latitude = radians(latitude)
             longitude = radians(longitude)
 
-            x: float = float(get_x_coord(latitude, longitude, radius))
-            y: float = float(get_y_coord(latitude, longitude, radius))
-            z: float = float(get_z_coord(latitude, radius))
+            x = radius * cos(latitude) * cos(longitude)
+            y = radius * cos(latitude) * sin(longitude)
+            z = radius * sin(latitude)
 
-            azi: float = get_azimuth(latitude, longitude)
-            elev: float = get_elevation(latitude, longitude, x, y, z)
+            dx = (earth_x * 1000) - x
+            dy = (earth_y * 1000) - y
+            dz = (earth_z * 1000) - z
 
-            xs.append(x), ys.append(y), zs.append(z), heights.append(height)
+            r = sqrt(dx ** 2 + dy ** 2 + dz ** 2)
+            rz = dx * cos(latitude) * cos(longitude) + dy * cos(latitude) * sin(longitude) + dz * sin(latitude)
 
-            a_star_data_array.append([x, y, z, slope, azi, elev, degrees(latitude), degrees(longitude), height])
+            xx = 361000 * 1000
+            yy = 0
+            zz = -42100 * 1000
+
+            rr = sqrt(xx ** 2 + yy ** 2 + zz ** 2)
+
+            earth_lat = asin(zz / rr)
+            earth_long = atan2(yy, xx)
+
+            #  A = moon, B = earth
+            p1 = sin(earth_long - longitude) * cos(earth_lat)
+            p2 = (cos(latitude) * sin(earth_lat)) - (sin(latitude) * cos(earth_lat) * cos(earth_long - longitude))
+
+            elev = asin(rz / r)
+            azi = atan2(p1, p2)
+
+            elev_deg = degrees(elev)
+            azi_deg = degrees(azi)
+
+            # azi: float = get_azimuth(latitude, longitude)
+            # elev: float = get_elevation(latitude, longitude, x, y, z)
+
+            xs.append(x), ys.append(y), zs.append(z), heights.append(azi_deg)
+
+            a_star_data_array.append([x, y, z, slope, azi_deg, elev_deg, degrees(latitude), degrees(longitude), height])
 
     min_x_: float = abs(min(xs))
     min_y_: float = abs(min(ys))
     min_z_: float = abs(min(zs))
     min_height_: float = abs(min(heights))
-
+    print(min(heights), max(heights))
     max_z: float = (round(abs(min_z_) - abs(max(zs))))
     max_height_: float = (round(min_height_ + abs(max(heights))))
 

@@ -137,7 +137,7 @@ def get_azimuth(moon_lat, moon_long):
     """
 
     # True Lunar South Pole
-    lunar_south_pole_lat, lunar_south_pole_long = radians(-89.54), radians(0)
+    lunar_south_pole_lat, lunar_south_pole_long = radians(-90), radians(0)
     moon_lat_radian = moon_lat
     moon_long_radian = moon_long
 
@@ -168,7 +168,7 @@ def get_elevation(moon_lat, moon_long, moon_x, moon_y, moon_z):
 
     elev = asin(rz / range_)
 
-    return degrees(elev)
+    return elev
 
 
 def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str:
