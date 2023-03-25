@@ -9,7 +9,7 @@ from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from A_Star import run_astar
 
 # Window Declarations and Formatting -------------
-app = Ursina(development_mode=False)
+app = Ursina()#development_mode=False)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
