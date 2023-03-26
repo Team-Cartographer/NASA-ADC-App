@@ -1,30 +1,44 @@
-import cProfile
-from math import cos
+import numpy as np
+
+def find_point_on_segment(p1, p2, ratio):
+    return (p1[0] + (p2[0] - p1[0]) * ratio, p1[1] + (p2[1] - p1[1]) * ratio)
+
+def euclidean_distance(p1, p2):
+    return np.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+def subdivide_path(points, sections=10):
+    # Calculate total length of the path
+    total_length = sum(euclidean_distance(points[i], points[i+1]) for i in range(len(points) - 1))
+    section_length = total_length / sections
+
+    # Iterate through the path and find the points at each section
+    section_points = []
+    current_length = 0
+    section = 1
+
+    for i in range(len(points) - 1):
+        segment_length = euclidean_distance(points[i], points[i + 1])
+        remaining_length = section_length * section - current_length
+
+        while remaining_length <= segment_length:
+            ratio = remaining_length / segment_length
+            point_on_segment = find_point_on_segment(points[i], points[i + 1], ratio)
+            section_points.append(point_on_segment)
+
+            section += 1
+            remaining_length = section_length * section - current_length
+
+        current_length += segment_length
 
 
-def calculate_x_coord(lat: float, long: float, radius: float) -> float:
-    """
-    Calculate the x-coordinate of a point on a sphere given its latitude, longitude, and radius.
-
-    Note that latitude and longitude should be in radians, and radius should be in meters.
-
-    Args:
-        lat (float): Latitude of the point in radians.
-        long (float): Longitude of the point in radians.
-        radius (float): Radius of the sphere in meters.
-
-    Returns:
-        float: The x-coordinate of the point in meters.
-    """
-
-    return radius * cos(lat) * cos(long)
+    intify = lambda arr: list(map(lambda x: (int(x[0]), int(x[1])), arr))
+    return intify(section_points)
 
 
-def main():
-    # Call your function here with some example inputs
-    lat = 0.5  # 30 degrees in radians
-    long = 1.0  # 60 degrees in radians
-    radius = 6371000  # Earth's mean radius in meters
-    x_coord = calculate_x_coord(lat, long, radius)
 
+# # Test the function
+# path = [(0, 0), (10, 10), (20, 0), (30, 10)]
+# sections = 10
+# result = subdivide_path(path, sections)
+# print(result)
 
