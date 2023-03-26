@@ -100,8 +100,8 @@ def generate_comm_path(comm_path):
         (start_x, start_y), (goal_x, goal_y) = (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
         global start_node
         global goal_node
-        start_node: Node = Node(start_x, start_y)
-        goal_node: Node = Node(goal_x, goal_y)
+        start_node = Node(start_x, start_y)
+        goal_node = Node(goal_x, goal_y)
 
         path_btw = astar()
         final_path.extend(path_btw)
@@ -169,7 +169,8 @@ def run_astar():
     (start_x, start_y), (goal_x, goal_y), checkpoints = \
         get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
-    global start_node, goal_node
+    global start_node
+    global goal_node
     start_node = Node(start_x, start_y)
     goal_node = Node(goal_x, goal_y)
 

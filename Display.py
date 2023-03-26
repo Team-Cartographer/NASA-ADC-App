@@ -11,6 +11,7 @@ from A_Star import run_astar
 # Window Declarations and Formatting -------------
 app = Ursina() #development_mode=False)
 window.set_title('Team Cartographer\'s ADC Application')
+application.development_mode = False
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
