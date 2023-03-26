@@ -1,42 +1,68 @@
-from utils import file2list, push_to_json, timeit
+import numpy as np
+from utils import timeit
 import FileManager as fm
-from tqdm import tqdm
-from Node import Node
-import cProfile
+from Constants import LUNAR_RADIUS, EARTH_X, EARTH_Y, EARTH_Z
+import time
+
+LUNAR_RADIUS_METERS = (LUNAR_RADIUS * 1000)
+EARTH_X_METERS = (EARTH_Y * 1000)
+EARTH_Y_METERS = (EARTH_X * 1000)
+EARTH_Z_METERS = (EARTH_Z * 1000)
+
+R = np.sqrt(EARTH_X_METERS ** 2 + EARTH_Y_METERS ** 2 + EARTH_Z_METERS ** 2)
+
+EARTH_LAT = np.arcsin(EARTH_Z_METERS / R)
+EARTH_LONG = np.arctan2(EARTH_Y_METERS, EARTH_X_METERS)
 
 # Get Constants
 SIZE: int = fm.get_size_constant()
 
-# Creates Lists of each Data Type from the Paths Given.
-latitude_list: list = file2list(fm.get_latitude_file_path())
-longitude_list: list = file2list(fm.get_longitude_file_path())
-height_list: list = file2list(fm.get_height_file_path())
-slope_list: list = file2list(fm.get_slope_file_path())
+startt_time = time.time()
 
+
+# Creates Lists of each Data Type from the Paths Given.
+latitude_list = np.loadtxt(fm.get_latitude_file_path(), delimiter=',', dtype=float)
+longitude_list = np.loadtxt(fm.get_longitude_file_path(), delimiter=',', dtype=float)
+height_list = np.loadtxt(fm.get_height_file_path(), delimiter=',', dtype=float)
+slope_list = np.loadtxt(fm.get_slope_file_path(), delimiter=',', dtype=float)
+
+print(time.time()- startt_time)
 
 @timeit
 def process_data():
-    """
-    Processes the input data lists containing latitude, longitude, height, and slope values,
-    and generates a sorted 3D array of x, y, and z coordinates along with azimuth and elevation values.
-    The processed data is written to a CSV file named 'AStarRawData.csv'.
-    """
+    start_time = time.time()
+    # Convert latitudes and longitudes to radians
+    latitude_radians = np.radians(latitude_list)
+    longitude_radians = np.radians(longitude_list)
 
-    rows: int = len(longitude_list)
-    cols: int = len(longitude_list[0])
+    # Calculate the radius
+    radius = LUNAR_RADIUS_METERS + height_list
 
-    a_star_data_array: list = []
-    nodes: list[Node] = []
+    # Calculate x, y, and z coordinates
+    x = radius * np.cos(latitude_radians) * np.cos(longitude_radians)
+    y = radius * np.cos(latitude_radians) * np.sin(longitude_radians)
+    z = radius * np.sin(latitude_radians)
 
-    for row in tqdm(range(rows), desc="Processing Polar to Rectangular Data"):
-        for col in range(cols):
-            latitude: float = float(latitude_list[row][col])
-            longitude: float = float(longitude_list[row][col])
-            height: float = float(height_list[row][col])
-            slope: float = float(slope_list[row][col])
+    # Calculate elevation and azimuth
+    dx, dy, dz = EARTH_X_METERS - x, EARTH_Y_METERS - y, EARTH_Z_METERS - z
+    r = np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
+    rz = dx * np.cos(latitude_radians) * np.cos(longitude_radians) + dy * np.cos(latitude_radians) * np.sin(longitude_radians) + dz * np.sin(latitude_radians)
+    elevation = np.degrees(np.arcsin(rz / r))
 
-            node = Node(latitude, longitude, height, slope)
-            # nodes.append(node)
+    c1 = np.sin(EARTH_LONG - longitude_radians) * np.cos(EARTH_LAT)
+    c2 = (np.cos(latitude_radians) * np.sin(EARTH_LAT)) - (np.sin(latitude_radians) * np.cos(EARTH_LAT) * np.cos(EARTH_LONG - longitude_radians))
+    azimuth = np.degrees(np.arctan2(c1, c2))
+
+    # Create a_star_data_array
+    a_star_data_array = np.column_stack((x.flatten(), y.flatten(), z.flatten(), slope_list.flatten(), azimuth.flatten(), elevation.flatten(), np.degrees(latitude_list).flatten(), np.degrees(longitude_list).flatten(), height_list.flatten()))
+    print(time.time() - start_time)
+    print(type(a_star_data_array))
+    print(a_star_data_array[0])
+    print(a_star_data_array[0][0])
+    # Save a_star_data_array to CSV file
+    # np.savetxt('AStarRawData.csv', a_star_data_array, delimiter=',', header='x,y,z,slope,azimuth,elevation,latitude,longitude,height', comments='')
+
+
 
     # adj_array: list = []
     # for i in tqdm(range(len(a_star_data_array)), desc="Creating AStar Data Array"):
@@ -65,8 +91,5 @@ def process_data():
     # push_to_json(fm.ASTAR_JSONPATH, array_to_be_written)
 
 
-# if __name__ == "__main__":
-#     process_data()
-
-
-cProfile.run('process_data()')
+if __name__ == "__main__":
+    process_data()
