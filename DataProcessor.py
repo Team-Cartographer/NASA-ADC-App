@@ -82,7 +82,7 @@ def process_data():
         array_to_be_written[i]: list = sorted(array_to_be_written[i], key=lambda arr: arr[0])
 
     push_to_json(fm.ASTAR_JSONPATH, array_to_be_written)
-    push_to_json(fm.INFO_JSONPATH, data)
+    #push_to_json(fm.INFO_JSONPATH, data)
 
 
 if __name__ == "__main__":
