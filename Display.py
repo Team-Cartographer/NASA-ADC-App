@@ -235,6 +235,7 @@ def input(key):
         run_music.stop(destroy=False)
 
 
+
 # Game Loop Update() Functions -------------
 height_vals = ground_player.model.height_values
 def update():
@@ -268,6 +269,8 @@ def update():
     slope = slope_from_rect(nx, nz, AStarData)
     height = height_from_rect(nx, nz, AStarData, infodata)
     azimuth, elevation = get_azi_elev(nx, nz, AStarData)
+
+    print(is_valid_location(lat, long, height, slope, elevation, nx, nz))
 
     # Updating Variables
     t_lat.text = f'Latitude: {round(lat, 4)}° N'

@@ -121,7 +121,7 @@ def get_specific_from_json(index, jsonpath):
     return arr
 
 
-# ONLY FOR USE WITH DISPLAY.PY
+# ONLY FOR USE WITH DISPLAY.PY AND ASTAR.PY
 def get_azi_elev(x, y, data):
     row = data[x][y]
     return round(row[4], 5), round(row[5], 5)  # azimuth and elevation, respectively

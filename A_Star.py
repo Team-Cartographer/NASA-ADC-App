@@ -1,7 +1,8 @@
 from PIL import Image, ImageDraw
 import heapq
 from numpy import sqrt
-from utils import show_warning, load_json, subdivide_path
+from utils import show_warning, load_json, subdivide_path, get_azi_elev, \
+    latitude_from_rect, longitude_from_rect, height_from_rect, slope_from_rect
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
@@ -51,6 +52,15 @@ class Node:
 
         eqn = k_dist * dist + k_slope * slope + slope_penalty
         return eqn
+
+def is_valid_checkpoint(point):
+    x, y = point[0], point[1]
+    azi, elev_earth = get_azi_elev(x, y)
+
+    # if not get_elev_horiz(azi) < elev_earth:
+    #     return False
+
+    return True
 
 
 def astar():
