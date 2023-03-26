@@ -1,7 +1,7 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 import heapq
 from numpy import sqrt
-from utils import show_warning, load_json
+from utils import show_warning, load_json, subdivide_path
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
@@ -88,27 +88,26 @@ def astar():
     return None
 
 
-def update_image(image_path: str, mvmt_path: list):
+def update_image(image_path: str, mvmt_path: list, comm_path: list):
     path = image_path
     img = Image.open(path)
 
-    color = (255, 0, 0)
+
     for i in tqdm(range(len(mvmt_path)), desc="Updating image"):
+        color = (255, 0, 0)
         x = mvmt_path[i][0]
         y = mvmt_path[i][1]
         img.putpixel((x, y), color)
 
+    if comm_path is not None:
+        for i in range(len(comm_path)):
+            draw = ImageDraw.Draw(img)
+            color = (0, 255, 0)
+            radius = 5
+            draw.ellipse((comm_path[i][0] - radius, comm_path[i][1] - radius,
+                          comm_path[i][0] + radius, comm_path[i][1] + radius), fill=color)
+
     img.save(fm.ASTAR_PATH)
-
-
-def div_10_points(final_path : list) -> list:
-    comm_points = []
-    dist = round(len(final_path) / 11)
-    for i in range(11):
-        comm_points.append(final_path[i * dist])
-
-    comm_points.pop(0)
-    return comm_points
 
 
 def line_to_earth(x, y):
@@ -119,7 +118,8 @@ def line_to_earth(x, y):
 
 
 def run_astar():
-    (start_x, start_y), (goal_x, goal_y) = get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
+    (start_x, start_y), (goal_x, goal_y), checkpoints = \
+        get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
 
     global grid
     grid = load_json(fm.ASTAR_JSONPATH)
@@ -129,21 +129,22 @@ def run_astar():
     goal_node = Node(goal_x, goal_y)
 
     final_path = astar()
+    sub_10_path = None
+
+    if checkpoints:
+        sub_10_path = subdivide_path(final_path)
+        sub_10_path.insert(0, (start_x, start_y))
 
     if final_path is not None:
-        update_image(fm.TEXTURE_PATH, final_path)
+        update_image(fm.TEXTURE_PATH, final_path, sub_10_path)
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 
-    # For Relative Earth position Pathfinding Calculation ---
-    divided_points = div_10_points(final_path)
-
-    m, b = line_to_earth(divided_points[0][0], divided_points[0][2])
-    # Slope of a line spanning from a point to the relative position of earth.
-    print(f'y = {m}x + {b}')
+    if checkpoints:
+        print("Created Path with Communication Checkpoints")
+    else:
+        print("Created Path")
 
 
 if __name__ == "__main__":
     run_astar()
-
-
