@@ -1,12 +1,13 @@
 from PIL import Image, ImageDraw
 import heapq
 from numpy import sqrt
-from utils import show_warning, load_json, subdivide_path, get_azi_elev, \
-    latitude_from_rect, longitude_from_rect, height_from_rect, slope_from_rect
+from utils import show_warning, load_json, subdivide_path, height_from_rect
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
 
+SIZE_CONSTANT = fm.get_size_constant()
+GRID = load_json(fm.ASTAR_JSONPATH)
 
 class Node:
     def __init__(self, x, y, parent=None):
@@ -15,8 +16,8 @@ class Node:
 
         self.parent = parent
 
-        self.height = grid[y][x][2]
-        self.slope = grid[y][x][3]
+        self.height = GRID[y][x][2]
+        self.slope = GRID[y][x][3]
 
         self.g = 0
         self.h = 0
@@ -53,14 +54,59 @@ class Node:
         eqn = k_dist * dist + k_slope * slope + slope_penalty
         return eqn
 
+
 def is_valid_checkpoint(point):
     x, y = point[0], point[1]
-    azi, elev_earth = get_azi_elev(x, y)
+    height = height_from_rect(x, y, GRID)
 
-    # if not get_elev_horiz(azi) < elev_earth:
-    #     return False
+    ALLOWANCE = 300 # Change this to change the stringency of checkpoint validity
+
+    for i in range(y, SIZE_CONSTANT):
+        # TODO Swap this with Elevation to be Rubric-Accurate
+        if height_from_rect(x, i, GRID) > (height + ALLOWANCE):
+            return False
 
     return True
+
+
+def generate_comm_path(comm_path):
+    for index, point in tqdm(enumerate(comm_path), desc="Generating Checkpoints"):
+        x, y = point[0], point[1]
+        # If a point is already valid, then just leave it be.
+        if is_valid_checkpoint(point):
+            continue
+
+        # Define the bounds of the square, using max/min as point validity fail safes.
+        SEARCH_AREA = 50
+        left_bound = max(0, x - SEARCH_AREA)
+        right_bound = min(SIZE_CONSTANT - 1, x + SEARCH_AREA)
+        top_bound = max(0, y - SEARCH_AREA)
+        bottom_bound = min(SIZE_CONSTANT - 1, y + SEARCH_AREA)
+
+        # Loop through each square per each checkpoint. If it's valid, then replace it.
+        for i in range(left_bound, right_bound + 1):
+            for j in range(top_bound, bottom_bound + 1):
+                test_point = (i, j)
+                if is_valid_checkpoint(test_point):
+                    comm_path[index] = test_point
+                else:
+                    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
+                    quit(1)
+
+
+    # Now we generate a new path.
+    final_path = []
+    for i in range(len(comm_path) - 1):
+        (start_x, start_y), (goal_x, goal_y) = (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
+        global start_node
+        global goal_node
+        start_node: Node = Node(start_x, start_y)
+        goal_node: Node = Node(goal_x, goal_y)
+
+        path_btw = astar()
+        final_path.extend(path_btw)
+
+    return final_path, comm_path
 
 
 def astar():
@@ -90,7 +136,7 @@ def astar():
                 x2 = current.x + dx
                 y2 = current.y + dy
 
-                if 0 <= x2 < len(grid) and 0 <= y2 < len(grid[0]):
+                if 0 <= x2 < len(GRID) and 0 <= y2 < len(GRID[0]):
                     new_node = Node(x2, y2, current)
                     heapq.heappush(nodes, new_node)
 
@@ -101,7 +147,6 @@ def astar():
 def update_image(image_path: str, mvmt_path: list, comm_path: list):
     path = image_path
     img = Image.open(path)
-
 
     for i in tqdm(range(len(mvmt_path)), desc="Updating image"):
         color = (255, 0, 0)
@@ -120,19 +165,9 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
     img.save(fm.ASTAR_PATH)
 
 
-def line_to_earth(x, y):
-    # Currently Hardcoded, Fix once we get it working with Regional Site.
-    m = (y-1250)/(x-638)
-    b = -m*x + y
-    return int(m), int(b)
-
-
 def run_astar():
     (start_x, start_y), (goal_x, goal_y), checkpoints = \
         get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
-
-    global grid
-    grid = load_json(fm.ASTAR_JSONPATH)
 
     global start_node, goal_node
     start_node = Node(start_x, start_y)
@@ -144,6 +179,7 @@ def run_astar():
     if checkpoints:
         sub_10_path = subdivide_path(final_path)
         sub_10_path.insert(0, (start_x, start_y))
+        final_path, sub_10_path = generate_comm_path(sub_10_path)
 
     if final_path is not None:
         update_image(fm.TEXTURE_PATH, final_path, sub_10_path)
@@ -153,7 +189,7 @@ def run_astar():
     if checkpoints:
         print("Created Path with Communication Checkpoints")
     else:
-        print("Created Path")
+        print("Created Path without Communication Checkpoints")
 
 
 if __name__ == "__main__":
