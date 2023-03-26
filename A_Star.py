@@ -72,7 +72,7 @@ def is_valid_checkpoint(point):
 def generate_comm_path(comm_path):
     for index, point in tqdm(enumerate(comm_path), desc="Generating Checkpoints"):
         x, y = point[0], point[1]
-        # If a point is already valid, then just leave it be.
+        # If a point is already valid, then just leave it.
         if is_valid_checkpoint(point):
             continue
 
