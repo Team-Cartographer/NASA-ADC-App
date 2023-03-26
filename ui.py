@@ -55,7 +55,7 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
             sg.Button("Set", key="-StartIN-", enable_events=True)
         ],
         [
-            sg.Text("Current Start Position:"),
+            sg.Text("Current Goal Position:"),
             sg.Input(default_text="None", key="-GoalOUT-", disabled=True),
             sg.Button("Set", key="-GoalIN-", enable_events=True)
         ],

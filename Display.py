@@ -9,7 +9,7 @@ from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from A_Star import run_astar
 
 # Window Declarations and Formatting -------------
-app = Ursina(development_mode=False)
+app = Ursina() #development_mode=False)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
@@ -118,10 +118,6 @@ t_slope = Text(text='Slope:', x=-.54, y=.33, scale=1.1, enabled=False)
 t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
 t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
 t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
-t_info = Text(
-    # text='M for Moon, L for Slopemap, H for Heightmap, Esc for Pause, X for Switch',
-    text='',
-    x=-.15, y=-.45, scale=1.1, color=color.black, enabled=False)
 
 
 # Player Interactable Declarations -------------
@@ -216,7 +212,6 @@ def input(key):
         t_ht.disable()
         t_azi.disable()
         t_slope.disable()
-        t_info.disable()
         t_elev.disable()
         player.disable()
         vc.disable()
@@ -233,6 +228,7 @@ def input(key):
         return_button.enable()
         pause_music.play()
         run_music.stop(destroy=False)
+
 
 
 # Game Loop Update() Functions -------------
@@ -266,7 +262,7 @@ def update():
     lat = float(latitude_from_rect(nx, nz, AStarData))
     long = float(longitude_from_rect(nx, nz, AStarData))
     slope = slope_from_rect(nx, nz, AStarData)
-    height = height_from_rect(nx, nz, AStarData, infodata)
+    height = height_from_rect(nx, nz, AStarData)
     azimuth, elevation = get_azi_elev(nx, nz, AStarData)
 
     # Updating Variables
@@ -306,7 +302,6 @@ def start_game():
     t_ht.enable()
     t_azi.enable()
     t_slope.enable()
-    t_info.enable()
     t_elev.enable()
     t_start_menu.disable()
     t_start_menu_creds.disable()
@@ -336,7 +331,6 @@ def on_unpause():
     t_ht.enable()
     t_azi.enable()
     t_slope.enable()
-    t_info.enable()
     t_elev.enable()
     t_start_menu.disable()
     t_quit.disable()

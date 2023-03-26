@@ -3,6 +3,7 @@ from utils import file2list, get_x_coord, get_y_coord, \
     get_z_coord, get_azimuth, get_elevation, timeit, \
     load_json, push_to_json
 from tqdm import tqdm
+from math import radians, degrees
 
 # Get Constants
 
@@ -49,16 +50,19 @@ def process_data():
 
             radius: float = LUNAR_RAD + float(height)
 
+            latitude = radians(latitude)
+            longitude = radians(longitude)
+
             x: float = float(get_x_coord(latitude, longitude, radius))
             y: float = float(get_y_coord(latitude, longitude, radius))
             z: float = float(get_z_coord(latitude, radius))
 
             azi: float = get_azimuth(latitude, longitude)
-            elev: float = get_elevation(latitude, longitude, radius)
+            elev: float = get_elevation(latitude, longitude, x, y, z)
 
             xs.append(x), ys.append(y), zs.append(z), heights.append(height)
 
-            a_star_data_array.append([x, y, z, slope, azi, elev, latitude, longitude, height])
+            a_star_data_array.append([x, y, z, slope, azi, elev, degrees(latitude), degrees(longitude), height])
 
     min_x_: float = abs(min(xs))
     min_y_: float = abs(min(ys))
