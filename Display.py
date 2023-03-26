@@ -14,7 +14,7 @@ window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
-# Display Specific Constants -------------
+# Display Specific Constants -------------- 
 Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = fm.get_size_constant()
 EDITOR_SCALE_FACTOR = 3
