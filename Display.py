@@ -31,7 +31,7 @@ except FileNotFoundError:
     quit()
 
 
-# Declaration of Entities -------------
+# Declaration of Entities --------------
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
