@@ -103,7 +103,7 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
         for i in range(len(comm_path)):
             draw = ImageDraw.Draw(img)
             color = (0, 255, 0)
-            radius = 5
+            radius = 3
             draw.ellipse((comm_path[i][0] - radius, comm_path[i][1] - radius,
                           comm_path[i][0] + radius, comm_path[i][1] + radius), fill=color)
 
