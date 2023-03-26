@@ -89,7 +89,7 @@ mini_dot = Entity(
 color_key = Entity(
     parent=camera.ui,
     model='quad',
-    scale = (0.4, 0.11),
+    scale=(0.4, 0.11),
     position=(-0.69, 0.09, 0),
     texture='slopeKey.png',
     enabled=False
@@ -122,12 +122,13 @@ t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
 
 # Player Interactable Declarations -------------
 sky = Sky()
-sky.color = '000000' # Black
+sky.color = '000000'  # Black
 
-vc = EditorCamera(enabled=False, zoom_speed=2) # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
+vc = EditorCamera(enabled=False, zoom_speed=2)  # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
 
-player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25), enabled=False, gravity=False)
-player.cursor.scale = 0.00000000001 # Hides the Cursor from the App Display
+player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25),
+                               enabled=False, gravity=False)
+player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
 track_list = ['Audio/track_1.mp3', 'Audio/track_2.mp3', 'Audio/track_3.mp3']
 menu_track_list = ['Audio/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
@@ -152,6 +153,7 @@ start_menu_music = Audio(
     volume=VOLUME,
     loop=True
 )
+
 
 def play_run_music():
     # run_music.clip(choice(track_list))
@@ -179,7 +181,7 @@ def input(key):
         ground_perspective.texture = 'heightkey_surface.png'
         view_cam_player_loc.color = color.white
         color_key.enable()
-        color_key.texture='heightKey.png'
+        color_key.texture = 'heightKey.png'
 
     if key == '2':
         ground_player.texture = 'AStar_Path.png'
@@ -230,16 +232,16 @@ def input(key):
         run_music.stop(destroy=False)
 
 
-
 # Game Loop Update() Functions -------------
 height_vals = ground_player.model.height_values
+
+
 def update():
     # Audio Update
     VOLUME = volume_change()
     pause_music.volume = VOLUME
     start_menu_music.volume = VOLUME
     run_music.volume = VOLUME
-
 
     # Map Failsafe
     bound = SIZE_CONSTANT*10/2 - 200
@@ -352,6 +354,8 @@ t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Applicati
 t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.135, color=color.dark_gray)
 
 start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.01)
+
+
 def main_menu_returner():
     t_start_menu.disable(), t_start_menu_creds.disable(), start_button.disable()
     creds_button.disable()
