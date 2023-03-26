@@ -8,13 +8,13 @@ from random import choice
 from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from A_Star import run_astar
 
-# Window Declarations and Formatting -------------
+# Window Declarations and Formatting --------------
 app = Ursina(development_mode=False)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
-# Display Specific Constants -------------
+# Display Specific Constants -------------- 
 Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = fm.get_size_constant()
 EDITOR_SCALE_FACTOR = 3
@@ -31,7 +31,7 @@ except FileNotFoundError:
     quit()
 
 
-# Declaration of Entities -------------
+# Declaration of Entities --------------
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
