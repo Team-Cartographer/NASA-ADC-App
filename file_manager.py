@@ -1,5 +1,5 @@
 import os
-from utils import file2list, load_json, push_to_json
+from utils import file2list, load_json, push_to_json, timeit
 import ui
 from constants import INFO_JSONPATH, ASTAR_JSONPATH, TEXTURE_PATH, RAW_HEIGHTMAP_PATH, PROCESSED_HEIGHTMAP_PATH, \
     SLOPEMAP_PATH, SURFACE_HEIGHTKEY_PATH, ASTAR_PATH
@@ -31,6 +31,7 @@ def initialize_file_manager():
 @singleton
 class FileManager:
 
+    @timeit
     def __init__(self):
         self.parent_path: str = os.getcwd()
         self.data_path: str = os.path.join(self.parent_path, 'Data')

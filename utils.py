@@ -95,6 +95,10 @@ def get_specific_from_json(index, jsonpath):
     arr = parsed_arr[:, :, index]
     return arr
 
+def get_size_cons():
+    data = load_json("info.json")
+    return load_json("info.json")["SIZE_CONSTANT"]
+
 
 # ONLY FOR USE WITH DISPLAY.PY AND ASTAR.PY
 def get_azi_elev(x, y, data):

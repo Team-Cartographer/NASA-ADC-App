@@ -1,12 +1,15 @@
-import file_manager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    height_from_rect, slope_from_rect, show_error
+    height_from_rect, slope_from_rect, show_error, load_json
 from ursina.prefabs.first_person_controller import FirstPersonController
 from random import choice 
 from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from a_star import run_astar
+from file_manager import FileManager
+from constants import SLOPEMAP_PATH, SURFACE_HEIGHTKEY_PATH
+
+fm = FileManager()
 
 # Window Declarations and Formatting --------------
 app = Ursina(development_mode=False)
@@ -16,7 +19,7 @@ window.exit_button.color = color.dark_gray
 
 # Display Specific Constants -------------- 
 Y_HEIGHT = 128  # Default Value
-SIZE_CONSTANT = fm.get_size_constant()
+SIZE_CONSTANT = fm.size
 EDITOR_SCALE_FACTOR = 3
 PLAYER_SCALE_FACTOR = 10
 RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
@@ -24,8 +27,8 @@ VOLUME = 0.15
 
 # Load the Data
 try:
-    AStarData = fm.load_json("Data/AStarRawData.json")
-    infodata = fm.load_json("info.json")
+    AStarData = load_json("Data/AStarRawData.json")
+    infodata = load_json("info.json")
 except FileNotFoundError:
     show_error("Display Error", "Data Not Processed!")
     quit()
@@ -105,11 +108,6 @@ color_key = Entity(
 #    )
 
 
-# Slope and Height Toggle Image Pathing -------------
-SLOPEMAP = fm.SLOPEMAP_PATH
-HEIGHTKEY = fm.SURFACE_HEIGHTKEY_PATH
-
-
 # Textboxes  -------------
 t_lat = Text(text='Latitude:', x=-.54, y=.48, scale=1.1, enabled=False)
 t_lon = Text(text='Longitude:', x=-.54, y=.43, scale=1.1, enabled=False)
@@ -135,7 +133,7 @@ menu_track_list = ['Audio/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
 run_music = Audio(
     # TODO Make a Tracklist Randomizer
     choice(track_list), # Change this for different tracks.
-    # TODO Make a Track Picker and Volume Control
+    # TODO Make a Track Picker
     volume=VOLUME,
     loop=True,
 )

@@ -4,9 +4,6 @@ from utils import push_to_json, timeit
 from file_manager import FileManager
 from concurrent.futures import ProcessPoolExecutor
 
-fm = FileManager()
-
-
 @timeit
 def process_data():
     latitude_list, longitude_list, height_list, height_list, slope_list = load_files()
@@ -37,10 +34,9 @@ def process_data():
 
 
 def load_file(file_path, delimiter=',', dtype=float):
-    return loadtxt(file_path, delimiter=delimiter, dtype=dtype)
+    return loadtxt(file_path, delimiter=delimiter, dtype=dtype, encoding='utf-8')
 
 
-@timeit
 def load_files():
     with ProcessPoolExecutor() as executor:
         latitude_future = executor.submit(load_file, fm.latitude_path)
@@ -62,7 +58,7 @@ def calculate_cartesian_coordinates(radius, latitude_radians, longitude_radians)
     y = radius * cos(latitude_radians) * sin(longitude_radians)
     z = radius * sin(latitude_radians)
 
-    return x, y, z
+    return int(x), int(y), int(z)
 
 
 @timeit
@@ -106,4 +102,5 @@ def ndarray2list(array):
 
 
 if __name__ == "__main__":
+    fm = FileManager()
     process_data()
