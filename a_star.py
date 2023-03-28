@@ -4,13 +4,13 @@ from numpy import sqrt
 from utils import show_warning, load_json, subdivide_path, height_from_rect
 from ui import get_pathfinding_endpoints
 from file_manager import FileManager
-from constants import ASTAR_JSONPATH
+from constants import IMAGES_PATH, TEXTURE_PATH, ASTAR_PATH
 from tqdm import tqdm
 
 fm = FileManager()
 
 SIZE = fm.size
-GRID = load_json(ASTAR_JSONPATH)
+GRID = load_json("Data/AStarRawData.json")
 
 class Node:
     def __init__(self, x, y, parent=None):
@@ -171,12 +171,12 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
             draw.ellipse((comm_path[i][0] - radius, comm_path[i][1] - radius,
                           comm_path[i][0] + radius, comm_path[i][1] + radius), fill=color)
 
-    img.save(fm.ASTAR_PATH)
+    img.save(IMAGES_PATH + ASTAR_PATH)
 
 
 def run_astar():
     (start_x, start_y), (goal_x, goal_y), checkpoints = \
-       get_pathfinding_endpoints(SIZE, fm.images_path)
+       get_pathfinding_endpoints(SIZE, IMAGES_PATH)
 
     # For Future Testing
     #(start_x, start_y), (goal_x, goal_y), checkpoints = (306, 1013), (669, 273), True
@@ -195,7 +195,7 @@ def run_astar():
         final_path, sub_10_path = generate_comm_path(sub_10_path)
 
     if final_path is not None:
-        update_image(fm.TEXTURE_PATH, final_path, sub_10_path)
+        update_image(IMAGES_PATH + TEXTURE_PATH, final_path, sub_10_path)
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 

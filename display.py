@@ -7,7 +7,7 @@ from random import choice
 from ursina.application import quit  # USE THIS, NOT PYTHON quit()
 from a_star import run_astar
 from file_manager import FileManager
-from constants import SLOPEMAP_PATH, SURFACE_HEIGHTKEY_PATH
+from constants import PROCESSED_HEIGHTMAP_PATH
 
 fm = FileManager()
 
@@ -38,7 +38,7 @@ except FileNotFoundError:
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
-    model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
+    model=Terrain(heightmap=PROCESSED_HEIGHTMAP_PATH),
     # color = color.gray,
     texture='moon_surface_texture.png',
     collider='mesh',
@@ -49,7 +49,7 @@ ground_player = Entity(
 
 # EditorCamera Ground Plane
 ground_perspective = Entity(
-    model=Terrain(heightmap=fm.PROCESSED_HEIGHTMAP_PATH),
+    model=Terrain(heightmap=PROCESSED_HEIGHTMAP_PATH),
     # color=color.gray,
     texture='moon_surface_texture.png',
     collider='box',
