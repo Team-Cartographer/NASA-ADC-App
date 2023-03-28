@@ -2,7 +2,6 @@ from concurrent.futures import ProcessPoolExecutor
 
 from PIL import Image
 from utils import resize, get_specific_from_json
-from tqdm import tqdm
 import seaborn as sns
 import matplotlib.pyplot as plt
 from time import time
