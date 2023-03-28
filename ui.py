@@ -23,7 +23,6 @@ def path_fetcher():
         ],
     ]
 
-
     window = sg.Window("PathFetcher", layout)
 
     while True:
