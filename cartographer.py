@@ -11,10 +11,12 @@ from file_manager import FileManager
 from constants import CWD
 from shutil import move
 
-
 fm = FileManager()
-Image.MAX_IMAGE_PIXELS = None
 
+heights = get_specific_from_json(8, fm.astar_json_path)
+slopes = get_specific_from_json(3, fm.astar_json_path)
+
+Image.MAX_IMAGE_PIXELS = None
 
 def sns_heatmap(arr, cmap, save):
     start_time = time()
@@ -30,10 +32,6 @@ def sns_heatmap(arr, cmap, save):
     print(f'{save} created in {round(time()-start_time, 2)}s')
 
     return save
-
-
-heights = get_specific_from_json(8, fm.astar_json_path)
-slopes = get_specific_from_json(3, fm.astar_json_path)
 
 
 def create_surface_texture():
@@ -64,42 +62,6 @@ def draw_all():
         Texture = Texture_future.result()
 
         return RAW_Heightmap, Heightkey, Slopemap, Slopemap, Texture
-
-
-# Uses threading for resize() functions for speed.
-def resizer():
-    with ProcessPoolExecutor() as exc:
-        # Args: method: resize, image_path=str, new_name=str, scale=int, transpose=bool
-        proper_heightmap_future = exc.submit(resize, fm.raw_height_map_path, 'processed_heightmap', 128, True)
-        proper_surface_texture_future = exc.submit(resize, fm.texture_path, 'moon_surface_texture', fm.size, True)
-        flipped_slopemap_future = exc.submit(resize, fm.slopemap_path, 'slopemap', fm.size, True)
-        flipped_heightmap_future = exc.submit(resize, fm.surface_heightkey_path, 'heightkey_surface', fm.size, True)
-        minimap_future = exc.submit(resize, fm.texture_path, 'minimap', 128)
-        interface_slopemap_future = exc.submit(resize, fm.slopemap_path, 'interface_slopemap', 500)
-        interface_texture_future = exc.submit(resize, fm.texture_path, 'interface_texture', 500)
-        interface_heightkey_future = exc.submit(resize, fm.surface_heightkey_path, 'interface_heightkey', 500)
-
-        proper_heightmap = proper_heightmap_future.result()
-        proper_surface_texture = proper_surface_texture_future.result()
-        flipped_slopemap = flipped_slopemap_future.result()
-        flipped_heightmap = flipped_heightmap_future.result()
-        minimap = minimap_future.result()
-        interface_slopemap = interface_slopemap_future.result()
-        interface_heightkey = interface_heightkey_future.result()
-        interface_texture = interface_texture_future.result()
-
-
-        return proper_heightmap, proper_surface_texture, \
-               flipped_heightmap, flipped_slopemap, \
-               minimap, interface_slopemap,\
-               interface_heightkey, interface_texture
-
-
-def draw_path(path, image, color):
-    for i in tqdm(range(len(path)), desc="Drawing A* Path"):
-        image.putpixel(path[0], path[1], color)
-        print(f"\rCreating Path Image. {round(i / len(path), 4)}% complete", end="")
-    return image
 
 
 if __name__ == "__main__":
