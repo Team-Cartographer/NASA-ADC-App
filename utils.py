@@ -3,7 +3,6 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 import os
-from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from time import time
 import orjson as oj
 import numpy as np
@@ -15,7 +14,7 @@ def timeit(method):
         time_start = time()
         result = method(*args, **kw)
         time_end = time()
-        print(f"Function '{method.__name__}' executed in {time_end - time_start:.3f}s")
+        print(f"'{method.__name__}()' executed in {time_end - time_start:.3f}s")
         return result
 
     return timed
@@ -117,6 +116,7 @@ def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str
         # Transpose Images
         img = img.transpose(method=Image.FLIP_TOP_BOTTOM).rotate(-90)
 
+
     width, height = img.size
     processed = img.crop((1, 1, width - 2, height - 2))
 
@@ -124,6 +124,7 @@ def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str
     path = os.getcwd() + f'/Data/Images/{new_name}.png'
     processed.save(path)
     print(f"Resized {new_name}.png in {round(time() - start, 2)}s")
+
     return path
 
 
