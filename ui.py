@@ -67,7 +67,7 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
         ]
     ]
 
-    window = sg.Window("PathFetcher", layout, finalize=True)
+    window = sg.Window("A* UI", layout, finalize=True)
     window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
 
     while True:
@@ -147,7 +147,42 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
                     show_error("Incomplete Data Error", "Please select a start and end point")
 
 
+# on start functions and helper functions
+
+def new_site():
+    print("new site")
+    pass
+
+
+def load_site():
+    print("load site")
+    pass
+
+
+def on_start():
+    layout = [
+        [
+            sg.Text("The Team Cartographer Lunar Visualizer")
+        ],
+        [
+            sg.Button("Load a Site", key="-Load-"),
+            sg.Button("New Site", key="-New-")
+        ]
+    ]
+    window = sg.Window("Welcome", layout, finalize=True)
+    while True:
+        event, values = window.read()
+        if event == "-Load-":
+            load_site()
+        if event == "-New-":
+            new_site()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            break
+
+
 if __name__ == "__main__":
     # path_fetcher()
     # print(get_pathfinding_endpoints(1277, "C:/Users/Owner/PycharmProjects/NASA-ADC-App/Data/Images"))
+    on_start()
     pass
