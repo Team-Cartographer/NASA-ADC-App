@@ -3,7 +3,6 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 import os
-from math import atan2, sin, cos, asin, sqrt, radians, degrees
 from time import time
 import orjson as oj
 import numpy as np
@@ -15,7 +14,7 @@ def timeit(method):
         time_start = time()
         result = method(*args, **kw)
         time_end = time()
-        print(f"Function '{method.__name__}' executed in {time_end - time_start:.3f}s")
+        print(f"'{method.__name__}()' executed in {time_end - time_start:.3f}s")
         return result
 
     return timed
