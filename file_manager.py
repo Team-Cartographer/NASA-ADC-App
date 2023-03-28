@@ -68,7 +68,7 @@ class FileManager:
         self.latitude_path = data["LATITUDE_PATH"].replace("\\", "/")
         self.longitude_path = data["LONGITUDE_PATH"].replace("\\", "/")
         self.height_path = data["HEIGHT_PATH"].replace("\\", "/")
-        self.slopemap_path = data["SLOPE_PATH"].replace("\\", "/")
+        self.slope_path = data["SLOPE_PATH"].replace("\\", "/")
 
         self.size = data["SIZE_CONSTANT"]
 

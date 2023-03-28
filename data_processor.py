@@ -42,7 +42,7 @@ def load_files():
         latitude_future = executor.submit(load_file, fm.latitude_path)
         longitude_future = executor.submit(load_file, fm.longitude_path)
         height_future = executor.submit(load_file, fm.height_path)
-        slope_future = executor.submit(load_file, fm.slopemap_path)
+        slope_future = executor.submit(load_file, fm.slope_path)
 
         latitude_list = latitude_future.result()
         longitude_list = longitude_future.result()
@@ -58,7 +58,7 @@ def calculate_cartesian_coordinates(radius, latitude_radians, longitude_radians)
     y = radius * cos(latitude_radians) * sin(longitude_radians)
     z = radius * sin(latitude_radians)
 
-    return int(x), int(y), int(z)
+    return x, y, z
 
 
 @timeit
