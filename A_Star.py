@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 import heapq
 from numpy import sqrt
-from utils import show_warning, load_json, subdivide_path, height_from_rect
+from utils import show_warning, load_json, subdivide_path, height_from_rect, get_azi_elev
 from ui import get_pathfinding_endpoints
 import FileManager as fm
 from tqdm import tqdm
@@ -58,11 +58,15 @@ class Node:
 def is_valid_checkpoint(point):
     x, y = point[0], point[1]
     height = height_from_rect(x, y, GRID)
+    #azi, elev = get_azi_elev(x, y, GRID)
 
     ALLOWANCE = 275 # Change this to change the stringency of checkpoint validity
 
     for i in range(y, SIZE_CONSTANT):
         # TODO Swap this with Elevation to be Rubric-Accurate
+        #_, check_elev = get_azi_elev(x, i, GRID)
+        #if check_elev > elev:
+        #    return False
         if height_from_rect(x, i, GRID) > (height + ALLOWANCE):
             return False
 
@@ -70,14 +74,14 @@ def is_valid_checkpoint(point):
 
 
 def generate_comm_path(comm_path):
-    for index, point in tqdm(enumerate(comm_path), desc="Generating Checkpoints"):
+    for index, point in enumerate(comm_path):
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
         if is_valid_checkpoint(point):
             continue
 
         # Define the bounds of the square, using max/min as point validity fail safes.
-        SEARCH_AREA = 75
+        SEARCH_AREA = 150
         left_bound = max(0, x - SEARCH_AREA)
         right_bound = min(SIZE_CONSTANT - 1, x + SEARCH_AREA)
         top_bound = max(0, y - SEARCH_AREA)
@@ -92,7 +96,9 @@ def generate_comm_path(comm_path):
                 #else:
                 #    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
                 #    quit(1)
+        print(f"\rGenerating Checkpoints: {round(index/len(comm_path) * 100, 2)}% Complete", end="")
 
+    print("\n")
 
     # Now we generate a new path.
     final_path = []
@@ -167,7 +173,10 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
 
 def run_astar():
     (start_x, start_y), (goal_x, goal_y), checkpoints = \
-        get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
+       get_pathfinding_endpoints(fm.get_size_constant(), fm.images_path)
+
+    # For Future Testing
+    #(start_x, start_y), (goal_x, goal_y), checkpoints = (306, 1013), (669, 273), True
 
     global start_node
     global goal_node
