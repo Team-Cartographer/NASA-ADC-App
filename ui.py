@@ -149,14 +149,46 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
 
 # on start functions and helper functions
 
-def new_site():
+def new_site() -> int:
+    # 1 is back, 0 is successful completion
     print("new site")
-    pass
+    layout = [
+        [
+            sg.Button("Go Back", key="-Back-"),
+            sg.Button("New Site", key="-NewConfirm-")
+        ]
+    ]
+    window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == "Exit":
+            return 1
+        if event == "-Back-":
+            return 1
+        elif event == "-NewConfirm-":
+            print("Hello from new confirm")
+            return 0
 
 
-def load_site():
+def load_site() -> int:
+    # 1 is back, 0 is successful completion
     print("load site")
-    pass
+    layout = [
+        [
+            sg.Button("Go Back", key="-Back-"),
+            sg.Button("New Site", key="-NewLoad-")
+        ]
+    ]
+    window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == "Exit":
+            return 1
+        if event == "-Back-":
+            return 1
+        elif event == "-NewLoad-":
+            print("Hello from new load")
+            return 0
 
 
 def on_start():
@@ -169,13 +201,27 @@ def on_start():
             sg.Button("New Site", key="-New-")
         ]
     ]
-    window = sg.Window("Welcome", layout, finalize=True)
+    window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
     while True:
         event, values = window.read()
         if event == "-Load-":
-            load_site()
+            window.disappear()
+            check = load_site()
+            if check == 1:
+                window.reappear()
+            elif check == 0:
+                break
+            else:
+                show_error("load error", "you done goofed")
         if event == "-New-":
-            new_site()
+            window.disappear()
+            check = new_site()
+            if check == 1:
+                window.reappear()
+            elif check == 0:
+                break
+            else:
+                show_error("new error", "you done goofed")
 
         if event == sg.WIN_CLOSED or event == "Exit":
             break
