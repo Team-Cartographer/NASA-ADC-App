@@ -56,7 +56,6 @@ def draw_all():
     )
 
     # Creates Heightkey
-    # TODO Add Reduced Opacity Feature to Original Texture for this
     sns_heatmap(
         arr=heights,
         cmap='viridis',
