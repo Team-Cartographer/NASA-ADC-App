@@ -1,10 +1,13 @@
 from ursina import *
+from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.application import quit
+
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect, show_error, load_json
-from ursina.prefabs.first_person_controller import FirstPersonController
-from random import choice 
-from ursina.application import quit  # USE THIS, NOT PYTHON quit()
+
+from random import choice
+
 from a_star import run_astar
 from file_manager import FileManager
 from constants import PROCESSED_HEIGHTMAP_PATH
