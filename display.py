@@ -90,7 +90,7 @@ mini_dot = Entity(
     enabled=False
     )
 
-# TODO Fix Color Keys in Photoshop
+
 # Color Key Entity (Activates on Heightmap/Slopemap Toggle)
 color_key = Entity(
     parent=camera.ui,
@@ -251,7 +251,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 60 # Sets correct height
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 60  # Sets correct height
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
