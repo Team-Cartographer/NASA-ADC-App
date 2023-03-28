@@ -44,26 +44,26 @@ if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
     print('Running Setup')
 
     print("Running FileManager First-Time Setup")
-    # runs FileManager.py
-    folder_creator_path = code_path + "/FileManager.py"
+    # runs file_manager.py
+    folder_creator_path = code_path + "/file_manager.py"
     folder_creator_program = run([sys.executable, folder_creator_path])
     print("FileManager Setup Success")
 
     print("Running DataProcessor")
-    # runs DataProcessor.py
-    data_processor_path = code_path + "/DataProcessor.py"
+    # runs data_processor.py
+    data_processor_path = code_path + "/data_processor.py"
     data_processor_program = run([sys.executable, data_processor_path])
     print("DataProcessor Success")
 
     print("Running Cartographer")
-    # runs Cartographer.py
-    cartographer_path = code_path + "/Cartographer.py"
+    # runs cartographer.py
+    cartographer_path = code_path + "/cartographer.py"
     cartographer_program = run([sys.executable, cartographer_path])
     print("Cartographer Success")
 
     print("Running A* Pathfinding")
-    # runs A_Star.py (Without quad trees)
-    a_star_path = code_path + "/A_Star.py"
+    # runs a_star.py (Without quad trees)
+    a_star_path = code_path + "/a_star.py"
     a_star_program = run([sys.executable, a_star_path])
     print("A* Pathfinding Success")
 
@@ -73,8 +73,8 @@ if not path.exists(code_path + "/Data/Images/AStar_Path.png"):
 
 
 print("Running Display")
-# runs Display.py
-display_path = code_path + '/Display.py'
+# runs display.py
+display_path = code_path + '/display.py'
 display_program = run([sys.executable, display_path])
 print('Ended Program')
 

@@ -1,4 +1,4 @@
-import FileManager as fm
+import file_manager as fm
 from ursina import *
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
@@ -6,7 +6,7 @@ from utils import get_azi_elev, \
 from ursina.prefabs.first_person_controller import FirstPersonController
 from random import choice 
 from ursina.application import quit  # USE THIS, NOT PYTHON quit()
-from A_Star import run_astar
+from a_star import run_astar
 
 # Window Declarations and Formatting --------------
 app = Ursina(development_mode=False)
@@ -416,6 +416,6 @@ def line_of_sight(player_x: int, player_y: int) -> bool:
 
 
 
-# Runs Display.py -------------
+# Runs display.py -------------
 if __name__ == '__main__':
     app.run(info=False)

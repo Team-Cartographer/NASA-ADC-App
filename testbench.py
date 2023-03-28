@@ -1,17 +1,19 @@
-from PIL import Image
-import random
-from utils import load_json, timeit, push_to_json, file2list
-import os
 import numpy as np
-import FileManager as fm
-import orjson as oj
-import FileManager as fm
 
-# parsed_arr = np.array(fm.load_json(fm.data_path + "/AStarRawData.json"))
-# x[0], y[1], z[2], slope[3], azi[4], elev[5], lat[6], long[7], height[8]
+LUNAR_RADIUS = 1737400
+EARTH_X = 361000 * 1000
+EARTH_Y = 0 * 1000
+EARTH_Z = -42100 * 1000
 
+LUNAR_RADIUS_METERS = (LUNAR_RADIUS )
+EARTH_X_METERS = (EARTH_Y)
+EARTH_Y_METERS = (EARTH_X)
+EARTH_Z_METERS = (EARTH_Z)
 
+R = np.sqrt(EARTH_X_METERS ** 2 + EARTH_Y_METERS ** 2 + EARTH_Z_METERS ** 2)
 
+EARTH_LAT = np.arcsin(EARTH_Z_METERS / R)
+EARTH_LONG = np.arctan2(EARTH_Y_METERS, EARTH_X_METERS)
 
-if __name__ == '__main__':
-    pass
+print(EARTH_LAT)
+print(EARTH_LONG)

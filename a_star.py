@@ -3,7 +3,7 @@ import heapq
 from numpy import sqrt
 from utils import show_warning, load_json, subdivide_path, height_from_rect, get_azi_elev
 from ui import get_pathfinding_endpoints
-import FileManager as fm
+import file_manager as fm
 from tqdm import tqdm
 
 SIZE_CONSTANT = fm.get_size_constant()
