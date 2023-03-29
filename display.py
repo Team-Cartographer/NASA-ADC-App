@@ -15,7 +15,7 @@ from constants import PROCESSED_HEIGHTMAP_PATH
 fm = FileManager()
 
 # Window Declarations and Formatting --------------
-app = Ursina(development_mode=False)
+app = Ursina(fullscreen=True)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
