@@ -110,6 +110,14 @@ color_key = Entity(
 #    enabled=True
 #    )
 
+credits = Entity(
+    parent=camera.ui,
+    model='quad',
+    scale=(1.75, 1),
+    texture='credits.mp4',
+    enabled=False
+)
+
 
 # Textboxes  -------------
 t_lat = Text(text='Latitude:', x=-.54, y=.48, scale=1.1, enabled=False)
@@ -131,8 +139,8 @@ player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=
                                enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
-track_list = ['Audio/track_1.mp3', 'Audio/track_2.mp3', 'Audio/track_3.mp3']
-menu_track_list = ['Audio/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
+track_list = ['assets/track_1.mp3', 'assets/track_2.mp3', 'assets/track_3.mp3']
+menu_track_list = ['assets/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
 run_music = Audio(
     # TODO Make a Tracklist Randomizer
     choice(track_list), # Change this for different tracks.
@@ -210,6 +218,7 @@ def input(key):
 
     # Pause
     if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
+        start_menu_music.stop(destroy=True)
         t_lat.disable()
         t_lon.disable()
         t_ht.disable()
@@ -230,6 +239,7 @@ def input(key):
         color_key.disable()
         return_button.enable()
         pause_music.play()
+        credits.disable()
         run_music.stop(destroy=False)
 
 
@@ -238,7 +248,7 @@ height_vals = ground_player.model.height_values
 
 
 def update():
-    # Audio Update
+    # assets Update
     VOLUME = volume_change()
     pause_music.volume = VOLUME
     start_menu_music.volume = VOLUME
@@ -377,8 +387,15 @@ start_button.on_click = main_menu_returner
 
 creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07)
 def creds_init():
-    # TODO: ADD PROPER CREDITS
-    pass
+    start_menu_music.stop(destroy=False)
+    t_start_menu.disable()
+    t_start_menu_creds.disable()
+    start_button.disable()
+    credits.enable()
+    creds_button.disable()
+    start_menu_music.play()
+
+creds_button.on_click = creds_init
 
 # For Main Menu
 def volume_change():
@@ -406,14 +423,6 @@ pause_button.on_click = on_unpause
 
 return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.07)
 return_button.on_click = main_menu_returner
-
-
-# Pathfinding Helper Functions
-def line_of_sight(player_x: int, player_y: int) -> bool:
-    # Raycasing here.
-    #if (intersection logic here):
-        # return False
-    return True
 
 
 
