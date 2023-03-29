@@ -44,7 +44,9 @@ def create_surface_texture():
                 if color < 0:
                     color = 0
             texture.putpixel((x, y), (color, color, color))
+        print(f"\rCreating Surface Texture: {round((y/len(slopes))*100, 2)}% Complete", end="")
     texture.save(fm.texture_path)
+    print("\n")
 
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
