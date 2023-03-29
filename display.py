@@ -242,6 +242,9 @@ def input(key):
         credits.disable()
         run_music.stop(destroy=False)
 
+    #if held_keys["gamepad left trigger"]:
+    #    print(held_keys["gamepad left trigger"])
+
 
 # Game Loop Update() Functions -------------
 height_vals = ground_player.model.height_values
@@ -428,4 +431,5 @@ return_button.on_click = main_menu_returner
 
 # Runs display.py -------------
 if __name__ == '__main__':
+    input_handler.rebind("f", "k") # Gets rid of EditorCamera Input Issue
     app.run(info=False)
