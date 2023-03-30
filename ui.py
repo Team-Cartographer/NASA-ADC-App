@@ -44,9 +44,12 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
     layout = [
 
         [
-            sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
-                     graph_bottom_left=(0, SIZE_CONSTANT), background_color=None,
-                     key="-GraphIN-", enable_events=True, drag_submits=False)
+            sg.Column(
+                [[
+                    sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
+                             graph_bottom_left=(0, SIZE_CONSTANT),  # background_color=None,
+                             key="-GraphIN-", enable_events=True, drag_submits=False)
+                ]], justification="center")
         ],
         [
             sg.Text("Current Start Position:"),
@@ -163,6 +166,7 @@ def new_site() -> int:
         if event == sg.WIN_CLOSED or event == "Exit":
             return 1
         if event == "-Back-":
+            window.close()
             return 1
         elif event == "-NewConfirm-":
             print("Hello from new confirm")
@@ -184,6 +188,7 @@ def load_site() -> int:
         if event == sg.WIN_CLOSED or event == "Exit":
             return 1
         if event == "-Back-":
+            window.close()
             return 1
         elif event == "-NewLoad-":
             print("Hello from new load")

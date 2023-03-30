@@ -14,6 +14,7 @@ SIZE = fm.size
 GRID = np.load(fm.astar_data_path)
 
 
+
 class Node:
     def __init__(self, x, y, parent=None):
         self.x = x
@@ -63,14 +64,14 @@ class Node:
 def is_valid_checkpoint(point):
     x, y = point[0], point[1]
     height = height_from_rect(x, y, GRID)
-    #azi, elev = get_azi_elev(x, y, GRID)
+    # azi, elev = get_azi_elev(x, y, GRID)
 
-    ALLOWANCE = 275 # Change this to change the stringency of checkpoint validity
+    ALLOWANCE = 275  # Change this to change the stringency of checkpoint validity
 
     for i in range(y, SIZE):
         # TODO Swap this with Elevation to be Rubric-Accurate
-        #_, check_elev = get_azi_elev(x, i, GRID)
-        #if check_elev > elev:
+        # _, check_elev = get_azi_elev(x, i, GRID)
+        # if check_elev > elev:
         #    return False
         if height_from_rect(x, i, GRID) > (height + ALLOWANCE):
             return False
@@ -98,7 +99,7 @@ def generate_comm_path(comm_path):
                 test_point = (i, j)
                 if is_valid_checkpoint(test_point):
                     comm_path[index] = test_point
-                #else:
+                # else:
                 #    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
                 #    quit(1)
         print(f"\rGenerating Checkpoints: {round(index/len(comm_path) * 100, 2)}% Complete", end="")
@@ -120,6 +121,7 @@ def generate_comm_path(comm_path):
     return final_path, comm_path
 
 
+# noinspection SpellCheckingInspection
 def astar():
     nodes = []
 
@@ -208,4 +210,6 @@ def run_astar():
 
 
 if __name__ == "__main__":
+    start_node: Node
+    goal_node: Node
     run_astar()

@@ -27,6 +27,7 @@ def initialize_file_manager():
     os.makedirs(fm.images_path, exist_ok=True)
 
 
+# noinspection SpellCheckingInspection
 @singleton
 class FileManager:
 

@@ -20,6 +20,7 @@ slopes = parsed_arr[:, :, 3]
 Image.MAX_IMAGE_PIXELS = None
 
 
+# noinspection SpellCheckingInspection
 def sns_heatmap(arr, cmap, save):
     start_time = time()
 
@@ -54,6 +55,7 @@ def create_surface_texture():
     texture.save(fm.texture_path)
 
 
+# noinspection SpellCheckingInspection
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_all():
     with ProcessPoolExecutor() as exc:
@@ -75,7 +77,6 @@ if __name__ == "__main__":
 
     # Create the essential images.
     draw_all()
-
 
     # Image Scaling for Faster Ursina Runs, as well as proper dimensions.
     proper_heightmap = resize(
@@ -132,6 +133,3 @@ if __name__ == "__main__":
     )
 
     print(f'Cartographer created images in {round(time()-start, 2)}s')
-
-
-
