@@ -361,21 +361,25 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
-def reload_textures(self):
+def reload_textures():
     textured_entities = [e for e in scene.entities if e.texture]
     reloaded_textures = list()
 
     for e in textured_entities:
+        if str(e.texture.name) == 'credits':
+            continue
+
         if e.texture.name in reloaded_textures:
-             continue
+            continue
 
         if e.texture.path.parent.name == application.compressed_textures_folder.name:
-            print('texture is made from .psd file', e.texture.path.stem + '.psd')
+            #print('texture is made from .psd file', e.texture.path.stem + '.psd')
             texture_importer.compress_textures(e.texture.path.stem)
-        print('reloaded texture:', e.texture.path)
+        #print('reloaded texture:', e.texture.path)
         e.texture._texture.reload()
         reloaded_textures.append(e.texture.name)
 
+    print("reloaded textures")
     return reloaded_textures
 
 def repath_init():
