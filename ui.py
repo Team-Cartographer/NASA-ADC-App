@@ -163,6 +163,7 @@ def new_site() -> int:
         if event == sg.WIN_CLOSED or event == "Exit":
             return 1
         if event == "-Back-":
+            window.close()
             return 1
         elif event == "-NewConfirm-":
             print("Hello from new confirm")
@@ -184,6 +185,7 @@ def load_site() -> int:
         if event == sg.WIN_CLOSED or event == "Exit":
             return 1
         if event == "-Back-":
+            window.close()
             return 1
         elif event == "-NewLoad-":
             print("Hello from new load")
@@ -229,5 +231,5 @@ def on_start():
 if __name__ == "__main__":
     # path_fetcher()
     # print(get_pathfinding_endpoints(1277, "C:/Users/Owner/PycharmProjects/NASA-ADC-App/Data/Images"))
-    # on_start()
+    on_start()
     pass
