@@ -54,17 +54,17 @@ def create_surface_texture():
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_all():
     with ProcessPoolExecutor() as exc:
-        RAW_Heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", fm.raw_height_map_path)
-        Heightkey_future = exc.submit(sns_heatmap, heights, "viridis", fm.surface_heightkey_path)
-        Slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", fm.slopemap_path)
-        Texture_future = exc.submit(create_surface_texture)
+        raw_heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", fm.raw_height_map_path)
+        heightkey_future = exc.submit(sns_heatmap, heights, "viridis", fm.surface_heightkey_path)
+        slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", fm.slopemap_path)
+        texture_future = exc.submit(create_surface_texture)
 
-        RAW_Heightmap = RAW_Heightmap_future.result()
-        Heightkey = Heightkey_future.result()
-        Slopemap = Slopemap_future.result()
-        Texture = Texture_future.result()
+        raw_heightmap = raw_heightmap_future.result()
+        heightkey = heightkey_future.result()
+        slopemap = slopemap_future.result()
+        texture = texture_future.result()
 
-        return RAW_Heightmap, Heightkey, Slopemap, Slopemap, Texture
+        return raw_heightmap, heightkey, slopemap, slopemap, texture
 
 
 if __name__ == "__main__":
