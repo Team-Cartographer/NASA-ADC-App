@@ -6,6 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from time import time
 import random
+import numpy as np
 from file_manager import FileManager
 from constants import CWD
 from shutil import move
@@ -38,14 +39,15 @@ def sns_heatmap(arr, cmap, save):
 def create_surface_texture():
     print("Surface Texture Generation In Progress")
     texture = Image.new("RGBA", (fm.size, fm.size))
+
     for y in range(len(slopes)):
         for x in range(len(slopes[y])):
             color = 255
 
-            cur_slope = slopes[y][x]
-            color -= random.randint(2 * cur_slope, 5 * cur_slope)
-            if color < 0:
-                color = 0
+            for i in range(int(slopes[y][x])):
+               color -= random.randint(2, 5)
+               if color < 0:
+                   color = 0
 
             texture.putpixel((x, y), (color, color, color))
 
