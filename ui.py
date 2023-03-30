@@ -136,9 +136,7 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
                 cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            show_error("Incomplete Data Error", "By exiting the Pathfinding UI, A* did not receive endpoints for "
-                                                "pathfinding. Please manually run programs or use the Launcher again.")
-            return None
+            raise TypeError("You closed A*")
 
         if event == "-Submit-":
             if are_you_sure("Endpoint Submission", "Are you sure these are the points you want?"):

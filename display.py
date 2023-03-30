@@ -4,7 +4,7 @@ from ursina.application import quit
 
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
-    height_from_rect, slope_from_rect, show_error, load_json
+    height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
 
 from random import choice
 
@@ -145,7 +145,7 @@ track_list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amlan
 menu_track_list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
 
 run_music = Audio(
-    choice(track_list), # Change this for different tracks.
+    choice(track_list),  # Change this for different tracks.
     volume=VOLUME,
     loop=True,
 )
@@ -360,6 +360,7 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
+
 def reload_textures():
     textured_entities = [e for e in scene.entities if e.texture]
     reloaded_textures = list()
@@ -372,9 +373,9 @@ def reload_textures():
             continue
 
         if e.texture.path.parent.name == application.compressed_textures_folder.name:
-            #print('texture is made from .psd file', e.texture.path.stem + '.psd')
+            # print('texture is made from .psd file', e.texture.path.stem + '.psd')
             texture_importer.compress_textures(e.texture.path.stem)
-        #print('reloaded texture:', e.texture.path)
+        # print('reloaded texture:', e.texture.path)
         e.texture._texture.reload()
         reloaded_textures.append(e.texture.name)
 
@@ -387,7 +388,8 @@ def repath_init():
         run_astar()
         reload_textures()
     except TypeError:
-        print("No A* Functionality")
+        if are_you_sure("A* exited early", "There was a problem with A*. Click OK to run again"):
+            repath_init()
 
 
 # Start Menu Text and Buttons -------------
