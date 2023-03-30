@@ -1,7 +1,7 @@
+import sys
 from concurrent.futures import ProcessPoolExecutor
-
 from PIL import Image
-from utils import resize, get_specific_from_json
+from utils import resize
 import seaborn as sns
 import matplotlib.pyplot as plt
 from time import time
@@ -9,13 +9,16 @@ import random
 from file_manager import FileManager
 from constants import CWD
 from shutil import move
+import numpy as np
 
 fm = FileManager()
 
-heights = get_specific_from_json(8, fm.astar_json_path)
-slopes = get_specific_from_json(3, fm.astar_json_path)
+parsed_arr = np.load(fm.astar_data_path)
+heights = parsed_arr[:, :, 8]
+slopes = parsed_arr[:, :, 3]
 
 Image.MAX_IMAGE_PIXELS = None
+
 
 def sns_heatmap(arr, cmap, save):
     start_time = time()
@@ -40,7 +43,7 @@ def create_surface_texture():
         for x in range(len(slopes[y])):
             color = 255
 
-            cur_slope = slopes[y][x]
+            cur_slope = int(slopes[y][x])
             color -= random.randint(2 * cur_slope, 5 * cur_slope)
             if color < 0:
                 color = 0

@@ -6,11 +6,13 @@ from ui import get_pathfinding_endpoints
 from file_manager import FileManager
 from constants import IMAGES_PATH, TEXTURE_PATH, ASTAR_PATH
 from tqdm import tqdm
+import numpy as np
 
 fm = FileManager()
 
 SIZE = fm.size
-GRID = load_json("Data/AStarRawData.json")
+GRID = np.load(fm.astar_data_path)
+
 
 class Node:
     def __init__(self, x, y, parent=None):

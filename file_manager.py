@@ -1,7 +1,7 @@
 import os
 from utils import file2list, load_json, push_to_json, timeit
 import ui
-from constants import INFO_JSONPATH, ASTAR_JSONPATH, TEXTURE_PATH, RAW_HEIGHTMAP_PATH, PROCESSED_HEIGHTMAP_PATH, \
+from constants import INFO_JSONPATH, ASTAR_DATA_PATH, TEXTURE_PATH, RAW_HEIGHTMAP_PATH, PROCESSED_HEIGHTMAP_PATH, \
     SLOPEMAP_PATH, SURFACE_HEIGHTKEY_PATH, ASTAR_PATH
 
 
@@ -24,7 +24,6 @@ def initialize_file_manager():
     fm = FileManager()
 
     os.makedirs(fm.data_path, exist_ok=True)
-    os.makedirs(fm.app_files_path, exist_ok=True)
     os.makedirs(fm.images_path, exist_ok=True)
 
 
@@ -36,10 +35,9 @@ class FileManager:
         self.parent_path: str = os.getcwd()
         self.data_path: str = os.path.join(self.parent_path, 'Data')
         self.images_path: str = os.path.join(self.data_path, 'Images')
-        self.app_files_path: str = os.path.join(self.parent_path, 'App Files')
 
         self.info_json_path = combine2paths(self.parent_path, INFO_JSONPATH)
-        self.astar_json_path = combine2paths(self.parent_path, ASTAR_JSONPATH)
+        self.astar_data_path = combine2paths(self.parent_path, ASTAR_DATA_PATH)
 
         # Image Paths
         self.texture_path = combine2paths(self.images_path, TEXTURE_PATH)

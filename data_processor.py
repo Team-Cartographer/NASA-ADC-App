@@ -4,6 +4,9 @@ from utils import push_to_json, timeit
 from file_manager import FileManager
 from concurrent.futures import ProcessPoolExecutor
 
+import numpy as np
+import time
+
 @timeit
 def process_data():
     latitude_list, longitude_list, height_list, height_list, slope_list = load_files()
@@ -28,9 +31,8 @@ def process_data():
     processed_data = processed_data[processed_data[:, 1].argsort()]
 
     formatted_data = format_array(processed_data)
-    formatted_data = ndarray2list(formatted_data)
 
-    push_to_json(fm.astar_json_path, formatted_data)
+    np.save(fm.astar_data_path, formatted_data)
 
 
 def load_file(file_path, delimiter=',', dtype=float):
