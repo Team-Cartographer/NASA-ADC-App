@@ -131,6 +131,7 @@ t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
 t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.485, enabled=True, scale=(0.5, 0.5))
 
 
+
 # Player Interactable Declarations -------------
 sky = Sky()
 sky.color = '000000'  # Black
