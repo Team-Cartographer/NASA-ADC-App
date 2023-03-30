@@ -39,11 +39,13 @@ def create_surface_texture():
     for y in range(len(slopes)):
         for x in range(len(slopes[y])):
             color = 255
-            # color logic here
-            for i in range(int(slopes[y][x])):
-                color -= random.randint(2, 5)
-                if color < 0:
-                    color = 0
+
+            # color logic
+            slope = slopes[y][x]
+            color -= random.randint(2*slope, 5*slope)
+            if color < 0:
+                color = 0
+
             texture.putpixel((x, y), (color, color, color))
     texture.save(fm.texture_path)
 
