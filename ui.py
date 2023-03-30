@@ -44,9 +44,12 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
     layout = [
 
         [
-            sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
-                     graph_bottom_left=(0, SIZE_CONSTANT), background_color=None,
-                     key="-GraphIN-", enable_events=True, drag_submits=False)
+            sg.Column(
+                [[
+                    sg.Graph(canvas_size=(500, 500), graph_top_right=(SIZE_CONSTANT, 0),
+                             graph_bottom_left=(0, SIZE_CONSTANT), background_color=None,
+                             key="-GraphIN-", enable_events=True, drag_submits=False)
+                ]], justification="center")
         ],
         [
             sg.Text("Current Start Position:"),
@@ -230,6 +233,6 @@ def on_start():
 
 if __name__ == "__main__":
     # path_fetcher()
-    # print(get_pathfinding_endpoints(1277, "C:/Users/Owner/PycharmProjects/NASA-ADC-App/Data/Images"))
-    on_start()
+    print(get_pathfinding_endpoints(1277, "C:/Users/Owner/PycharmProjects/NASA-ADC-App/Data/Images"))
+    # on_start()
     pass
