@@ -40,7 +40,7 @@ def create_surface_texture():
         for x in range(len(slopes[y])):
             color = 255
 
-            # color logic
+            # color logic DONE BY JL
             slope = slopes[y][x]
             color -= random.randint(2*slope, 5*slope)
             if color < 0:
