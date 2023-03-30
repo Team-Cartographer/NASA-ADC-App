@@ -419,6 +419,8 @@ def main_menu_returner():
 start_button.on_click = main_menu_returner
 
 creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07)
+
+
 def creds_init():
     start_menu_music.stop(destroy=False)
     t_start_menu.disable()
@@ -428,15 +430,19 @@ def creds_init():
     creds_button.disable()
     start_menu_music.play()
 
+
 creds_button.on_click = creds_init
+
 
 # For Main Menu
 def volume_change():
     return volume_slider.value
 
+
 def sens_change():
     sens = sens_slider.value * 65 # Sensitivity Scaler
     player.mouse_sensitivity = Vec2(sens, sens)
+
 
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
@@ -456,7 +462,6 @@ pause_button.on_click = on_unpause
 
 return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.07)
 return_button.on_click = main_menu_returner
-
 
 
 # Runs display.py -------------
