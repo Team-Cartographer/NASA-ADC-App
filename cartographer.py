@@ -37,7 +37,7 @@ def sns_heatmap(arr, cmap, save):
 
 
 def create_surface_texture():
-    print("Surface Texture Generation In Progress")
+    start = time()
     texture = Image.new("RGBA", (fm.size, fm.size))
 
     for y in range(len(slopes)):
@@ -51,7 +51,7 @@ def create_surface_texture():
 
             texture.putpixel((x, y), (color, color, color))
 
-    print("Surface Texture Generation Complete")
+    print(f'{fm.texture_path} created in {round(time()-start, 2)}s')
     texture.save(fm.texture_path)
 
 
