@@ -17,6 +17,7 @@ slopes = get_specific_from_json(3, fm.astar_json_path)
 
 Image.MAX_IMAGE_PIXELS = None
 
+
 def sns_heatmap(arr, cmap, save):
     start_time = time()
 
@@ -73,7 +74,6 @@ if __name__ == "__main__":
     # Create the essential images.
     draw_all()
 
-
     # Image Scaling for Faster Ursina Runs, as well as proper dimensions.
     proper_heightmap = resize(
         image_path=fm.raw_height_map_path,
@@ -129,6 +129,3 @@ if __name__ == "__main__":
     )
 
     print(f'Cartographer created images in {round(time()-start, 2)}s')
-
-
-
