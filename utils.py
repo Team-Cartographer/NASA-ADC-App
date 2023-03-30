@@ -94,6 +94,7 @@ def get_specific_from_json(index, jsonpath):
     arr = parsed_arr[:, :, index]
     return arr
 
+
 def get_size_cons():
     data = load_json("info.json")
     return load_json("info.json")["SIZE_CONSTANT"]
@@ -115,7 +116,6 @@ def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str
     if transpose:
         # Transpose Images
         img = img.transpose(method=Image.FLIP_TOP_BOTTOM).rotate(-90)
-
 
     width, height = img.size
     processed = img.crop((1, 1, width - 2, height - 2))
