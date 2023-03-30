@@ -30,12 +30,11 @@ VOLUME = 0.15
 
 # Load the Data
 try:
-    AStarData = load_json("Data/AStarRawData.json")
-    infodata = load_json("info.json")
+    a_star_data = load_json("Data/AStarRawData.json")
+    info_data = load_json("info.json")
 except FileNotFoundError:
     show_error("Display Error", "Data Not Processed!")
     quit()
-
 
 # Declaration of Entities --------------
 
@@ -279,11 +278,11 @@ def update():
     view_cam_player_loc.position = (x / (10 / EDITOR_SCALE_FACTOR), 0, z / (10 / EDITOR_SCALE_FACTOR))
 
     # Calculating Data
-    lat = float(latitude_from_rect(nx, nz, AStarData))
-    long = float(longitude_from_rect(nx, nz, AStarData))
-    slope = slope_from_rect(nx, nz, AStarData)
-    height = height_from_rect(nx, nz, AStarData)
-    azimuth, elevation = get_azi_elev(nx, nz, AStarData)
+    lat = float(latitude_from_rect(nx, nz, a_star_data))
+    long = float(longitude_from_rect(nx, nz, a_star_data))
+    slope = slope_from_rect(nx, nz, a_star_data)
+    height = height_from_rect(nx, nz, a_star_data)
+    azimuth, elevation = get_azi_elev(nx, nz, a_star_data)
 
     # Updating Variables
     t_lat.text = f'Latitude: {round(lat, 4)}° N'
