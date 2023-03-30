@@ -383,8 +383,11 @@ def reload_textures():
     return reloaded_textures
 
 def repath_init():
-    run_astar()
-    reload_textures()
+    try:
+        run_astar()
+        reload_textures()
+    except TypeError:
+        print("No A* Functionality")
 
 
 # Start Menu Text and Buttons -------------
