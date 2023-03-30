@@ -18,6 +18,7 @@ slopes = get_specific_from_json(3, fm.astar_json_path)
 Image.MAX_IMAGE_PIXELS = None
 
 
+# noinspection SpellCheckingInspection
 def sns_heatmap(arr, cmap, save):
     start_time = time()
 
@@ -52,6 +53,7 @@ def create_surface_texture():
     texture.save(fm.texture_path)
 
 
+# noinspection SpellCheckingInspection
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_all():
     with ProcessPoolExecutor() as exc:
