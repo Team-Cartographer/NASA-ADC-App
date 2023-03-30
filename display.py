@@ -143,7 +143,7 @@ track_list = ['assets/track_1.mp3', 'assets/track_2.mp3', 'assets/track_3.mp3']
 menu_track_list = ['assets/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
 run_music = Audio(
     # TODO Make a Tracklist Randomizer
-    choice(track_list), # Change this for different tracks.
+    choice(track_list),  # Change this for different tracks.
     # TODO Make a Track Picker
     volume=VOLUME,
     loop=True,
