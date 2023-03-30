@@ -48,6 +48,7 @@ def create_surface_texture():
 
             texture.putpixel((x, y), (color, color, color))
     texture.save(fm.texture_path)
+    print("Surface Texture Generated")
 
 
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
