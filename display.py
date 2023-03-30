@@ -1,13 +1,10 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.application import quit
-
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
-
 from random import choice
-
 from a_star import run_astar
 from file_manager import FileManager
 from constants import PROCESSED_HEIGHTMAP_PATH
@@ -59,6 +56,7 @@ ground_perspective = Entity(
     enabled=False
     )
 
+
 # ViewCamera Player Location Beacon
 view_cam_player_loc = Entity(
     model='cube',
@@ -66,6 +64,7 @@ view_cam_player_loc = Entity(
     color=color.red,
     enabled=False,
     )
+
 
 # Minimap Image
 minimap = Entity(
@@ -78,6 +77,7 @@ minimap = Entity(
     texture='minimap.png',
     enabled=False
     )
+
 
 # Minimap Dot Entity
 mini_dot = Entity(
@@ -100,6 +100,8 @@ color_key = Entity(
     enabled=False
 )
 
+
+# Temporarily Disabled
 # # Earth Entity (Scales to Player Position)
 # earth = Entity(
 #    model='sphere',
@@ -108,6 +110,7 @@ color_key = Entity(
 #    texture='earth_texture.jpg',
 #    enabled=True
 #    )
+
 
 credits = Entity(
     parent=camera.ui,
@@ -118,7 +121,7 @@ credits = Entity(
 )
 
 
-# Textboxes  -------------
+# Information Textboxes  -------------
 t_lat = Text(text='Latitude:', x=-.54, y=.48, scale=1.1, enabled=False)
 t_lon = Text(text='Longitude:', x=-.54, y=.43, scale=1.1, enabled=False)
 t_ht = Text(text='Height:', x=-.54, y=.38, scale=1.1, enabled=False)
@@ -126,7 +129,6 @@ t_slope = Text(text='Slope:', x=-.54, y=.33, scale=1.1, enabled=False)
 t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
 t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
 t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
-
 t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.485, enabled=True, scale=(0.5, 0.5))
 
 
@@ -136,11 +138,12 @@ sky = Sky()
 sky.color = '000000'  # Black
 
 vc = EditorCamera(enabled=False, zoom_speed=2)  # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
-
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25),
                                enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
+
+# Music Functionality --------------
 track_list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amland.mp3.mp3', 'assets/Seraph-Petter_Amland.mp3']
 menu_track_list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
 
@@ -165,10 +168,34 @@ start_menu_music = Audio(
 )
 
 
+# TODO Add Music Switch Statement
 def play_run_music():
     # run_music.clip(choice(track_list))
     t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     run_music.play()
+
+
+# Texture Reloader
+def reload_textures():
+    textured_entities = [e for e in scene.entities if e.texture]
+    reloaded_textures = list()
+
+    for e in textured_entities:
+        if str(e.texture.name) == 'credits':
+            continue
+
+        if e.texture.name in reloaded_textures:
+            continue
+
+        if e.texture.path.parent.name == application.compressed_textures_folder.name:
+            # print('texture is made from .psd file', e.texture.path.stem + '.psd')
+            texture_importer.compress_textures(e.texture.path.stem)
+        # print('reloaded texture:', e.texture.path)
+        e.texture._texture.reload()
+        reloaded_textures.append(e.texture.name)
+
+    print("reloaded textures")
+    return reloaded_textures
 
 
 # Input Functions and Toggles -------------
@@ -245,13 +272,11 @@ def input(key):
         credits.disable()
         run_music.stop(destroy=False)
 
-    #if held_keys["gamepad left trigger"]:
-    #    print(held_keys["gamepad left trigger"])
 
 
 # Game Loop Update() Functions -------------
-height_vals = ground_player.model.height_values
 
+height_vals = ground_player.model.height_values
 
 def update():
     # assets Update
@@ -311,7 +336,7 @@ def update():
     #     earth.z = -9000
 
 
-# Create Start Menu -------------
+# All Button Functions --------------
 def start_game():
     ground_player.enable()
     player.enable()
@@ -335,8 +360,6 @@ def start_game():
     play_run_music()
     pause_music.stop(destroy=False)
 
-
-# Unpause Button Function -------------
 def on_unpause():
     if str(ground_player.texture) == 'heightkey_surface.png' or str(ground_player.texture) == 'slopemap.png':
         color_key.enable()
@@ -360,45 +383,6 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
-
-def reload_textures():
-    textured_entities = [e for e in scene.entities if e.texture]
-    reloaded_textures = list()
-
-    for e in textured_entities:
-        if str(e.texture.name) == 'credits':
-            continue
-
-        if e.texture.name in reloaded_textures:
-            continue
-
-        if e.texture.path.parent.name == application.compressed_textures_folder.name:
-            # print('texture is made from .psd file', e.texture.path.stem + '.psd')
-            texture_importer.compress_textures(e.texture.path.stem)
-        # print('reloaded texture:', e.texture.path)
-        e.texture._texture.reload()
-        reloaded_textures.append(e.texture.name)
-
-    print("reloaded textures")
-    return reloaded_textures
-
-
-def repath_init():
-    try:
-        run_astar()
-        reload_textures()
-    except TypeError:
-        if are_you_sure("A* exited early", "There was a problem with A*. Click OK to run again"):
-            repath_init()
-
-
-# Start Menu Text and Buttons -------------
-t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Application", x=-0.35, y=0.08)
-t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.135, color=color.dark_gray)
-
-start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.01)
-
-
 def main_menu_returner():
     t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     t_start_menu.disable(), t_start_menu_creds.disable(), start_button.disable()
@@ -415,12 +399,6 @@ def main_menu_returner():
     volume_slider.enable()
     sens_slider.enable()
 
-
-start_button.on_click = main_menu_returner
-
-creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07)
-
-
 def creds_init():
     start_menu_music.stop(destroy=False)
     t_start_menu.disable()
@@ -430,38 +408,48 @@ def creds_init():
     creds_button.disable()
     start_menu_music.play()
 
+def repath_init():
+    try:
+        run_astar()
+        reload_textures()
+    except TypeError:
+        if are_you_sure("A* exited early", "There was a problem with A*. Click OK to run again"):
+            repath_init()
 
-creds_button.on_click = creds_init
 
-
-# For Main Menu
+# Slider Functions --------------
 def volume_change():
     return volume_slider.value
-
 
 def sens_change():
     sens = sens_slider.value * 65 # Sensitivity Scaler
     player.mouse_sensitivity = Vec2(sens, sens)
 
 
+# UI Text and Buttons --------------
+
+# Start Menu
+t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Application", x=-0.35, y=0.08)
+t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.135, color=color.dark_gray)
+start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.01, on_click=main_menu_returner)
+creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
+
+# For Main Menu
 t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
-launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray, scale=(0.25, 0.06), x=0, y=0.0, enabled=False)
-repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0), scale=(0.25, 0.06), x=0, y=-0.08, enabled=False)
+launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray,
+                       scale=(0.25, 0.06), x=0, y=0.0, enabled=False, on_click=start_game)
+repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0),
+                       scale=(0.25, 0.06), x=0, y=-0.08, enabled=False, on_click=repath_init)
 volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
 sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True, on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
 
-launch_button.on_click = start_game
-repath_button.on_click = repath_init
-
-
-# Pause Menu Text and Buttons -------------
+# Pause Menu Text and Buttons
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)
-pause_button = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.05), enabled=False)
+pause_button = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray,
+                      scale=(0.23, 0.05), enabled=False, on_click=on_unpause)
 t_quit = Text(text="Press 'LShift+Q' to quit.", x=-0.14, y=-0.135, enabled=False)
-pause_button.on_click = on_unpause
-
-return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.23, 0.06), enabled=False, x=0, y=-0.07)
-return_button.on_click = main_menu_returner
+return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray,
+                       scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
 # Runs display.py -------------
