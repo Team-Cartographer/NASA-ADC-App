@@ -382,6 +382,7 @@ def reload_textures():
     print("reloaded textures")
     return reloaded_textures
 
+
 def repath_init():
     try:
         run_astar()
