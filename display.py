@@ -128,6 +128,8 @@ t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
 t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
 t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
 
+t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.485, enabled=True, scale=(0.5, 0.5))
+
 
 # Player Interactable Declarations -------------
 sky = Sky()
@@ -139,12 +141,11 @@ player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=
                                enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
-track_list = ['assets/track_1.mp3', 'assets/track_2.mp3', 'assets/track_3.mp3']
-menu_track_list = ['assets/bouyer_lonely_wasteland.mp3', 'pause_track.mp3']
+track_list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amland.mp3.mp3', 'assets/Seraph-Petter_Amland.mp3']
+menu_track_list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
+
 run_music = Audio(
-    # TODO Make a Tracklist Randomizer
     choice(track_list), # Change this for different tracks.
-    # TODO Make a Track Picker
     volume=VOLUME,
     loop=True,
 )
@@ -166,6 +167,7 @@ start_menu_music = Audio(
 
 def play_run_music():
     # run_music.clip(choice(track_list))
+    t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     run_music.play()
 
 
@@ -218,6 +220,7 @@ def input(key):
 
     # Pause
     if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
+        t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
         start_menu_music.stop(destroy=True)
         t_lat.disable()
         t_lon.disable()
@@ -357,10 +360,26 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
+def reload_textures(self):
+    textured_entities = [e for e in scene.entities if e.texture]
+    reloaded_textures = list()
+
+    for e in textured_entities:
+        if e.texture.name in reloaded_textures:
+             continue
+
+        if e.texture.path.parent.name == application.compressed_textures_folder.name:
+            print('texture is made from .psd file', e.texture.path.stem + '.psd')
+            texture_importer.compress_textures(e.texture.path.stem)
+        print('reloaded texture:', e.texture.path)
+        e.texture._texture.reload()
+        reloaded_textures.append(e.texture.name)
+
+    return reloaded_textures
 
 def repath_init():
     run_astar()
-    application.hot_reloader.reload_textures()
+    reload_textures()
 
 
 # Start Menu Text and Buttons -------------
@@ -371,6 +390,7 @@ start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.
 
 
 def main_menu_returner():
+    t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     t_start_menu.disable(), t_start_menu_creds.disable(), start_button.disable()
     creds_button.disable()
     start_menu_music.stop(destroy=False)
@@ -431,5 +451,6 @@ return_button.on_click = main_menu_returner
 
 # Runs display.py -------------
 if __name__ == '__main__':
+    t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     input_handler.rebind("f", "k") # Gets rid of EditorCamera Input Issue
     app.run(info=False)
