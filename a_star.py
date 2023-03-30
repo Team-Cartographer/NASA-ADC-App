@@ -119,6 +119,7 @@ def generate_comm_path(comm_path):
     return final_path, comm_path
 
 
+# noinspection SpellCheckingInspection
 def astar():
     nodes = []
 
@@ -207,4 +208,6 @@ def run_astar():
 
 
 if __name__ == "__main__":
+    start_node: Node
+    goal_node: Node
     run_astar()
