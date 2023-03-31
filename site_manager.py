@@ -43,10 +43,12 @@ class Save:
 
                 "SIZE_CONSTANT": len(file2list(lat)),
             }
-            self.latitude_path, self.longitude_path, self.height_path, self.slope_path = lat, long, ht, slope
+
             push_to_json(self.info_json, data)
 
         data = load_json(self.info_json)
+        self.latitude_path, self.longitude_path, self.height_path, self.slope_path = \
+            data["LATITUDE_PATH"], data["LONGITUDE_PATH"], data["HEIGHT_PATH"], data["SLOPE_PATH"]
         self.size = data["SIZE_CONSTANT"]
 
 
