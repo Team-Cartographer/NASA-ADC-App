@@ -1,6 +1,8 @@
+from data_processor import process_data
+from ui import on_start
 
-class Site:
-    def __init__(self, folder_path, site_name):
+class Save:
+    def __init__(self, folder_path: str, site_name: str):
         self.folder_path = folder_path
         self.site_name = site_name
         self.data_folder = folder_path + "/Data"
@@ -17,6 +19,16 @@ class Site:
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
         self.astar_json = self.data_folder + "/AStarRawData.json"
 
+        #process_data()
+
+
+    def to_string(self):
+        return f"Save {self.site_name}"
+
+
 
 if __name__ == '__main__':
+    path = on_start()
+    save = Save(path, "test")
+    print(save.to_string())
     pass

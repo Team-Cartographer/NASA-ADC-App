@@ -2,6 +2,9 @@
 
 import PySimpleGUI as sg
 from utils import show_error, are_you_sure
+import tkinter as tk
+from tkinter import filedialog as fd
+from os import path
 
 
 def path_fetcher():
@@ -172,25 +175,13 @@ def new_site() -> int:
 
 
 def load_site() -> int:
-    # 1 is back, 0 is successful completion
-    print("load site")
-    layout = [
-        [
-            sg.Button("Go Back", key="-Back-"),
-            sg.Button("New Site", key="-NewLoad-")
-        ]
-    ]
-    window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
-    while True:
-        event, values = window.read()
-        if event == sg.WIN_CLOSED or event == "Exit":
-            return 1
-        if event == "-Back-":
-            window.close()
-            return 1
-        elif event == "-NewLoad-":
-            print("Hello from new load")
-            return 0
+    root = tk.Tk()
+    root.withdraw()
+    save = fd.askdirectory()
+    if path.exists(save):
+        return save, 0
+
+    return None, 1
 
 
 def on_start():
@@ -208,13 +199,14 @@ def on_start():
         event, values = window.read()
         if event == "-Load-":
             window.disappear()
-            check = load_site()
+            path, check = load_site()
             if check == 1:
                 window.reappear()
             elif check == 0:
-                break
+                return path
             else:
                 show_error("load error", "you done goofed")
+
         if event == "-New-":
             window.disappear()
             check = new_site()
