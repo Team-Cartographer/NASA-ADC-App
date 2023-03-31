@@ -5,6 +5,7 @@ from data_processor import process_data
 from cartographer import create_images
 from a_star import run_astar
 
+
 class Save:
     def __init__(self, folder_path: str, load:bool = False, site_name: str = None):
         if load:
@@ -62,11 +63,8 @@ class Save:
         create_images(self)
         run_astar(self)
 
-
-
     def to_string(self):
         return f"{self.folder_path}"
-
 
 
 def check_save():
