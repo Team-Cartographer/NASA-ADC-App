@@ -2,7 +2,6 @@ from __future__ import annotations
 import csv
 import tkinter as tk
 from tkinter import messagebox
-import os
 from time import time
 import orjson as oj
 import numpy as np

@@ -38,9 +38,11 @@ def path_fetcher():
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
 
 
-def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
+def get_pathfinding_endpoints(save):
     cur_state = 0  # 0 is no set, 1 is set start, 2 is set goal.
     # There should be an easier way to do this, but this works for now
+
+    SIZE_CONSTANT = save.size
 
     start_circle_pos = None
     end_circle_pos = None
@@ -73,7 +75,7 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
     ]
 
     window = sg.Window("A* UI", layout, finalize=True)
-    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
+    window["-GraphIN-"].draw_image(save.interface_texture_image, location=(0, 0))
 
     while True:
         event, values = window.read(timeout=500)
@@ -82,11 +84,11 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
             map_canvas = values["-Map-"]
 
             if map_canvas == 'Moon Texture':
-                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(save.interface_texture_image, location=(0, 0))
             elif map_canvas == 'Slopemap':
-                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_slopemap.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(save.interface_slopemap_image, location=(0, 0))
             elif map_canvas == 'Heightkey':
-                window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_heightkey.png", location=(0, 0))
+                window["-GraphIN-"].draw_image(save.interface_heightkey_image, location=(0, 0))
             if start_circle_pos is not None:
                 window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
             if end_circle_pos is not None:
@@ -106,11 +108,11 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
                 map_canvas = values["-Map-"]
 
                 if map_canvas == 'Moon Texture':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_texture_image, location=(0, 0))
                 elif map_canvas == 'Slopemap':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_slopemap.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_slopemap_image, location=(0, 0))
                 elif map_canvas == 'Heightkey':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_heightkey.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_heightkey_image, location=(0, 0))
                 if start_circle_pos is not None:
                     window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
                 if end_circle_pos is not None:
@@ -125,11 +127,11 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
                 map_canvas = values["-Map-"]
 
                 if map_canvas == 'Moon Texture':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_texture.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_texture_image, location=(0, 0))
                 elif map_canvas == 'Slopemap':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_slopemap.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_slopemap_image, location=(0, 0))
                 elif map_canvas == 'Heightkey':
-                    window["-GraphIN-"].draw_image(IMAGES_PATH + "/interface_heightkey.png", location=(0, 0))
+                    window["-GraphIN-"].draw_image(save.interface_heightkey_image, location=(0, 0))
                 if start_circle_pos is not None:
                     window["-GraphIN-"].draw_circle(start_circle_pos, radius=10, fill_color="blue")
                 if end_circle_pos is not None:

@@ -6,10 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from time import time
 import random
-import numpy as np
 from file_manager import FileManager
-from constants import CWD
-from shutil import move
 
 fm = FileManager()
 

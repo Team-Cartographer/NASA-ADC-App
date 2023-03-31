@@ -3,14 +3,7 @@ import heapq
 from numpy import sqrt
 from utils import show_warning, load_json, subdivide_path, height_from_rect
 from ui import get_pathfinding_endpoints
-from file_manager import FileManager
-from constants import IMAGES_PATH, TEXTURE_PATH, ASTAR_PATH
 from tqdm import tqdm
-
-fm = FileManager()
-
-SIZE = fm.size
-GRID = load_json("Data/AStarRawData.json")
 
 
 class Node:
@@ -173,12 +166,22 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
             draw.ellipse((comm_path[i][0] - radius, comm_path[i][1] - radius,
                           comm_path[i][0] + radius, comm_path[i][1] + radius), fill=color)
 
-    img.save(IMAGES_PATH + ASTAR_PATH)
+    img.save(save.astar_path_image)
 
 
-def run_astar():
+def run_astar(sv):
+
+    global save
+    save = sv
+
+    global SIZE
+    global GRID
+    SIZE = save.size
+    GRID = load_json(save.astar_json)
+
+
     (start_x, start_y), (goal_x, goal_y), checkpoints = \
-       get_pathfinding_endpoints(SIZE, IMAGES_PATH)
+       get_pathfinding_endpoints(save)
 
     # For Future Testing
     #(start_x, start_y), (goal_x, goal_y), checkpoints = (306, 1013), (669, 273), True
@@ -197,7 +200,7 @@ def run_astar():
         final_path, sub_10_path = generate_comm_path(sub_10_path)
 
     if final_path is not None:
-        update_image(IMAGES_PATH + TEXTURE_PATH, final_path, sub_10_path)
+        update_image(save.moon_surface_texture_image, final_path, sub_10_path)
     else:
         show_warning("A* Pathfinding Error", "No Valid Path found between points.")
 
@@ -208,6 +211,8 @@ def run_astar():
 
 
 if __name__ == "__main__":
-    start_node: Node
-    goal_node: Node
-    run_astar()
+    pass
+
+    #start_node: Node
+    #goal_node: Node
+    #run_astar()

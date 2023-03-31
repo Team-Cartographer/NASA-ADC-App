@@ -5,10 +5,8 @@ from utils import get_azi_elev, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
 from random import choice
 from a_star import run_astar
-from file_manager import FileManager
-from constants import PROCESSED_HEIGHTMAP_PATH
+from site_manager import check_save
 
-fm = FileManager()
 
 # Window Declarations and Formatting --------------
 app = Ursina(fullscreen=True)
@@ -16,29 +14,15 @@ window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
-# Display Specific Constants -------------- 
-Y_HEIGHT = 128  # Default Value
-SIZE_CONSTANT = fm.size
-EDITOR_SCALE_FACTOR = 3
-PLAYER_SCALE_FACTOR = 10
-RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
-VOLUME = 0.15
 
-# Load the Data
-try:
-    a_star_data = load_json("Data/AStarRawData.json")
-    info_data = load_json("info.json")
-except FileNotFoundError:
-    show_error("Display Error", "Data Not Processed!")
-    exit(1)
 
 # Declaration of Entities --------------
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
-    model=Terrain(heightmap=PROCESSED_HEIGHTMAP_PATH),
+    model=Terrain(heightmap=save.processed_heightmap),
     # color = color.gray,
-    texture='moon_surface_texture.png',
+    texture=save.moon_surface_texture_image,
     collider='mesh',
     scale=(SIZE_CONSTANT*PLAYER_SCALE_FACTOR, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*PLAYER_SCALE_FACTOR),
     enabled=False
@@ -47,9 +31,9 @@ ground_player = Entity(
 
 # EditorCamera Ground Plane
 ground_perspective = Entity(
-    model=Terrain(heightmap=PROCESSED_HEIGHTMAP_PATH),
+    model=Terrain(heightmap=save.processed_heightmap),
     # color=color.gray,
-    texture='moon_surface_texture.png',
+    texture=save.moon_surface_texture_image,
     collider='box',
     scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
     enabled=False
@@ -73,7 +57,7 @@ minimap = Entity(
     scale=(0.3, 0.3),
     origin=(-0.5, 0.5),
     position=window.top_left,
-    texture='minimap.png',
+    texture=save.minimap_image,
     enabled=False
     )
 
@@ -206,29 +190,29 @@ def input(key):
 
     # Slopemap Toggle
     if key == '4':
-        ground_player.texture = 'slopemap.png'
-        ground_perspective.texture = 'slopemap.png'
+        ground_player.texture = save.slopemap_image
+        ground_perspective.texture = save.slopemap_image
         view_cam_player_loc.color = color.green
         color_key.enable()
-        color_key.texture='slopeKey.png'
+        color_key.texture = 'slopeKey.png'
 
     # Heightkey Toggle
     if key == '3':
-        ground_player.texture = 'heightkey_surface.png'
-        ground_perspective.texture = 'heightkey_surface.png'
+        ground_player.texture = save.heightkey_surface_image
+        ground_perspective.texture = save.heightkey_surface_image
         view_cam_player_loc.color = color.white
         color_key.enable()
         color_key.texture = 'heightKey.png'
 
     if key == '2':
-        ground_player.texture = 'AStar_Path.png'
-        ground_perspective.texture = 'AStar_Path.png'
+        ground_player.texture = save.astar_path_image
+        ground_perspective.texture = save.astar_path_image
         color_key.disable()
 
     # Moon Texture Toggle (Default)
     if key == '1':
-        ground_player.texture = 'moon_surface_texture.png'
-        ground_perspective.texture = 'moon_surface_texture.png'
+        ground_player.texture = save.moon_surface_texture_image
+        ground_perspective.texture = save.moon_surface_texture_image
         view_cam_player_loc.color = color.red
         color_key.disable()
 
@@ -409,7 +393,7 @@ def creds_init():
 
 def repath_init():
     try:
-        run_astar()
+        run_astar(save)
         reload_textures()
     except TypeError:
         if are_you_sure("A* exited early", "There was a problem with A*. Click OK to run again"):
@@ -451,7 +435,7 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
                        scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
-def show():
+def show(sv):
     t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
     app.run(info=False)
@@ -459,4 +443,28 @@ def show():
 
 # Runs display.py -------------
 if __name__ == '__main__':
-    show()
+    try:
+        save = check_save()
+    except TypeError:
+        show_error("Display Error", "Save Not Given")
+        quit(1)
+
+    # Display Specific Constants --------------
+    Y_HEIGHT = 128  # Default Value
+    # noinspection PyUnboundLocalVariable
+    SIZE_CONSTANT = save.size
+    EDITOR_SCALE_FACTOR = 3
+    PLAYER_SCALE_FACTOR = 10
+    RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
+    VOLUME = 0.15
+
+    # Load the Data
+    try:
+        a_star_data = load_json(save.astar_json)
+        info_data = load_json(save.info_json)
+    except FileNotFoundError:
+        show_error("Display Error", "Data Not Processed!")
+        exit(1)
+
+    app.run(info=False)
+
