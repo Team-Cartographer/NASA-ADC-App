@@ -5,6 +5,7 @@ from data_processor import process_data
 from cartographer import create_images
 
 
+
 class Save:
     def __init__(self, folder_path: str, site_name: str):
         self.folder_path = folder_path + "/Save_" + site_name
@@ -57,7 +58,6 @@ class Save:
 
     def to_string(self):
         return f"{self.folder_path}"
-
 
 
 if __name__ == '__main__':
