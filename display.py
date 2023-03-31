@@ -13,9 +13,7 @@ from shutil import move
 app = Ursina(fullscreen=True)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
-exit_button = Button(ignore_paused=True, origin=(.5, .5), enabled=window.borderless,
-                     position=window.top_right, z=-999, scale=(.05, .025), color=color.light_gray, text='x',
-                     on_click=application.quit, name='exit_button', highlight_color=color.red)
+window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
 save = check_save()
