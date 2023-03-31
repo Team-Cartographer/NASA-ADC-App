@@ -1,6 +1,7 @@
 from data_processor import process_data
 from ui import on_start
 
+
 class Save:
     def __init__(self, folder_path: str, site_name: str):
         self.folder_path = folder_path
@@ -24,7 +25,6 @@ class Save:
 
     def to_string(self):
         return f"Save {self.site_name}"
-
 
 
 if __name__ == '__main__':
