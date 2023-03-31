@@ -1,6 +1,5 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
-from ursina.application import quit
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
@@ -31,7 +30,7 @@ try:
     info_data = load_json("info.json")
 except FileNotFoundError:
     show_error("Display Error", "Data Not Processed!")
-    quit()
+    exit(1)
 
 # Declaration of Entities --------------
 
@@ -243,7 +242,7 @@ def input(key):
 
     # Quit App
     if held_keys['left shift', 'q']:
-        exit(0)
+        quit(0)
 
     # Pause
     if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
@@ -452,8 +451,12 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
                        scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
+def show():
+    t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+    input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
+    app.run(info=False)
+
+
 # Runs display.py -------------
 if __name__ == '__main__':
-    t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
-    input_handler.rebind("f", "k") # Gets rid of EditorCamera Input Issue
-    app.run(info=False)
+    run()
