@@ -14,6 +14,28 @@ window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
+try:
+    save = check_save()
+except TypeError:
+    show_error("Display Error", "Save Not Given")
+    quit(1)
+
+# Display Specific Constants --------------
+Y_HEIGHT = 128  # Default Value
+SIZE_CONSTANT = save.size
+EDITOR_SCALE_FACTOR = 3
+PLAYER_SCALE_FACTOR = 10
+RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
+VOLUME = 0.15
+
+
+# Load the Data
+try:
+    a_star_data = load_json(save.astar_json)
+    info_data = load_json(save.info_json)
+except FileNotFoundError:
+    show_error("Display Error", "Incorrect Save Selected!")
+    exit(1)
 
 
 # Declaration of Entities --------------
@@ -443,28 +465,5 @@ def show(sv):
 
 # Runs display.py -------------
 if __name__ == '__main__':
-    try:
-        save = check_save()
-    except TypeError:
-        show_error("Display Error", "Save Not Given")
-        quit(1)
-
-    # Display Specific Constants --------------
-    Y_HEIGHT = 128  # Default Value
-    # noinspection PyUnboundLocalVariable
-    SIZE_CONSTANT = save.size
-    EDITOR_SCALE_FACTOR = 3
-    PLAYER_SCALE_FACTOR = 10
-    RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
-    VOLUME = 0.15
-
-    # Load the Data
-    try:
-        a_star_data = load_json(save.astar_json)
-        info_data = load_json(save.info_json)
-    except FileNotFoundError:
-        show_error("Display Error", "Data Not Processed!")
-        exit(1)
-
     app.run(info=False)
 

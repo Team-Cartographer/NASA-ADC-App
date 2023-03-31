@@ -77,5 +77,9 @@ def check_save():
     return save
 
 
+if __name__ == '__main__':
+    check_save()
+
+
 
 
