@@ -3,10 +3,10 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
-from random import choice
+from random import choice, randint
 from a_star import run_astar
 from site_manager import check_save
-from shutil import move
+from shutil import move, copytree, rmtree
 
 
 
@@ -19,13 +19,19 @@ window.exit_button.color = color.dark_gray
 # Load the Save (ESSENTIAL)
 save = check_save()
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
-move(src=save.images_folder, dst=os.getcwd() + "/Images")
+copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
 
 
 def display_quit():
-    move(src=(os.getcwd() + "/Images"), dst=save.images_folder)
+    rmtree(path=os.getcwd() + "/Images")
     move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+    print('cleared temporary files and paths')
     print('sys exit confirmed')
+
+    # A little easter egg.
+    if randint(1, 10) == 5:
+        print('\n\"This is all just a simulation?\"\n\"Always has been.\"')
+
     exit(0)
 
 
@@ -471,6 +477,9 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
 
 
 # Runs display.py -------------
+if randint(1, 10) == 5:
+    print("\n\"All alone in this universe...\"\n")
+
 t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
 app.run(info=False)

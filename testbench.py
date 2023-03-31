@@ -1,8 +1,3 @@
-from shutil import move
-
-move(src="C:/Users/ashwa/Desktop/TEST", dst="C:/Users/ashwa/Downloads/TEST")
-
-
 # import numpy as np
 #
 #
