@@ -74,7 +74,7 @@ def check_save():
     if path:
         save = Save(folder_path=path, load=True, site_name=None)
     else:
-        save = Save(folder_path=save_folder, load=False, site_name='TEMP')
+        save = Save(folder_path=save_folder, load=False, site_name='TMEP')
         save.set_up()
 
     if save is None:
