@@ -1,12 +1,16 @@
+import ui
+import os
+from utils import file2list, push_to_json, load_json
 from data_processor import process_data
-from ui import on_start
+from cartographer import create_images
+
 
 class Save:
     def __init__(self, folder_path: str, site_name: str):
-        self.folder_path = folder_path
+        self.folder_path = folder_path + "/Save_" + site_name
         self.site_name = site_name
-        self.data_folder = folder_path + "/Data"
-        self.images_folder = folder_path + "/Images"
+        self.data_folder = self.folder_path + "/Data"
+        self.images_folder = self.folder_path + "/Images"
         self.astar_path_image = self.images_folder + "/AStar_Path.png"
         self.heightkey_surface_image = self.images_folder + "/heightkey_surface.png"
         self.interface_heightkey_image = self.images_folder + "/interface_heightkey_image.png"
@@ -18,17 +22,57 @@ class Save:
         self.slopemap_image = self.images_folder + "/slopemap.png"
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
         self.astar_json = self.data_folder + "/AStarRawData.json"
+        self.info_json = self.data_folder + "/Info.json"
+        self.size = None
+        self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
 
-        #process_data()
+
+    def set_up(self):
+        os.makedirs(self.folder_path, exist_ok=True)
+        os.makedirs(self.data_folder, exist_ok=True)
+        os.makedirs(self.images_folder, exist_ok=True)
+
+        if not os.path.exists(self.info_json):
+            lat, long, ht, slope = ui.path_fetcher()
+            data: dict = {
+                "LATITUDE_PATH": lat,
+                "LONGITUDE_PATH": long,
+                "HEIGHT_PATH": ht,
+                "SLOPE_PATH": slope,
+
+                "SIZE_CONSTANT": len(file2list(lat)),
+            }
+            self.latitude_path, self.longitude_path, self.height_path, self.slope_path = lat, long, ht, slope
+            push_to_json(self.info_json, data)
+
+        data = load_json(self.info_json)
+        self.size = data["SIZE_CONSTANT"]
+
+
+        process_data(self)
+        create_images(self)
+
+
 
 
     def to_string(self):
-        return f"Save {self.site_name}"
+        return f"{self.folder_path}"
 
 
 
 if __name__ == '__main__':
-    path = on_start()
-    save = Save(path, "test")
-    print(save.to_string())
-    pass
+
+    save_folder = os.getcwd() + '/Saves'
+    os.makedirs(save_folder, exist_ok=True)
+
+    path = ui.on_start()
+    save = None
+
+    if path:
+        save = Save(path, "test")
+        print(save.to_string())
+    else:
+        save = Save(save_folder, "TEMP")
+        save.set_up()
+
+

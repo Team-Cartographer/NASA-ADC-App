@@ -106,7 +106,7 @@ def get_azi_elev(x, y, data):
     return round(row[4], 5), round(row[5], 5)  # azimuth and elevation, respectively
 
 
-def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str:
+def resize(image_path: str, path: str, scale: float, transpose=False) -> str:
     start = time()
 
     # Scale Images to Given Scale
@@ -121,9 +121,8 @@ def resize(image_path: str, new_name: str, scale: float, transpose=False) -> str
     processed = img.crop((1, 1, width - 2, height - 2))
 
     # Save Image and Return Path
-    path = os.getcwd() + f'/Data/Images/{new_name}.png'
     processed.save(path)
-    print(f"Resized {new_name}.png in {round(time() - start, 2)}s")
+    print(f"resized {path} in {round(time() - start, 2)}s")
 
     return path
 

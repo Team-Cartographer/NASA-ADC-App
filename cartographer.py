@@ -20,7 +20,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 # noinspection SpellCheckingInspection
-def sns_heatmap(arr, cmap, save):
+def sns_heatmap(arr, cmap, path):
     start_time = time()
 
     # cmap reference: https://matplotlib.org/stable/gallery/color/colormap_reference.html
@@ -28,15 +28,15 @@ def sns_heatmap(arr, cmap, save):
     sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
                 yticklabels=False, cmap=cmap)
     plt.tight_layout()
-    plt.savefig(save, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(path, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
 
     # Convert to RGBA for Ursina.
-    print(f'{save} created in {round(time()-start_time, 2)}s')
+    print(f'{path} created in {round(time() - start_time, 2)}s')
 
-    return save
+    return path
 
 
-def create_surface_texture():
+def create_surface_texture(save):
     start = time()
     texture = Image.new("RGBA", (fm.size, fm.size))
 
@@ -51,18 +51,18 @@ def create_surface_texture():
 
             texture.putpixel((x, y), (color, color, color))
 
-    print(f'{fm.texture_path} created in {round(time()-start, 2)}s')
-    texture.save(fm.texture_path)
+    print(f'{save.moon_surface_texture_image} created in {round(time()-start, 2)}s')
+    texture.save(save.moon_surface_texture_image)
 
 
 # noinspection SpellCheckingInspection
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
-def draw_all():
+def draw_maps(save):
     with ProcessPoolExecutor() as exc:
-        raw_heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", fm.raw_height_map_path)
-        heightkey_future = exc.submit(sns_heatmap, heights, "viridis", fm.surface_heightkey_path)
-        slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", fm.slopemap_path)
-        texture_future = exc.submit(create_surface_texture)
+        raw_heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", save.raw_heightmap_image)
+        heightkey_future = exc.submit(sns_heatmap, heights, "viridis", save.heightkey_surface_image)
+        slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", save.slopemap_image)
+        texture_future = exc.submit(create_surface_texture, save)
 
         raw_heightmap = raw_heightmap_future.result()
         heightkey = heightkey_future.result()
@@ -71,65 +71,69 @@ def draw_all():
 
         return raw_heightmap, heightkey, slopemap, slopemap, texture
 
-
-if __name__ == "__main__":
+def create_images(save):
     start = time()
 
     # Create the essential images.
-    draw_all()
+    draw_maps(save)
 
     # Image Scaling for Faster Ursina Runs, as well as proper dimensions.
     proper_heightmap = resize(
-        image_path=fm.raw_height_map_path,
-        new_name='processed_heightmap',
+        image_path=save.raw_heightmap_image,
+        path=save.processed_heightmap,
         scale=128,
         transpose=True
     )
-    move(fm.processed_heightmap_path, CWD + '/processed_heightmap.png')
 
     proper_surface_texture = resize(
-        image_path=fm.texture_path,
-        new_name='moon_surface_texture',
+        image_path=save.moon_surface_texture_image,
+        path=save.moon_surface_texture_image,
         scale=fm.size,
         transpose=True
     )
 
     flipped_slopemap = resize(
-        image_path=fm.slopemap_path,
-        new_name='slopemap',
+        image_path=save.slopemap_image,
+        path=save.slopemap_image,
         scale=fm.size,
         transpose=True
     )
 
     flipped_heightmap = resize(
-        image_path=fm.surface_heightkey_path,
-        new_name='heightkey_surface',
+        image_path=save.heightkey_surface_image,
+        path=save.heightkey_surface_image,
         scale=fm.size,
         transpose=True
     )
 
     minimap = resize(
-        image_path=fm.texture_path,
-        new_name='minimap',
+        image_path=save.moon_surface_texture_image,
+        path=save.minimap_image,
         scale=128
     )
 
     interface_slopemap = resize(
-        image_path=fm.slopemap_path,
-        new_name='interface_slopemap',
+        image_path=save.slopemap_image,
+        path=save.interface_slopemap_image,
         scale=500
     )
 
     interface_texture = resize(
-        image_path=fm.texture_path,
-        new_name='interface_texture',
+        image_path=save.moon_surface_texture_image,
+        path=save.interface_texture_image,
         scale=500
     )
 
     interface_heightkey = resize(
-        image_path=fm.surface_heightkey_path,
-        new_name='interface_heightkey',
+        image_path=save.heightkey_surface_image,
+        path=save.interface_heightkey_image,
         scale=500
     )
 
-    print(f'Cartographer created images in {round(time()-start, 2)}s')
+    print(f'cartographer created images in {round(time() - start, 2)}s')
+
+
+
+if __name__ == "__main__":
+    #create_images()
+    pass

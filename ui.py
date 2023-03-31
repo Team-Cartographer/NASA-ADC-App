@@ -153,25 +153,26 @@ def get_pathfinding_endpoints(SIZE_CONSTANT, IMAGES_PATH):
 # on start functions and helper functions
 
 def new_site() -> int:
-    # 1 is back, 0 is successful completion
-    print("new site")
-    layout = [
-        [
-            sg.Button("Go Back", key="-Back-"),
-            sg.Button("New Site", key="-NewConfirm-")
-        ]
-    ]
-    window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
-    while True:
-        event, values = window.read()
-        if event == sg.WIN_CLOSED or event == "Exit":
-            return 1
-        if event == "-Back-":
-            window.close()
-            return 1
-        elif event == "-NewConfirm-":
-            print("Hello from new confirm")
-            return 0
+    return 0
+    # # 1 is back, 0 is successful completion
+    # print("new site")
+    # layout = [
+    #     [
+    #         sg.Button("Go Back", key="-Back-"),
+    #         sg.Button("New Site", key="-NewConfirm-")
+    #     ]
+    # ]
+    # window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
+    # while True:
+    #     event, values = window.read()
+    #     if event == sg.WIN_CLOSED or event == "Exit":
+    #         return 1
+    #     if event == "-Back-":
+    #         window.close()
+    #         return 1
+    #     elif event == "-NewConfirm-":
+    #         print("Hello from new confirm")
+    #         return 0
 
 
 def load_site() -> int:
@@ -213,7 +214,7 @@ def on_start():
             if check == 1:
                 window.reappear()
             elif check == 0:
-                break
+                return None
             else:
                 show_error("new error", "you done goofed")
 
