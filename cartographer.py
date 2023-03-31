@@ -6,12 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from time import time
 import random
-from file_manager import FileManager
 
-fm = FileManager()
-
-heights = get_specific_from_json(8, fm.astar_json_path)
-slopes = get_specific_from_json(3, fm.astar_json_path)
 
 Image.MAX_IMAGE_PIXELS = None
 
@@ -35,7 +30,7 @@ def sns_heatmap(arr, cmap, path):
 
 def create_surface_texture(save):
     start = time()
-    texture = Image.new("RGBA", (fm.size, fm.size))
+    texture = Image.new("RGBA", (save.size, save.size))
 
     for y in range(len(slopes)):
         for x in range(len(slopes[y])):
@@ -71,6 +66,12 @@ def draw_maps(save):
 def create_images(save):
     start = time()
 
+    global heights
+    global slopes
+
+    heights = get_specific_from_json(8, save.astar_json)
+    slopes = get_specific_from_json(3, save.astar_json)
+    
     # Create the essential images.
     draw_maps(save)
 
@@ -85,21 +86,21 @@ def create_images(save):
     proper_surface_texture = resize(
         image_path=save.moon_surface_texture_image,
         path=save.moon_surface_texture_image,
-        scale=fm.size,
+        scale=save.size,
         transpose=True
     )
 
     flipped_slopemap = resize(
         image_path=save.slopemap_image,
         path=save.slopemap_image,
-        scale=fm.size,
+        scale=save.size,
         transpose=True
     )
 
     flipped_heightmap = resize(
         image_path=save.heightkey_surface_image,
         path=save.heightkey_surface_image,
-        scale=fm.size,
+        scale=save.size,
         transpose=True
     )
 

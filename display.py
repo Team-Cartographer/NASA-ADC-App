@@ -6,30 +6,29 @@ from utils import get_azi_elev, \
 from random import choice
 from a_star import run_astar
 from site_manager import check_save
+from shutil import move
 
 
 # Window Declarations and Formatting --------------
 app = Ursina(fullscreen=True)
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
-window.exit_button.color = color.dark_gray
 
-try:
-    save = check_save()
-except TypeError:
-    show_error("Display Error", "Save Not Given")
-    quit(1)
+# Load the Save (ESSENTIAL)
+save = check_save()
+move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
+
 
 # Display Specific Constants --------------
 Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = save.size
-EDITOR_SCALE_FACTOR = 3
-PLAYER_SCALE_FACTOR = 10
+EDITOR_SIZE = 3000
+PLAYER_SIZE = 15000
 RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
 VOLUME = 0.15
 
 
-# Load the Data
+# Load the Data -----------------
 try:
     a_star_data = load_json(save.astar_json)
     info_data = load_json(save.info_json)
@@ -42,22 +41,22 @@ except FileNotFoundError:
 
 # FirstPersonController Ground Plane
 ground_player = Entity(
-    model=Terrain(heightmap=save.processed_heightmap),
+    model=Terrain(heightmap="/processed_heightmap.png"),
     # color = color.gray,
     texture=save.moon_surface_texture_image,
     collider='mesh',
-    scale=(SIZE_CONSTANT*PLAYER_SCALE_FACTOR, Y_HEIGHT*PLAYER_SCALE_FACTOR, SIZE_CONSTANT*PLAYER_SCALE_FACTOR),
+    scale=(PLAYER_SIZE, 512, PLAYER_SIZE),
     enabled=False
     )
 
 
 # EditorCamera Ground Plane
 ground_perspective = Entity(
-    model=Terrain(heightmap=save.processed_heightmap),
+    model=Terrain(heightmap="/processed_heightmap.png"),
     # color=color.gray,
     texture=save.moon_surface_texture_image,
     collider='box',
-    scale=(SIZE_CONSTANT*3, Y_HEIGHT*EDITOR_SCALE_FACTOR, SIZE_CONSTANT*3),
+    scale=(EDITOR_SIZE, 256, EDITOR_SIZE),
     enabled=False
     )
 
@@ -248,7 +247,8 @@ def input(key):
 
     # Quit App
     if held_keys['left shift', 'q']:
-        quit(0)
+        exit(0)
+        #move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
 
     # Pause
     if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
@@ -305,7 +305,7 @@ def update():
 
     # Updating Position and Viewer Cam Position Labels
     t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
-    view_cam_player_loc.position = (x / (10 / EDITOR_SCALE_FACTOR), 0, z / (10 / EDITOR_SCALE_FACTOR))
+    view_cam_player_loc.position = (x / (10 / EDITOR_SIZE), 0, z / (10 / EDITOR_SIZE))
 
     # Calculating Data
     lat = float(latitude_from_rect(nx, nz, a_star_data))
@@ -329,7 +329,7 @@ def update():
         player.speed = 500
 
     # Mini-Map Dot Positioning
-    mmsc: int = SIZE_CONSTANT * PLAYER_SCALE_FACTOR  # minimap size constant
+    mmsc: int = SIZE_CONSTANT * PLAYER_SIZE  # minimap size constant
     mx, mz = (x/mmsc) + 0.5, (z/mmsc) - 0.5
     mini_dot.position = (mx, mz, 0)
 
@@ -457,13 +457,9 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
                        scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
-def show(sv):
-    t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
-    input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
-    app.run(info=False)
-
 
 # Runs display.py -------------
-if __name__ == '__main__':
-    app.run(info=False)
+t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
+app.run(info=False)
 

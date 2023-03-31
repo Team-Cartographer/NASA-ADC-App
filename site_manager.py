@@ -6,9 +6,15 @@ from cartographer import create_images
 from a_star import run_astar
 
 class Save:
-    def __init__(self, folder_path: str, site_name: str):
-        self.folder_path = folder_path + "/Save_" + site_name
-        self.site_name = site_name
+    def __init__(self, folder_path: str, load:bool = False, site_name: str = None):
+        if load:
+            self.folder_path = folder_path
+            self.site_name = folder_path # TODO fix this to get name from folder path
+        else:
+            self.folder_path = folder_path + "/Save_" + site_name
+            self.site_name = site_name
+            self.size = None
+
         self.data_folder = self.folder_path + "/Data"
         self.images_folder = self.folder_path + "/Images"
         self.astar_path_image = self.images_folder + "/AStar_Path.png"
@@ -23,8 +29,10 @@ class Save:
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
         self.astar_json = self.data_folder + "/AStarRawData.json"
         self.info_json = self.data_folder + "/Info.json"
-        self.size = None
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
+
+        if load:
+            self.size = load_json(self.info_json)["SIZE_CONSTANT"]
 
     def set_up(self):
         os.makedirs(self.folder_path, exist_ok=True)
@@ -62,19 +70,19 @@ class Save:
 
 
 def check_save():
-    save_folder = os.getcwd() + '/Saves'
-    os.makedirs(save_folder, exist_ok=True)
-
+    save_folder = os.getcwd() + "/Saves"
     path = ui.on_start()
-    save = None
 
     if path:
-        save = Save(path, "test")
+        save = Save(folder_path=path, load=True, site_name=None)
     else:
-        save = Save(save_folder, "TEMP")
+        save = Save(folder_path=save_folder, load=False, site_name='TEMP')
         save.set_up()
 
-    return save
+    if save is None:
+        exit(1)
+    else:
+        return save
 
 
 if __name__ == '__main__':

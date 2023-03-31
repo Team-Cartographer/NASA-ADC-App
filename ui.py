@@ -36,6 +36,7 @@ def path_fetcher():
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points #
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
+            break
 
 
 def get_pathfinding_endpoints(save):
