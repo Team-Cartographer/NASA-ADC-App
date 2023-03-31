@@ -9,6 +9,7 @@ from site_manager import check_save
 from shutil import move
 
 
+
 # Window Declarations and Formatting --------------
 app = Ursina(fullscreen=True)
 window.set_title('Team Cartographer\'s ADC Application')
@@ -18,6 +19,17 @@ window.exit_button.color = color.dark_gray
 # Load the Save (ESSENTIAL)
 save = check_save()
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
+move(src=save.images_folder, dst=os.getcwd() + "/Images")
+
+
+def display_quit():
+    move(src=(os.getcwd() + "/Images"), dst=save.images_folder)
+    move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+    print('sys exit confirmed')
+    exit(0)
+
+
+window.exit_button.on_click = display_quit
 
 
 # Display Specific Constants --------------
@@ -44,7 +56,7 @@ except FileNotFoundError:
 ground_player = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
     # color = color.gray,
-    texture=save.moon_surface_texture_image,
+    texture='Images/moon_surface_texture.png',
     collider='mesh',
     scale=(PLAYER_SIZE, 512, PLAYER_SIZE),
     enabled=False
@@ -55,7 +67,7 @@ ground_player = Entity(
 ground_perspective = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
     # color=color.gray,
-    texture=save.moon_surface_texture_image,
+    texture='Images/moon_surface_texture.png',
     collider='box',
     scale=(EDITOR_SIZE, 256, EDITOR_SIZE),
     enabled=False
@@ -79,7 +91,7 @@ minimap = Entity(
     scale=(0.3, 0.3),
     origin=(-0.5, 0.5),
     position=window.top_left,
-    texture=save.minimap_image,
+    texture='Images/minimap.png',
     enabled=False
     )
 
@@ -212,29 +224,29 @@ def input(key):
 
     # Slopemap Toggle
     if key == '4':
-        ground_player.texture = save.slopemap_image
-        ground_perspective.texture = save.slopemap_image
+        ground_player.texture = 'Images/slopemap.png'
+        ground_perspective.texture = 'Images/slopemap.png'
         view_cam_player_loc.color = color.green
         color_key.enable()
         color_key.texture = 'slopeKey.png'
 
     # Heightkey Toggle
     if key == '3':
-        ground_player.texture = save.heightkey_surface_image
-        ground_perspective.texture = save.heightkey_surface_image
+        ground_player.texture = 'Images/heightkey_surface.png'
+        ground_perspective.texture = 'Images/heightkey_surface.png'
         view_cam_player_loc.color = color.white
         color_key.enable()
         color_key.texture = 'heightKey.png'
 
     if key == '2':
-        ground_player.texture = save.astar_path_image
-        ground_perspective.texture = save.astar_path_image
+        ground_player.texture = 'Images/AStar_Path.png'
+        ground_perspective.texture = 'Images/AStar_Path.png'
         color_key.disable()
 
     # Moon Texture Toggle (Default)
     if key == '1':
-        ground_player.texture = save.moon_surface_texture_image
-        ground_perspective.texture = save.moon_surface_texture_image
+        ground_player.texture = 'Images/moon_surface_texture.png'
+        ground_perspective.texture = 'Images/moon_surface_texture.png'
         view_cam_player_loc.color = color.red
         color_key.disable()
 
@@ -248,8 +260,7 @@ def input(key):
 
     # Quit App
     if held_keys['left shift', 'q']:
-        exit(0)
-        #move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+        display_quit()
 
     # Pause
     if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:

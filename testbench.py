@@ -1,3 +1,6 @@
+from shutil import move
+
+move(src="C:/Users/ashwa/Desktop/TEST", dst="C:/Users/ashwa/Downloads/TEST")
 
 
 # import numpy as np
@@ -98,7 +101,3 @@
 # # Show the plot
 # plt.show()
 
-import chardet
-with open('C:/Users/ashwa/Desktop/Regional Data Files/RegLat.csv', 'rb') as f:
-    result = chardet.detect(f.read())
-print(result['encoding'])
