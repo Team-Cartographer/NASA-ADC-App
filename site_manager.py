@@ -10,7 +10,7 @@ class Save:
     def __init__(self, folder_path: str, load: bool = False, site_name: str = None):
         if load:
             self.folder_path = folder_path
-            self.site_name = folder_path # TODO fix this to get name from folder path
+            self.site_name = folder_path  # TODO fix this to get name from folder path
         else:
             self.folder_path = folder_path + "/Save_" + site_name
             self.site_name = site_name
@@ -85,7 +85,3 @@ def check_save():
 
 if __name__ == '__main__':
     check_save()
-
-
-
-
