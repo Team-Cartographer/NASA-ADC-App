@@ -5,7 +5,6 @@ from data_processor import process_data
 from cartographer import create_images
 
 
-
 class Save:
     def __init__(self, folder_path: str, site_name: str):
         self.folder_path = folder_path + "/Save_" + site_name
@@ -26,7 +25,6 @@ class Save:
         self.info_json = self.data_folder + "/Info.json"
         self.size = None
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
-
 
     def set_up(self):
         os.makedirs(self.folder_path, exist_ok=True)
@@ -51,12 +49,8 @@ class Save:
             data["LATITUDE_PATH"], data["LONGITUDE_PATH"], data["HEIGHT_PATH"], data["SLOPE_PATH"]
         self.size = data["SIZE_CONSTANT"]
 
-
         process_data(self)
         create_images(self)
-
-
-
 
     def to_string(self):
         return f"{self.folder_path}"
