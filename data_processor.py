@@ -1,7 +1,14 @@
 from numpy import sin, cos, degrees, radians, arctan2, column_stack, min, array_split, arange, loadtxt, sqrt, arcsin
-from constants import LUNAR_RADIUS, EARTH_X, EARTH_Y, EARTH_Z, EARTH_LAT, EARTH_LONG
 from utils import push_to_json, timeit
 from concurrent.futures import ProcessPoolExecutor
+
+# Data-Processing Constants
+LUNAR_RADIUS = 1737400
+EARTH_X = 361000 * 1000
+EARTH_Y = 0 * 1000
+EARTH_Z = -42100 * 1000
+EARTH_LAT = -0.11609607854640751
+EARTH_LONG = 1.5707963267948966
 
 @timeit
 def process_data(save):
