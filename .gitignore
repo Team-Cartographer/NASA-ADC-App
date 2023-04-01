@@ -1,11 +1,19 @@
 # Project folders
+Saves/
 App Files/
 Data/
-info.json
 
 #Images
-processed_heightmap.png
+Saves/Save_TESTY/Images/processed_heightmap.png
 moon_surface_texture.png
+AStar_Path.png
+heightkey_surface.png
+interface_heightkey_image.png
+interface_slopemap.png
+interface_texture.png
+minimap.png
+RAW_heightmap.png
+slopemap.png
 
 ### Python template
 # Byte-compiled / optimized / DLL files
