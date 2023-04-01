@@ -28,7 +28,7 @@ def sns_heatmap(arr, cmap, path):
     return path
 
 
-def create_surface_texture(save):
+def create_surface_texture(save, slopes):
     start = time()
     texture = Image.new("RGBA", (save.size, save.size))
 
@@ -50,11 +50,14 @@ def create_surface_texture(save):
 # noinspection SpellCheckingInspection
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_maps(save):
+    heights = get_specific_from_json(8, save.astar_json)
+    slopes = get_specific_from_json(3, save.astar_json)
     with ProcessPoolExecutor() as exc:
+
         raw_heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", save.raw_heightmap_image)
         heightkey_future = exc.submit(sns_heatmap, heights, "viridis", save.heightkey_surface_image)
         slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", save.slopemap_image)
-        texture_future = exc.submit(create_surface_texture, save)
+        texture_future = exc.submit(create_surface_texture, save, slopes)
 
         raw_heightmap = raw_heightmap_future.result()
         heightkey = heightkey_future.result()
@@ -66,12 +69,6 @@ def draw_maps(save):
 def create_images(save):
     start = time()
 
-    global heights
-    global slopes
-
-    heights = get_specific_from_json(8, save.astar_json)
-    slopes = get_specific_from_json(3, save.astar_json)
-    
     # Create the essential images.
     draw_maps(save)
 

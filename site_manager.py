@@ -10,7 +10,7 @@ class Save:
     def __init__(self, folder_path: str, load: bool = False, site_name: str = None):
         if load:
             self.folder_path = folder_path
-            self.site_name = folder_path  # TODO fix this to get name from folder path
+            self.site_name = os.path.basename(folder_path).split('_')[-1].strip() # Parse name from <folder_path>
         else:
             self.folder_path = folder_path + "/Save_" + site_name
             self.site_name = site_name
@@ -34,6 +34,8 @@ class Save:
 
         if load:
             self.size = load_json(self.info_json)["SIZE_CONSTANT"]
+        else:
+            self.set_up()
 
     def set_up(self):
         os.makedirs(self.folder_path, exist_ok=True)
@@ -62,6 +64,7 @@ class Save:
         process_data(self)
         create_images(self)
         run_astar(self)
+        print(f'{self.site_name} setup complete')
 
     def to_string(self):
         return f"{self.folder_path}"
@@ -75,7 +78,7 @@ def check_save():
         save = Save(folder_path=path, load=True, site_name=None)
     else:
         save = Save(folder_path=save_folder, load=False, site_name='TMEP')
-        save.set_up()
+        #save.set_up()
 
     if save is None:
         exit(1)
