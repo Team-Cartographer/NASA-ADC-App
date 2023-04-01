@@ -12,6 +12,7 @@ EARTH_LONG = 1.5707963267948966
 
 @timeit
 def process_data(save):
+    print('processing data')
     latitude_list, longitude_list, height_list, height_list, slope_list = \
         load_files(save.latitude_path, save.longitude_path, save.height_path, save.slope_path)
 

@@ -3,7 +3,6 @@ import heapq
 from numpy import sqrt
 from utils import show_warning, load_json, subdivide_path, height_from_rect
 from ui import get_pathfinding_endpoints
-from tqdm import tqdm
 
 
 class Node:
@@ -93,7 +92,7 @@ def generate_comm_path(comm_path):
                 # else:
                 #    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
                 #    quit(1)
-        print(f"\rGenerating Checkpoints: {round(index/len(comm_path) * 100, 2)}% Complete", end="")
+        print(f"\rgenerating communication checkpoints: {round(index/len(comm_path) * 100, 2)}% complete", end="")
 
     print("\n")
 
@@ -119,32 +118,30 @@ def astar():
     heapq.heappush(nodes, start_node)
     visited = set()
 
-    with tqdm(total=None, desc='A* algorithm', unit=" Nodes") as pbar:
-        while nodes:
-            current = heapq.heappop(nodes)
+    while nodes:
+        current = heapq.heappop(nodes)
 
-            if (current.x, current.y) in visited:
-                continue
-            visited.add((current.x, current.y))
+        if (current.x, current.y) in visited:
+            continue
+        visited.add((current.x, current.y))
 
-            if current.x == goal_node.x and current.y == goal_node.y and current.height == goal_node.height:
-                path = []
-                while current.parent:
-                    path.append((current.x, current.y, current.height))
-                    current = current.parent
-                path.append((start_node.x, start_node.y, start_node.height))
-                path.reverse()
-                return path
+        if current.x == goal_node.x and current.y == goal_node.y and current.height == goal_node.height:
+            path = []
+            while current.parent:
+                path.append((current.x, current.y, current.height))
+                current = current.parent
+            path.append((start_node.x, start_node.y, start_node.height))
+            path.reverse()
+            return path
 
-            for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                x2 = current.x + dx
-                y2 = current.y + dy
+        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            x2 = current.x + dx
+            y2 = current.y + dy
 
-                if 0 <= x2 < len(GRID) and 0 <= y2 < len(GRID[0]):
-                    new_node = Node(x2, y2, current)
-                    heapq.heappush(nodes, new_node)
+            if 0 <= x2 < len(GRID) and 0 <= y2 < len(GRID[0]):
+                new_node = Node(x2, y2, current)
+                heapq.heappush(nodes, new_node)
 
-            pbar.update()
     return None
 
 
@@ -152,7 +149,8 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
     path = image_path
     img = Image.open(path)
 
-    for i in tqdm(range(len(mvmt_path)), desc="Updating image"):
+    print('updating path image')
+    for i in range(len(mvmt_path)):
         color = (255, 0, 0)
         x = mvmt_path[i][0]
         y = mvmt_path[i][1]
@@ -170,7 +168,7 @@ def update_image(image_path: str, mvmt_path: list, comm_path: list):
 
 
 def run_astar(sv):
-
+    print('finding a suitable lunar path')
     global save
     save = sv
 
@@ -180,8 +178,7 @@ def run_astar(sv):
     GRID = load_json(save.astar_json)
 
 
-    (start_x, start_y), (goal_x, goal_y), checkpoints = \
-       get_pathfinding_endpoints(save)
+    (start_x, start_y), (goal_x, goal_y), checkpoints = get_pathfinding_endpoints(save)
 
     # For Future Testing
     #(start_x, start_y), (goal_x, goal_y), checkpoints = (306, 1013), (669, 273), True
@@ -192,6 +189,7 @@ def run_astar(sv):
     goal_node = Node(goal_x, goal_y)
 
     final_path = astar()
+    print('initial path generated')
     sub_10_path = None
 
     if checkpoints:

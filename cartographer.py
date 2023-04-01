@@ -67,6 +67,7 @@ def draw_maps(save):
         return raw_heightmap, heightkey, slopemap, slopemap, texture
 
 def create_images(save):
+    print('creating all images')
     start = time()
 
     # Create the essential images.

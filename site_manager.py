@@ -6,6 +6,7 @@ from cartographer import create_images
 from a_star import run_astar
 from subprocess import run
 from sys import executable
+from time import time
 
 
 class Save:
@@ -40,6 +41,10 @@ class Save:
             self.set_up()
 
     def set_up(self):
+        print(f'starting save {save.site_name} first time setup...')
+
+        start = time()
+
         os.makedirs(self.folder_path, exist_ok=True)
         os.makedirs(self.data_folder, exist_ok=True)
         os.makedirs(self.images_folder, exist_ok=True)
@@ -66,10 +71,13 @@ class Save:
         process_data(self)
         create_images(self)
         run_astar(self)
-        print(f'{self.site_name} setup complete')
+
+        print(f'{self.site_name} setup complete in {round(time() - start, 2)}s')
+
 
     def to_string(self):
         return f"{self.folder_path}"
+
 
 
 def check_save():
