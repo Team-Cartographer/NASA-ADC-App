@@ -5,9 +5,8 @@ from utils import get_azi_elev, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
 from random import choice, randint
 from a_star import run_astar
-from site_manager import check_save
 from shutil import move, copytree, rmtree
-
+from site_manager import Save
 
 
 # Window Declarations and Formatting --------------
@@ -17,7 +16,8 @@ window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
-save = check_save()
+save = Save(sys.argv[1], bool(sys.argv[2]))
+
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
 copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
 

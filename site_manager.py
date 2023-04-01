@@ -4,6 +4,8 @@ from utils import file2list, push_to_json, load_json
 from data_processor import process_data
 from cartographer import create_images
 from a_star import run_astar
+from subprocess import run
+from sys import executable
 
 
 class Save:
@@ -72,19 +74,25 @@ class Save:
 
 def check_save():
     save_folder = os.getcwd() + "/Saves"
+    site_name = input("Site Name: ")
     path = ui.on_start()
 
     if path:
-        save = Save(folder_path=path, load=True, site_name=None)
+        save_ = Save(folder_path=path, load=True, site_name=None)
     else:
-        save = Save(folder_path=save_folder, load=False, site_name='TMEP')
-        #save.set_up()
+        save_ = Save(folder_path=save_folder, load=False, site_name=site_name)
 
-    if save is None:
+    if save_ is None:
         exit(1)
     else:
-        return save
+        return save_
 
 
 if __name__ == '__main__':
-    check_save()
+    save = check_save()
+
+    # Since Display is a script, run it via Subprocess.
+    run([executable, 'display.py']+ [save.folder_path, str(True)], text=True)
+
+
+
