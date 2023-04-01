@@ -31,8 +31,8 @@ class Save:
         self.raw_heightmap_image = self.images_folder + "/RAW_heightmap.png"
         self.slopemap_image = self.images_folder + "/slopemap.png"
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
+        self.info_json = self.data_folder + '/info.json'
         self.astar_json = self.data_folder + "/AStarRawData.json"
-        self.info_json = self.data_folder + "/Info.json"
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
 
         if load:
@@ -41,7 +41,7 @@ class Save:
             self.set_up()
 
     def set_up(self):
-        print(f'starting save {save.site_name} first time setup...')
+        print(f'starting save {self.site_name} first time setup...')
 
         start = time()
 
@@ -49,9 +49,9 @@ class Save:
         os.makedirs(self.data_folder, exist_ok=True)
         os.makedirs(self.images_folder, exist_ok=True)
 
-        if not os.path.exists(self.info_json):
-            lat, long, ht, slope = ui.path_fetcher()
-            data: dict = {
+        # Paths to each data file
+        lat, long, ht, slope = ui.path_fetcher()
+        data: dict = {
                 "LATITUDE_PATH": lat,
                 "LONGITUDE_PATH": long,
                 "HEIGHT_PATH": ht,
@@ -59,13 +59,10 @@ class Save:
 
                 "SIZE_CONSTANT": len(file2list(lat)),
             }
+        push_to_json(self.info_json, data)
 
-            push_to_json(self.info_json, data)
 
-        data = load_json(self.info_json)
-
-        self.latitude_path, self.longitude_path, self.height_path, self.slope_path = \
-            data["LATITUDE_PATH"], data["LONGITUDE_PATH"], data["HEIGHT_PATH"], data["SLOPE_PATH"]
+        self.latitude_path, self.longitude_path, self.height_path, self.slope_path = lat, long, ht, slope
         self.size = data["SIZE_CONSTANT"]
 
         process_data(self)

@@ -10,7 +10,6 @@ from a_star import run_astar
 from shutil import move, copytree, rmtree
 from site_manager import Save
 from atexit import register
-from warnings import filterwarnings
 
 
 # Window Declarations and Formatting --------------
