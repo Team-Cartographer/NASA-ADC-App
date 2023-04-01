@@ -1,3 +1,5 @@
+import warnings
+
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
@@ -7,6 +9,8 @@ from random import choice, randint
 from a_star import run_astar
 from shutil import move, copytree, rmtree
 from site_manager import Save
+from atexit import register
+from warnings import filterwarnings
 
 
 # Window Declarations and Formatting --------------
@@ -22,20 +26,20 @@ move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
 copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
 
 
-def display_quit():
-    rmtree(path=os.getcwd() + "/Images")
-    move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+def cleanup():
+    try:
+        rmtree(path=os.getcwd() + "/Images")
+        move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+    except FileNotFoundError:
+        pass
+
     print('cleared temporary files and paths')
     print('sys exit confirmed')
 
-    # A little easter egg.
     if randint(1, 10) == 5:
         print('\n\"This is all just a simulation...?\"\n\"Always has been...\"')
 
-    exit(0)
-
-
-window.exit_button.on_click = display_quit
+register(cleanup)
 
 
 # Display Specific Constants --------------
@@ -267,7 +271,7 @@ def input(key):
 
     # Quit App
     if held_keys['left shift', 'q']:
-        display_quit()
+        exit(0)
 
     # Pause
     if key == 'escape' and pause_button.enabled is False \
@@ -496,5 +500,8 @@ if randint(1, 10) == 5:
 
 t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
+warnings.filterwarnings("ignore")
 app.run(info=False)
+
+
 
