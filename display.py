@@ -458,7 +458,7 @@ start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.
 creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
 
 # For Main Menu
-t_current_site = Text(text=f"Currently Visiting: Shackleton", x=-0.2, y=0.1, scale=1.25, enabled=False)
+t_current_site = Text(text=f"Currently Visiting: {save.site_name}", x=-0.2, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray,
                        scale=(0.25, 0.06), x=0, y=0.0, enabled=False, on_click=start_game)
 repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0),
