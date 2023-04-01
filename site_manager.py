@@ -74,13 +74,13 @@ class Save:
 
 def check_save():
     save_folder = os.getcwd() + "/Saves"
-    site_name = input("Site Name: ")
     path = ui.on_start()
 
     if path:
         save_ = Save(folder_path=path, load=True, site_name=None)
     else:
-        save_ = Save(folder_path=save_folder, load=False, site_name=site_name)
+        #TODO Replace "TEMP"
+        save_ = Save(folder_path=save_folder, load=False, site_name="TEMP")
 
     if save_ is None:
         exit(1)

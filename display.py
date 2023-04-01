@@ -30,7 +30,7 @@ def display_quit():
 
     # A little easter egg.
     if randint(1, 10) == 5:
-        print('\n\"This is all just a simulation?\"\n\"Always has been.\"')
+        print('\n\"This is all just a simulation...?\"\n\"Always has been...\"')
 
     exit(0)
 
@@ -41,8 +41,8 @@ window.exit_button.on_click = display_quit
 # Display Specific Constants --------------
 Y_HEIGHT = 128  # Default Value
 SIZE_CONSTANT = save.size
-EDITOR_SIZE = 3000
-PLAYER_SIZE = 15000
+EDITOR_SIZE = 3831
+PLAYER_SIZE = 12770
 RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
 VOLUME = 0.15
 
@@ -64,7 +64,7 @@ ground_player = Entity(
     # color = color.gray,
     texture='Images/moon_surface_texture.png',
     collider='mesh',
-    scale=(PLAYER_SIZE, 512, PLAYER_SIZE),
+    scale=(PLAYER_SIZE, PLAYER_SIZE/10, PLAYER_SIZE),
     enabled=False
     )
 
@@ -75,7 +75,7 @@ ground_perspective = Entity(
     # color=color.gray,
     texture='Images/moon_surface_texture.png',
     collider='box',
-    scale=(EDITOR_SIZE, 256, EDITOR_SIZE),
+    scale=(EDITOR_SIZE, EDITOR_SIZE/10, EDITOR_SIZE),
     enabled=False
     )
 
@@ -83,7 +83,7 @@ ground_perspective = Entity(
 # ViewCamera Player Location Beacon
 view_cam_player_loc = Entity(
     model='cube',
-    scale=(20, 1000, 20),
+    scale=(30, 30, 30),
     color=color.red,
     enabled=False,
     )
@@ -123,6 +123,14 @@ color_key = Entity(
     enabled=False
 )
 
+credits = Entity(
+    parent=camera.ui,
+    model='quad',
+    scale=(1.75, 1),
+    texture='credits.mp4',
+    enabled=False
+    )
+
 
 # Temporarily Disabled
 # # Earth Entity (Scales to Player Position)
@@ -133,15 +141,6 @@ color_key = Entity(
 #    texture='earth_texture.jpg',
 #    enabled=True
 #    )
-
-
-credits = Entity(
-    parent=camera.ui,
-    model='quad',
-    scale=(1.75, 1),
-    texture='credits.mp4',
-    enabled=False
-)
 
 
 # Information Textboxes  -------------
@@ -167,7 +166,9 @@ player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
 
 # Music Functionality --------------
-track_list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amland.mp3.mp3', 'assets/Seraph-Petter_Amland.mp3']
+track_list = ['assets/Night_Sky-Petter_Amland.mp3',
+              'assets/Buffalo-Petter_Amland.mp3.mp3',
+              'assets/Seraph-Petter_Amland.mp3']
 menu_track_list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
 
 run_music = Audio(
@@ -269,7 +270,8 @@ def input(key):
         display_quit()
 
     # Pause
-    if key == 'escape' and pause_button.enabled is False and volume_slider.enabled is False and start_button.enabled is False:
+    if key == 'escape' and pause_button.enabled is False \
+            and volume_slider.enabled is False and start_button.enabled is False:
         t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
         start_menu_music.stop(destroy=True)
         t_lat.disable()
@@ -300,6 +302,7 @@ def input(key):
 # Game Loop Update() Functions -------------
 
 height_vals = ground_player.model.height_values
+ec_height_vals = ground_perspective.model.height_values
 
 def update():
     # assets Update
@@ -310,7 +313,8 @@ def update():
 
     # Map Failsafe
     bound = SIZE_CONSTANT*10/2 - 200
-    if -bound > player.position.x or player.position.x > bound or -bound > player.position.z or player.position.z > bound:
+    if -bound > player.position.x or player.position.x > bound or \
+            -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
 
     # Positions
@@ -323,7 +327,11 @@ def update():
 
     # Updating Position and Viewer Cam Position Labels
     t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
-    view_cam_player_loc.position = (x / (10 / EDITOR_SIZE), 0, z / (10 / EDITOR_SIZE))
+
+    # EditorCamera Scaling
+    ex, ez = x/(10/3), z/(10/3)
+    ey = terraincast(Vec3(ex, 0, ez), ground_perspective, ec_height_vals)
+    view_cam_player_loc.position = (ex, ey, ez)
 
     # Calculating Data
     lat = float(latitude_from_rect(nx, nz, a_star_data))
@@ -347,11 +355,10 @@ def update():
         player.speed = 500
 
     # Mini-Map Dot Positioning
-    mmsc: int = SIZE_CONSTANT * PLAYER_SIZE  # minimap size constant
-    mx, mz = (x/mmsc) + 0.5, (z/mmsc) - 0.5
+    mx, mz = (x/PLAYER_SIZE) + 0.5, (z/PLAYER_SIZE) - 0.5
     mini_dot.position = (mx, mz, 0)
 
-    # # Earth Positioning (haha funny number)
+    # # Earth Positioning
     # earth.position = (earth.x, 420+elevation*100, earth.z)
     # if view_cam_player_loc.enabled is True:
     #     earth.z = -4000
@@ -426,10 +433,11 @@ def creds_init():
     start_menu_music.stop(destroy=False)
     t_start_menu.disable()
     t_start_menu_creds.disable()
-    start_button.disable()
     credits.enable()
+    start_button.disable()
     creds_button.disable()
     start_menu_music.play()
+
 
 def repath_init():
     try:
@@ -453,9 +461,13 @@ def sens_change():
 
 # Start Menu
 t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Application", x=-0.35, y=0.08)
-t_start_menu_creds = Text(text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina", x=-0.275, y=-0.135, color=color.dark_gray)
-start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.01, on_click=main_menu_returner)
-creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray, scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
+t_start_menu_creds = Text(
+    text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina",
+    x=-0.275, y=-0.135, color=color.dark_gray)
+start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray,
+                      scale=(0.2, 0.05), y=-0.01, on_click=main_menu_returner)
+creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray,
+                      scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
 
 # For Main Menu
 t_current_site = Text(text=f"Currently Visiting: {save.site_name}", x=-0.2, y=0.1, scale=1.25, enabled=False)
@@ -463,8 +475,10 @@ launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color
                        scale=(0.25, 0.06), x=0, y=0.0, enabled=False, on_click=start_game)
 repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0),
                        scale=(0.25, 0.06), x=0, y=-0.08, enabled=False, on_click=repath_init)
-volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True, on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
-sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True, on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
+volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True,
+                           on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
+sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True,
+                         on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
 
 # Pause Menu Text and Buttons
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)
