@@ -15,6 +15,7 @@ class Save:
         if load:
             self.folder_path = folder_path
             self.site_name = os.path.basename(folder_path).split('_')[-1].strip() # Parse name from <folder_path>
+            print(f'loading {self.site_name} visualization')
         else:
             site_name = input("Enter site name: ") #TODO Replace with UI-based function
             self.folder_path = folder_path + "/Save_" + site_name
