@@ -30,7 +30,9 @@ def path_fetcher():
         event, values = window.read()
 
         if event == sg.WIN_CLOSED or event == "Exit":
+            window.close()
             break
+
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points #
             window.close()
@@ -140,6 +142,7 @@ def get_pathfinding_endpoints(save):
                 cur_state = 0
 
         if event == sg.WIN_CLOSED or event == "Exit":
+            window.close()
             raise TypeError("You closed A*")
 
         if event == "-Submit-":
@@ -196,9 +199,11 @@ def load_site() -> tuple[str | None, int]:
         event, values = window.read()
 
         if event == sg.WIN_CLOSED or event == "Exit":
+            window.close()
             return None, 1
 
         if event == "-Submit-":
+            window.close()
             return getcwd() + "/Saves/Save_" + values["-FileIN-"], 0
 
 
@@ -226,16 +231,11 @@ def on_start():
                 show_error("load error", "you done goofed")
 
         if event == "-New-":
-            window.disappear()
-            check = new_site()
-            if check == 1:
-                window.reappear()
-            elif check == 0:
-                return None
-            else:
-                show_error("new error", "you done goofed")
+            window.close()
+            return None
 
         if event == sg.WIN_CLOSED or event == "Exit":
+            window.close()
             exit()
 
 
