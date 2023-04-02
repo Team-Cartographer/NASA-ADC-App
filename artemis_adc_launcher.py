@@ -16,7 +16,7 @@ if not path.exists(venv_folder):
     start = time()
 
     print("creating virtual environment")
-    venv.create('simulation_venv', with_pip=True)
+    venv.create('subprocess_venv', with_pip=True)
 
     print("installing dependencies...")
 
@@ -33,7 +33,6 @@ if not path.exists(venv_folder):
     print(f"venv creation completed in {round(time()-start, 2)}s")
 
 
-
 print('running application')
 
 # runs site_manager.py
@@ -42,5 +41,5 @@ program = run([sys.executable, program_path])
 
 print('goodbye')
 
-#end
+# end
 run('deactivate', shell=True, check=True)
