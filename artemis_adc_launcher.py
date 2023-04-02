@@ -16,7 +16,7 @@ if not path.exists(venv_folder):
     start = time()
 
     print("creating virtual environment")
-    venv.create('subprocess_venv', with_pip=True)
+    venv.create('simulation_venv', with_pip=True)
 
     print("installing dependencies...")
 
@@ -28,7 +28,7 @@ if not path.exists(venv_folder):
     packages = ["Pillow", "numpy", "ursina", "PySimpleGUI", "orjson", "seaborn"]
     for package in packages:
         run([sys.executable, '-m', 'pip', 'install', package], check=True)
-        print(f"Installed package: {package}")
+        print(f"installed package: {package}")
 
     print(f"venv creation completed in {round(time()-start, 2)}s")
 
@@ -40,7 +40,7 @@ print('running application')
 program_path = getcwd() + "/site_manager.py"
 program = run([sys.executable, program_path])
 
-print('thanks for utilizing the app!')
+print('goodbye')
 
 #end
 run('deactivate', shell=True, check=True)

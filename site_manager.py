@@ -10,11 +10,13 @@ from time import time
 
 
 class Save:
-    def __init__(self, folder_path: str, load: bool = False, site_name: str = None):
+    # If "load=False", then the declared folder_path when making the save is just a path to /Saves/
+    def __init__(self, folder_path: str, load: bool = False):
         if load:
             self.folder_path = folder_path
             self.site_name = os.path.basename(folder_path).split('_')[-1].strip() # Parse name from <folder_path>
         else:
+            site_name = input("Enter site name: ") #TODO Replace with UI-based function
             self.folder_path = folder_path + "/Save_" + site_name
             self.site_name = site_name
             self.size = None
@@ -82,10 +84,10 @@ def check_save():
     path = ui.on_start()
 
     if path:
-        save_ = Save(folder_path=path, load=True, site_name=None)
+        save_ = Save(folder_path=path, load=True)
     else:
         #TODO Replace "TEMP"
-        save_ = Save(folder_path=save_folder, load=False, site_name="TEMP")
+        save_ = Save(folder_path=save_folder, load=False)
 
     if save_ is None:
         exit(1)

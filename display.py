@@ -1,5 +1,3 @@
-import warnings
-
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
@@ -315,7 +313,7 @@ def update():
     run_music.volume = VOLUME
 
     # Map Failsafe
-    bound = SIZE_CONSTANT*10/2 - 200
+    bound = 6190
     if -bound > player.position.x or player.position.x > bound or \
             -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
@@ -499,7 +497,6 @@ if randint(1, 10) == 5:
 
 t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
-warnings.filterwarnings("ignore")
 app.run(info=False)
 
 
