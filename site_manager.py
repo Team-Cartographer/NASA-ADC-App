@@ -1,6 +1,6 @@
 import ui
 import os
-from utils import file2list, push_to_json, load_json
+from utils import file2list, push_to_json, load_json, are_you_sure
 from data_processor import process_data
 from cartographer import create_images
 from a_star import run_astar
@@ -97,10 +97,21 @@ def check_save():
         return save_
 
 
-if __name__ == '__main__':
+def run_smpy():
     save = check_save()
-
     # Since Display is a script, run it via Subprocess.
     run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True)
 
-    os.execv(sys.argv[0], sys.argv)
+
+
+
+
+if __name__ == '__main__':
+
+    # rerun the file until the user wants to quit
+    while True:
+        run_smpy()
+        if are_you_sure("Exiting Simulation", "Press OK to Run Again"):
+            continue
+        else:
+            break
