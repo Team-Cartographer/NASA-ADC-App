@@ -43,7 +43,7 @@ class Save:
             self.set_up()
 
     def set_up(self):
-        print(f'starting save {self.site_name} first time setup...')
+        print(f'starting {self.site_name} first time setup...')
 
         start = time()
 

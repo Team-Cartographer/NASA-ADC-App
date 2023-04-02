@@ -443,9 +443,11 @@ def creds_init():
 def repath_init():
     try:
         run_astar(save)
+        rmtree(path=os.getcwd() + "/Images")
+        copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
         reload_textures()
     except TypeError:
-        if are_you_sure("A* exited early", "There was a problem with A*. Click OK to run again"):
+        if are_you_sure("A* Exit Error", "A* Did Not Work as Intended. Press OK To Run Again."):
             repath_init()
 
 
