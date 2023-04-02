@@ -2,9 +2,7 @@
 
 import PySimpleGUI as sg
 from utils import show_error, are_you_sure
-import tkinter as tk
-from tkinter import filedialog as fd
-from os import path, getcwd, listdir
+from os import getcwd, listdir
 
 
 def path_fetcher():

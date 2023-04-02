@@ -103,9 +103,6 @@ def run_smpy():
     run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True)
 
 
-
-
-
 if __name__ == '__main__':
 
     # rerun the file until the user wants to quit
