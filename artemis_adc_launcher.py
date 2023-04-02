@@ -39,7 +39,7 @@ print('running application')
 program_path = getcwd() + "/site_manager.py"
 program = run([sys.executable, program_path])
 
-print('goodbye')
+print('deactivating')
 
 # end
 run('deactivate', shell=True, check=True)

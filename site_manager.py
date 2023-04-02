@@ -116,4 +116,5 @@ if __name__ == '__main__':
             if are_you_sure("Exiting Simulation", "Press OK to Run Again"):
                 continue
             else:
+                print('deactivating display')
                 break
