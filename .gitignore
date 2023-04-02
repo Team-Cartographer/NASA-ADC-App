@@ -1,19 +1,9 @@
 # Project folders
-Saves/
 App Files/
 Data/
 
 #Images
-Saves/Save_TESTY/Images/processed_heightmap.png
-moon_surface_texture.png
-AStar_Path.png
-heightkey_surface.png
-interface_heightkey_image.png
-interface_slopemap.png
-interface_texture.png
-minimap.png
-RAW_heightmap.png
-slopemap.png
+# None for now
 
 ### Python template
 # Byte-compiled / optimized / DLL files
