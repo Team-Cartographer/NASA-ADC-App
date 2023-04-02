@@ -231,7 +231,7 @@ def new_site_name() -> str:
             sg.Text("Insert site name "), sg.Input(key="-SaveNameIN-"), sg.OK("Submit")
         ]
     ]
-    window = sg.Window("PathFetcher", layout)
+    window = sg.Window("New Site Name", layout)
 
     while True:
         event, values = window.read()
