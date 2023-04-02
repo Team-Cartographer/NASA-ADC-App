@@ -35,8 +35,8 @@ def path_fetcher():
             break
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points #
+            window.close()
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
-            break
 
 
 def get_pathfinding_endpoints(save):
@@ -178,7 +178,7 @@ def new_site() -> int:
     #         return 0
 
 
-def load_site() -> int:
+def load_site() -> tuple[any, int]:
     root = tk.Tk()
     root.withdraw()
     save = fd.askdirectory()
