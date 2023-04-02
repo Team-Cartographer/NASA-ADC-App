@@ -226,6 +226,7 @@ def on_start():
             if check == 1:
                 window.reappear()
             elif check == 0:
+                window.close()
                 return path
             else:
                 show_error("load error", "you done goofed")
