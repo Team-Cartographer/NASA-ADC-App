@@ -225,5 +225,24 @@ def on_start():
             break
 
 
+def new_site_name() -> str:
+    layout = [
+        [
+            sg.Text("Insert site name "), sg.Input(key="-SaveNameIN-"), sg.OK("Submit")
+        ]
+    ]
+    window = sg.Window("PathFetcher", layout)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            break
+
+        elif event == "Submit":
+            return values["-SaveNameIN-"]
+
+
 if __name__ == "__main__":
+    # print(new_site_name())
     pass
