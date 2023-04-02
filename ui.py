@@ -35,8 +35,8 @@ def path_fetcher():
             break
         elif event == "Submit":
             # Latitude, Longitude, Height, Slope, Dist_Between_Points #
+            window.close()
             return values["-LatIN-"], values["-LongIN-"], values["-HeightIN-"], values["-SlopeIN-"]
-            break
 
 
 def get_pathfinding_endpoints(save):
@@ -178,7 +178,7 @@ def new_site() -> int:
     #         return 0
 
 
-def load_site() -> int:
+def load_site() -> tuple[any, int]:
     root = tk.Tk()
     root.withdraw()
     save = fd.askdirectory()
@@ -225,8 +225,24 @@ def on_start():
             break
 
 
+def new_site_name() -> str:
+    layout = [
+        [
+            sg.Text("Insert site name "), sg.Input(key="-SaveNameIN-"), sg.OK("Submit")
+        ]
+    ]
+    window = sg.Window("PathFetcher", layout)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            break
+
+        elif event == "Submit":
+            return values["-SaveNameIN-"]
+
+
 if __name__ == "__main__":
-    # path_fetcher()
-    # print(get_pathfinding_endpoints(1277, "C:/Users/Owner/PycharmProjects/NASA-ADC-App/Data/Images"))
-    # on_start()
+    # print(new_site_name())
     pass

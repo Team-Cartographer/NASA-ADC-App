@@ -37,9 +37,10 @@ def create_surface_texture(save, slopes):
             color = 255
 
             for i in range(int(slopes[y][x])):
-               color -= random.randint(2, 5)
-               if color < 0:
-                   color = 0
+                color -= random.randint(2, 5)
+
+            if color < 0:
+                color = 0
 
             texture.putpixel((x, y), (color, color, color))
 
@@ -65,6 +66,7 @@ def draw_maps(save):
         texture = texture_future.result()
 
         return raw_heightmap, heightkey, slopemap, slopemap, texture
+
 
 def create_images(save):
     print('creating all images')
@@ -129,7 +131,6 @@ def create_images(save):
     print(f'cartographer created images in {round(time() - start, 2)}s')
 
 
-
 if __name__ == "__main__":
-    #create_images()
+    # create_images()
     pass
