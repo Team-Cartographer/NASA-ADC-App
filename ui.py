@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 from utils import show_error, are_you_sure
 import tkinter as tk
 from tkinter import filedialog as fd
-from os import path
+from os import path, getcwd
 
 
 def path_fetcher():
@@ -181,7 +181,7 @@ def new_site() -> int:
 def load_site() -> tuple[any, int]:
     root = tk.Tk()
     root.withdraw()
-    save = fd.askdirectory(initialdir="Save/")
+    save = fd.askdirectory(initialdir=getcwd() + "/Saves")
     if path.exists(save):
         return save, 0
 
@@ -222,7 +222,7 @@ def on_start():
                 show_error("new error", "you done goofed")
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            break
+            exit()
 
 
 def new_site_name() -> str:
@@ -237,7 +237,7 @@ def new_site_name() -> str:
         event, values = window.read()
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            break
+            exit()
 
         elif event == "Submit":
             return values["-SaveNameIN-"]

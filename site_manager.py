@@ -5,7 +5,7 @@ from data_processor import process_data
 from cartographer import create_images
 from a_star import run_astar
 from subprocess import run
-from sys import executable
+import sys
 from time import time
 
 
@@ -101,4 +101,6 @@ if __name__ == '__main__':
     save = check_save()
 
     # Since Display is a script, run it via Subprocess.
-    run([executable, 'display.py'] + [save.folder_path, str(True)], text=True)
+    run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True)
+
+    os.execv(sys.argv[0], sys.argv)
