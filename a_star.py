@@ -71,6 +71,9 @@ def is_valid_checkpoint(point):
 
 def generate_comm_path(comm_path):
     for index, point in enumerate(comm_path):
+
+        print(f"\rgenerating communication checkpoints: {round(index / len(comm_path) * 100, 2)}% complete", end="")
+
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
         if is_valid_checkpoint(point):
@@ -92,7 +95,6 @@ def generate_comm_path(comm_path):
                 # else:
                 #    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
                 #    quit(1)
-        print(f"\rgenerating communication checkpoints: {round(index/len(comm_path) * 100, 2)}% complete", end="")
 
     print("\n")
 

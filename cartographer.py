@@ -2,7 +2,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 from PIL import Image
 from utils import resize, get_specific_from_json
-import seaborn as sns
+import seaborn as sb
 import matplotlib.pyplot as plt
 from time import time
 import random
@@ -12,13 +12,13 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 # noinspection SpellCheckingInspection
-def sns_heatmap(arr, cmap, path):
+def sb_heatmap(arr, cmap, path):
     start_time = time()
 
     # cmap reference: https://matplotlib.org/stable/gallery/color/colormap_reference.html
 
-    sns.heatmap(arr, square=True, cbar=False, xticklabels=False,
-                yticklabels=False, cmap=cmap)
+    sb.heatmap(arr, square=True, cbar=False, xticklabels=False,
+               yticklabels=False, cmap=cmap)
     plt.tight_layout()
     plt.savefig(path, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
 
@@ -54,9 +54,9 @@ def draw_maps(save):
     slopes = get_specific_from_json(3, save.astar_json)
     with ProcessPoolExecutor() as exc:
 
-        raw_heightmap_future = exc.submit(sns_heatmap, heights, "gist_gray", save.raw_heightmap_image)
-        heightkey_future = exc.submit(sns_heatmap, heights, "viridis", save.heightkey_surface_image)
-        slopemap_future = exc.submit(sns_heatmap, slopes, "inferno", save.slopemap_image)
+        raw_heightmap_future = exc.submit(sb_heatmap, heights, "gist_gray", save.raw_heightmap_image)
+        heightkey_future = exc.submit(sb_heatmap, heights, "viridis", save.heightkey_surface_image)
+        slopemap_future = exc.submit(sb_heatmap, slopes, "inferno", save.slopemap_image)
         texture_future = exc.submit(create_surface_texture, save, slopes)
 
         raw_heightmap = raw_heightmap_future.result()
