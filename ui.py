@@ -181,7 +181,7 @@ def new_site() -> int:
 def load_site() -> tuple[any, int]:
     root = tk.Tk()
     root.withdraw()
-    save = fd.askdirectory()
+    save = fd.askdirectory(initialdir="Save/")
     if path.exists(save):
         return save, 0
 
