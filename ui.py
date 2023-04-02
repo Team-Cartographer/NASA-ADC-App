@@ -1,5 +1,5 @@
 # ui -> User Interface Helper File
-
+from __future__ import annotations
 import PySimpleGUI as sg
 from utils import show_error, are_you_sure
 from os import getcwd, listdir
@@ -176,7 +176,7 @@ def new_site() -> int:
     #         return 0
 
 
-def load_site() -> str:
+def load_site() -> tuple[str | None, int]:
     save_folder = getcwd() + "/Saves"
     files = listdir(save_folder)
     print(files)
@@ -196,10 +196,10 @@ def load_site() -> str:
         event, values = window.read()
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            quit(0)
+            return None, 1
 
         if event == "-Submit-":
-            return getcwd() + "/Saves/Save_" + values["-FileIN-"]
+            return getcwd() + "/Saves/Save_" + values["-FileIN-"], 0
 
 
 def on_start():
