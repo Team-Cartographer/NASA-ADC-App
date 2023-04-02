@@ -178,14 +178,30 @@ def new_site() -> int:
     #         return 0
 
 
-def load_site() -> tuple[any, int]:
-    root = tk.Tk()
-    root.withdraw()
-    save = fd.askdirectory(initialdir=getcwd() + "/Saves")
-    if path.exists(save):
-        return save, 0
+def load_site() -> str:
+    save_folder = getcwd() + "/Saves"
+    files = listdir(save_folder)
+    print(files)
+    parsed_sites = []
+    for file in files:
+        parsed_sites.append(file.removeprefix("Save_"))
+    print(parsed_sites)
 
-    return None, 1
+    layout = [
+        [
+            sg.Combo(parsed_sites, key="-FileIN-", default_value=parsed_sites[0]), sg.OK("Submit", key="-Submit-")
+        ]
+    ]
+
+    window = sg.Window("Load Site", layout, finalize=True)
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            quit(0)
+
+        if event == "-Submit-":
+            return getcwd() + "/Saves/Save_" + values["-FileIN-"]
 
 
 def on_start():
@@ -241,32 +257,6 @@ def new_site_name() -> str:
 
         elif event == "Submit":
             return values["-SaveNameIN-"]
-
-
-def site_load_dir():
-    save_folder = getcwd() + "/Saves"
-    files = listdir(save_folder)
-    print(files)
-    parsed_sites = []
-    for file in files:
-        parsed_sites.append(file.removeprefix("Save_"))
-    print(parsed_sites)
-
-    layout = [
-        [
-            sg.Combo(parsed_sites, key="-FileIN-", default_value=parsed_sites[0]), sg.OK("Submit", key="-Submit-")
-        ]
-    ]
-
-    window = sg.Window("Load Site", layout, finalize=True)
-    while True:
-        event, values = window.read()
-
-        if event == sg.WIN_CLOSED or event == "Exit":
-            quit(0)
-
-        if event == "-Submit-":
-            return getcwd() + "/Saves/Save_" + values["-FileIN-"]
 
 
 if __name__ == "__main__":
