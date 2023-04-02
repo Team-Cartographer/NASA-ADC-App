@@ -17,7 +17,7 @@ class Save:
             self.site_name = os.path.basename(folder_path).split('_')[-1].strip()  # Parse name from <folder_path>
             print(f'loading {self.site_name} visualization')
         else:
-            site_name = input("Enter site name: ")  # TODO Replace with UI-based function
+            site_name = ui.new_site_name()
             self.folder_path = folder_path + "/Save_" + site_name
             self.site_name = site_name
             self.size = None
