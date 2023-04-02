@@ -179,11 +179,11 @@ def new_site() -> int:
 def load_site() -> tuple[str | None, int]:
     save_folder = getcwd() + "/Saves"
     files = listdir(save_folder)
-    print(files)
+    #print(files)
     parsed_sites = []
     for file in files:
         parsed_sites.append(file.removeprefix("Save_"))
-    print(parsed_sites)
+    #print(parsed_sites)
 
     layout = [
         [

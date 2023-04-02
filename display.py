@@ -246,6 +246,9 @@ def input(key):
         color_key.enable()
         color_key.texture = 'heightKey.png'
 
+    if key == '9':
+        quit(2)
+
     if key == '2':
         ground_player.texture = 'Images/AStar_Path.png'
         ground_perspective.texture = 'Images/AStar_Path.png'
