@@ -31,7 +31,7 @@ def cleanup():
         pass
 
     print('cleared temporary files and paths')
-    print('sys exit confirmed')
+    print(f'exited {save.site_name} visualization')
 
     if randint(1, 10) == 5:
         print('\n\"This is all just a simulation...?\"\n\"Always has been...\"')
@@ -246,9 +246,6 @@ def input(key):
         color_key.enable()
         color_key.texture = 'heightKey.png'
 
-    if key == '9':
-        quit(2)
-
     if key == '2':
         ground_player.texture = 'Images/AStar_Path.png'
         ground_perspective.texture = 'Images/AStar_Path.png'
@@ -391,6 +388,7 @@ def start_game():
     t_current_site.disable()
     volume_slider.disable()
     sens_slider.disable()
+    new_site_button.disable()
     play_run_music()
     pause_music.stop(destroy=False)
 
@@ -432,6 +430,7 @@ def main_menu_returner():
     pause_music.play()
     volume_slider.enable()
     sens_slider.enable()
+    new_site_button.enable()
 
 def creds_init():
     start_menu_music.stop(destroy=False)
@@ -476,15 +475,20 @@ creds_button = Button(text='Credits', color=color.gray, highlight_color=color.da
                       scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
 
 # For Main Menu
-t_current_site = Text(text=f"Currently Visiting: {save.site_name}", x=-0.2, y=0.1, scale=1.25, enabled=False)
+def on_new_site_quit():
+    quit(2)
+
+t_current_site = Text(text=f"  Currently Visiting: \"{save.site_name}\"", x=-0.25, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray,
                        scale=(0.25, 0.06), x=0, y=0.0, enabled=False, on_click=start_game)
-repath_button = Button(text="Re-Run Pathfinding", color=color.dark_gray, highlight_color=Color(0.15, 0.15, 0.15, 1.0),
+repath_button = Button(text="Re-Run Pathfinding", color=color.gray, highlight_color=color.dark_gray,
                        scale=(0.25, 0.06), x=0, y=-0.08, enabled=False, on_click=repath_init)
+new_site_button = Button(text="Switch Lunar Site", color=color.gray, highlight_color=color.dark_gray,
+                         enabled=False, on_click=on_new_site_quit, scale=(0.25, 0.06), x=0, y=-0.16)
 volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True,
-                           on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.2)
+                           on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.27)
 sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True,
-                         on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.27)
+                         on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.35)
 
 # Pause Menu Text and Buttons
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)

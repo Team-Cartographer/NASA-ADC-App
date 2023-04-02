@@ -100,10 +100,11 @@ def run_smpy():
     save = check_save()
     # Since Display is a script, run it via Subprocess.
     result = run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True, capture_output=True)
+    print(f'ended {save.site_name} visualization.')
     if result.returncode == 2:
-        return False
-    else:
         return True
+    else:
+        return False
 
 
 if __name__ == '__main__':
@@ -111,10 +112,7 @@ if __name__ == '__main__':
     # rerun the file until the user wants to quit
     while True:
         reset = run_smpy()
-
         if reset:
-            if are_you_sure("Exiting Simulation", "Press OK to Run Again"):
-                continue
-            else:
-                print('deactivating display')
-                break
+            continue
+        else:
+            break

@@ -31,6 +31,8 @@ def path_fetcher():
 
         if event == sg.WIN_CLOSED or event == "Exit":
             window.close()
+            show_error("No Pathing Given", "Ending Program")
+            exit(0)
             break
 
         elif event == "Submit":
@@ -155,29 +157,6 @@ def get_pathfinding_endpoints(save):
 
 
 # on start functions and helper functions
-
-def new_site() -> int:
-    return 0
-    # # 1 is back, 0 is successful completion
-    # print("new site")
-    # layout = [
-    #     [
-    #         sg.Button("Go Back", key="-Back-"),
-    #         sg.Button("New Site", key="-NewConfirm-")
-    #     ]
-    # ]
-    # window = sg.Window("Welcome", layout, element_justification='c', finalize=True)
-    # while True:
-    #     event, values = window.read()
-    #     if event == sg.WIN_CLOSED or event == "Exit":
-    #         return 1
-    #     if event == "-Back-":
-    #         window.close()
-    #         return 1
-    #     elif event == "-NewConfirm-":
-    #         print("Hello from new confirm")
-    #         return 0
-
 
 def load_site() -> tuple[str | None, int]:
     save_folder = getcwd() + "/Saves"
