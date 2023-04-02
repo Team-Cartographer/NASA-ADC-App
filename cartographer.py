@@ -29,6 +29,7 @@ def sb_heatmap(arr, cmap, path):
 
 
 def create_surface_texture(save, slopes):
+    print(f'creating surface texture')
     start = time()
     texture = Image.new("RGBA", (save.size, save.size))
 
