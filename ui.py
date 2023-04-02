@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 from utils import show_error, are_you_sure
 import tkinter as tk
 from tkinter import filedialog as fd
-from os import path, getcwd
+from os import path, getcwd, listdir
 
 
 def path_fetcher():
@@ -241,6 +241,32 @@ def new_site_name() -> str:
 
         elif event == "Submit":
             return values["-SaveNameIN-"]
+
+
+def site_load_dir():
+    save_folder = getcwd() + "/Saves"
+    files = listdir(save_folder)
+    print(files)
+    parsed_sites = []
+    for file in files:
+        parsed_sites.append(file.removeprefix("Save_"))
+    print(parsed_sites)
+
+    layout = [
+        [
+            sg.Combo(parsed_sites, key="-FileIN-", default_value=parsed_sites[0]), sg.OK("Submit", key="-Submit-")
+        ]
+    ]
+
+    window = sg.Window("Load Site", layout, finalize=True)
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            quit(0)
+
+        if event == "-Submit-":
+            return getcwd() + "/Saves/Save_" + values["-FileIN-"]
 
 
 if __name__ == "__main__":
