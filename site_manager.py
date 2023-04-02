@@ -14,10 +14,10 @@ class Save:
     def __init__(self, folder_path: str, load: bool = False):
         if load:
             self.folder_path = folder_path
-            self.site_name = os.path.basename(folder_path).split('_')[-1].strip() # Parse name from <folder_path>
+            self.site_name = os.path.basename(folder_path).split('_')[-1].strip()  # Parse name from <folder_path>
             print(f'loading {self.site_name} visualization')
         else:
-            site_name = input("Enter site name: ") #TODO Replace with UI-based function
+            site_name = input("Enter site name: ")  # TODO Replace with UI-based function
             self.folder_path = folder_path + "/Save_" + site_name
             self.site_name = site_name
             self.size = None
@@ -64,7 +64,6 @@ class Save:
             }
         push_to_json(self.info_json, data)
 
-
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = lat, long, ht, slope
         self.size = data["SIZE_CONSTANT"]
 
@@ -74,10 +73,8 @@ class Save:
 
         print(f'{self.site_name} setup complete in {round(time() - start, 2)}s')
 
-
     def to_string(self):
         return f"{self.folder_path}"
-
 
 
 def check_save():
@@ -87,7 +84,7 @@ def check_save():
     if path:
         save_ = Save(folder_path=path, load=True)
     else:
-        #TODO Replace "TEMP"
+        # TODO Replace "TEMP"
         save_ = Save(folder_path=save_folder, load=False)
 
     if save_ is None:
@@ -100,7 +97,4 @@ if __name__ == '__main__':
     save = check_save()
 
     # Since Display is a script, run it via Subprocess.
-    run([executable, 'display.py']+ [save.folder_path, str(True)], text=True)
-
-
-
+    run([executable, 'display.py'] + [save.folder_path, str(True)], text=True)
