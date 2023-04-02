@@ -88,7 +88,6 @@ def check_save():
     if path:
         save_ = Save(folder_path=path, load=True)
     else:
-        # TODO Replace "TEMP"
         save_ = Save(folder_path=save_folder, load=False)
 
     if save_ is None:

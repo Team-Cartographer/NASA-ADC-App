@@ -254,6 +254,7 @@ def new_site_name() -> str:
             exit()
 
         elif event == "Submit":
+            window.close()
             return values["-SaveNameIN-"]
 
 
