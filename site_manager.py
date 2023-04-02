@@ -79,6 +79,10 @@ class Save:
 
 def check_save():
     save_folder = os.getcwd() + "/Saves"
+
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
+
     path = ui.on_start()
 
     if path:
