@@ -31,6 +31,7 @@ def cleanup():
     except FileNotFoundError:
         pass
 
+
 register(cleanup)
 
 
@@ -147,8 +148,7 @@ t_slope = Text(text='Slope:', x=-.54, y=.33, scale=1.1, enabled=False)
 t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
 t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
 t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
-t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.485, enabled=True, scale=(0.5, 0.5))
-
+t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.450, enabled=True, scale=(0.8, 0.8))
 
 
 # Player Interactable Declarations -------------
@@ -189,6 +189,7 @@ start_menu_music = Audio(
 
 
 # TODO Add Music Switch Statement
+# hahaha -JL
 def play_run_music():
     # run_music.clip(choice(track_list))
     t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
@@ -294,11 +295,11 @@ def input(key):
         run_music.stop(destroy=False)
 
 
-
 # Game Loop Update() Functions -------------
 
 height_vals = ground_player.model.height_values
 ec_height_vals = ground_perspective.model.height_values
+
 
 def update():
     # assets Update
@@ -387,6 +388,7 @@ def start_game():
     play_run_music()
     pause_music.stop(destroy=False)
 
+
 def on_unpause():
     if str(ground_player.texture) == 'heightkey_surface.png' or str(ground_player.texture) == 'slopemap.png':
         color_key.enable()
@@ -410,6 +412,7 @@ def on_unpause():
     pause_music.stop(destroy=False)
     play_run_music()
 
+
 def main_menu_returner():
     t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     t_start_menu.disable(), t_start_menu_creds.disable(), start_button.disable()
@@ -426,6 +429,7 @@ def main_menu_returner():
     volume_slider.enable()
     sens_slider.enable()
     new_site_button.enable()
+
 
 def creds_init():
     start_menu_music.stop(destroy=False)
@@ -452,6 +456,7 @@ def repath_init():
 def volume_change():
     return volume_slider.value
 
+
 def sens_change():
     sens = sens_slider.value * 65 # Sensitivity Scaler
     player.mouse_sensitivity = Vec2(sens, sens)
@@ -469,9 +474,11 @@ start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.
 creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray,
                       scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
 
+
 # For Main Menu
 def on_new_site_quit():
     quit(2)
+
 
 t_current_site = Text(text=f"  Currently Visiting: \"{save.site_name}\"", x=-0.25, y=0.1, scale=1.25, enabled=False)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray,
