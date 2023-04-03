@@ -1,6 +1,6 @@
 import ui
 import os
-from utils import file2list, push_to_json, load_json, are_you_sure
+from utils import file2list, push_to_json, load_json
 from data_processor import process_data
 from cartographer import create_images
 from a_star import run_astar
@@ -15,7 +15,6 @@ class Save:
         if load:
             self.folder_path = folder_path
             self.site_name = os.path.basename(folder_path).split('_')[-1].strip()  # Parse name from <folder_path>
-            print(f'loading {self.site_name} visualization')
         else:
             site_name = ui.new_site_name()
             self.folder_path = folder_path + "/Save_" + site_name
@@ -99,7 +98,9 @@ def check_save():
 def run_smpy():
     save = check_save()
     # Since Display is a script, run it via Subprocess.
+    print(f'loading {save.site_name} visualization')
     result = run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True, capture_output=True)
+    print(f'cleared temporary files and paths')
     print(f'ended {save.site_name} visualization.')
     if result.returncode == 2:
         return True

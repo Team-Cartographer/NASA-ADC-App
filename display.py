@@ -30,12 +30,6 @@ def cleanup():
     except FileNotFoundError:
         pass
 
-    print('cleared temporary files and paths')
-    print(f'exited {save.site_name} visualization')
-
-    if randint(1, 10) == 5:
-        print('\n\"This is all just a simulation...?\"\n\"Always has been...\"')
-
 register(cleanup)
 
 
@@ -342,12 +336,12 @@ def update():
     azimuth, elevation = get_azi_elev(nx, nz, a_star_data)
 
     # Updating Variables
-    t_lat.text = f'Latitude: {round(lat, 4)}° N'
-    t_lon.text = f'Longitude: {round(long, 4)}° E'
-    t_ht.text = 'Height: ' + str(height) + 'm'
-    t_slope.text = 'Slope: ' + str(slope) + '°'
-    t_azi.text = 'Azimuth: ' + str(round(azimuth, 4)) + '°'
-    t_elev.text = 'Elevation: ' + str(round(elevation, 4)) + '°'
+    t_lat.text = f'Latitude: {round(lat, 2)}° N'
+    t_lon.text = f'Longitude: {round(long, 2)}° E'
+    t_ht.text = 'Height: ' + str(round(height, 2)) + 'm'
+    t_slope.text = 'Slope: ' + str(round(slope, 2)) + '°'
+    t_azi.text = 'Azimuth: ' + str(round(azimuth, 2)) + '°'
+    t_elev.text = 'Elevation: ' + str(round(elevation, 2)) + '°'
 
     # Sprint Key
     if held_keys['left shift']:
@@ -499,11 +493,7 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
                        scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
-
 # Runs display.py -------------
-if randint(1, 10) == 5:
-    print("\n\"All alone in this universe...\"\n")
-
 t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
 app.run(info=False)
