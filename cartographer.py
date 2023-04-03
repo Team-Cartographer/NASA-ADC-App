@@ -1,8 +1,9 @@
 from concurrent.futures import ProcessPoolExecutor
 
 from PIL import Image
-from utils import resize, get_specific_from_json
+from utils import resize
 import seaborn as sb
+from numpy import load
 import matplotlib.pyplot as plt
 from time import time
 import random
@@ -52,8 +53,11 @@ def create_surface_texture(save, slopes):
 # noinspection SpellCheckingInspection
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_maps(save):
-    heights = get_specific_from_json(8, save.astar_json)
-    slopes = get_specific_from_json(3, save.astar_json)
+
+    parsed_arr = load(save.data_file)
+    heights = parsed_arr[:, :, 8]
+    slopes = parsed_arr[:, :, 3]
+
     with ProcessPoolExecutor() as exc:
 
         raw_heightmap_future = exc.submit(sb_heatmap, heights, "gist_gray", save.raw_heightmap_image)

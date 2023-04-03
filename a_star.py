@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 import heapq
-from numpy import sqrt
-from utils import show_warning, load_json, subdivide_path, height_from_rect
+from numpy import sqrt, load
+from utils import show_warning, subdivide_path, height_from_rect
 from ui import get_pathfinding_endpoints
 
 
@@ -177,8 +177,7 @@ def run_astar(sv):
     global SIZE
     global GRID
     SIZE = save.size
-    GRID = load_json(save.astar_json)
-
+    GRID = load(save.data_file)
 
     (start_x, start_y), (goal_x, goal_y), checkpoints = get_pathfinding_endpoints(save)
 

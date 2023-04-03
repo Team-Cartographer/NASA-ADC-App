@@ -34,7 +34,7 @@ class Save:
         self.slopemap_image = self.images_folder + "/slopemap.png"
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
         self.info_json = self.data_folder + '/info.json'
-        self.astar_json = self.data_folder + "/AStarRawData.json"
+        self.data_file = self.data_folder + f"/AStarRawData.npy"
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
 
         if load:

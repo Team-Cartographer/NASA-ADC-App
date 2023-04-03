@@ -3,7 +3,8 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
     height_from_rect, slope_from_rect, show_error, load_json, are_you_sure
-from random import choice, randint
+from numpy import load
+from random import choice
 from a_star import run_astar
 from shutil import move, copytree, rmtree
 from site_manager import Save
@@ -44,7 +45,7 @@ VOLUME = 0.15
 
 # Load the Data -----------------
 try:
-    a_star_data = load_json(save.astar_json)
+    a_star_data = load(save.data_file)
     info_data = load_json(save.info_json)
 except FileNotFoundError:
     show_error("Display Error", "Incorrect Save Selected!")

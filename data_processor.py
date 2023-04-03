@@ -1,5 +1,6 @@
-from numpy import sin, cos, degrees, radians, arctan2, column_stack, min, array_split, arange, loadtxt, sqrt, arcsin
-from utils import push_to_json, timeit
+from numpy import sin, cos, degrees, radians, arctan2, column_stack, min, \
+    array_split, arange, loadtxt, sqrt, arcsin, save
+from utils import timeit
 from concurrent.futures import ProcessPoolExecutor
 
 # Data-Processing Constants
@@ -11,10 +12,10 @@ EARTH_LAT = -0.11609607854640751
 EARTH_LONG = 1.5707963267948966
 
 @timeit
-def process_data(save):
+def process_data(save_):
     print('processing data')
     latitude_list, longitude_list, height_list, height_list, slope_list = \
-        load_files(save.latitude_path, save.longitude_path, save.height_path, save.slope_path)
+        load_files(save_.latitude_path, save_.longitude_path, save_.height_path, save_.slope_path)
 
     latitude_radians = radians(latitude_list)
     longitude_radians = radians(longitude_list)
@@ -35,10 +36,12 @@ def process_data(save):
 
     processed_data = processed_data[processed_data[:, 1].argsort()]
 
-    formatted_data = format_array(processed_data, save.size)
-    formatted_data = ndarray2list(formatted_data)
+    formatted_data = format_array(processed_data, save_.size)
+    save(save_.data_file, formatted_data)
 
-    push_to_json(save.astar_json, formatted_data)
+    #formatted_data = ndarray2list(formatted_data)
+
+    #push_to_json(save.astar_json, formatted_data)
 
 
 def load_file(file_path, delimiter=',', dtype=float):
