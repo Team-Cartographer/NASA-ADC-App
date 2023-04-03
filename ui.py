@@ -161,11 +161,16 @@ def get_pathfinding_endpoints(save):
 def load_site() -> tuple[str | None, int]:
     save_folder = getcwd() + "/Saves"
     files = listdir(save_folder)
-    #print(files)
+
+    if files is None:
+        if are_you_sure("Save Loading Error", "No previous saves exist. Press OK to make a new save"):
+            return None, 0
+
+
     parsed_sites = []
     for file in files:
         parsed_sites.append(file.removeprefix("Save_"))
-    #print(parsed_sites)
+
 
     layout = [
         [
