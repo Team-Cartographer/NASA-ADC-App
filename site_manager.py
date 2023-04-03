@@ -97,11 +97,15 @@ def check_save():
 
 def run_smpy():
     save = check_save()
+
     # Since Display is a script, run it via Subprocess.
     print(f'loading {save.site_name} visualization')
+
     result = run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True, capture_output=True)
+
     print(f'cleared temporary files and paths')
     print(f'ended {save.site_name} visualization.')
+
     if result.returncode == 2:
         return True
     else:
@@ -109,7 +113,6 @@ def run_smpy():
 
 
 if __name__ == '__main__':
-
     # rerun the file until the user wants to quit
     while True:
         reset = run_smpy()
