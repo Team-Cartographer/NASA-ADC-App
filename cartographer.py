@@ -51,22 +51,6 @@ def create_surface_texture(save, slopes):
 
     print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
     texture.save(save.moon_surface_texture_image)
-    '''
-    print(f'creating surface texture')
-    start = time()
-
-    random_array = np.random.uniform(low=2, high=3, size=slopes.shape)
-
-    new_array = 255 - (slopes * random_array)
-    new_array[new_array < 0] = 0
-
-    # Multiplying by 3 gives us (color, color, color) [Not exactly but it kind of represents the RGB values]
-    image_array = np.stack([new_array] * 3, axis=-1)
-    texture = Image.fromarray(np.uint8(image_array), mode='RGB')
-
-    print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
-    texture.save(save.moon_surface_texture_image)
-    '''
 
 
 # noinspection SpellCheckingInspection
@@ -92,6 +76,7 @@ def draw_maps(save):
         return raw_heightmap, heightkey, slopemap, slopemap, texture
 
 
+# noinspection PyUnusedLocal
 def create_images(save):
     print('creating all images')
     start = time()

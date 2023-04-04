@@ -10,7 +10,7 @@ from time import time
 
 
 class Save:
-    # If "load=False", then the declared folder_path when making the save is just a path to /Saves/
+    # If "load=False", then the declared folder_path when making the save is just a path to /Saves
     def __init__(self, folder_path: str, load: bool = False):
         if load:
             self.folder_path = folder_path

@@ -3,10 +3,11 @@ import heapq
 from numpy import sqrt, load
 from utils import show_warning, subdivide_path, timeit
 from ui import get_pathfinding_endpoints
+from typing import List, Tuple, Union
 
 
 class Node:
-    def __init__(self, x, y, parent=None):
+    def __init__(self, x: int, y: int, parent: "Node" = None) -> None:
         self.x = x
         self.y = y
 
@@ -15,43 +16,44 @@ class Node:
         self.height = GRID[y][x][2]
         self.slope = GRID[y][x][3]
 
-        self.g = 0
-        self.h = 0
-        self.f = 0
+        self.g: float = 0
+        self.h: float = 0
+        self.f: float = 0
 
         if parent is not None:
             self.g = parent.new_g(self)
             self.h = self.heuristic(goal_node)
             self.f = self.g + self.h
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Node") -> bool:
         return self.f < other.f
 
-    def heuristic(self, other):
+    def heuristic(self, other: "Node") -> float:
         return self.dist_btw(other)
 
-    def dist_btw(self, other):
-        return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.h - other.h) ** 2)
+    def dist_btw(self, other: "Node") -> float:
+        return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.height - other.height) ** 2)
 
-    def new_g(self, other) -> float:
+    def new_g(self, other: "Node") -> float:
         # constant values:
-        k_dist = 1
-        k_slope = 0.25
+        k_dist: float = 1
+        k_slope: float = 0.25
 
-        slope_penalty = 0  # we could perhaps allow the user to change how much they want to penalize slopes #
+        slope_penalty: float = 0  # we could perhaps allow the user to change how much they want to penalize slopes #
         if other.slope >= 15:
             slope_penalty = 25
         elif other.slope >= 8:
             slope_penalty = 5  # see above to do
 
-        dist = self.dist_btw(other)
-        slope = abs(self.slope - other.slope)
+        dist: float = self.dist_btw(other)
+        slope: float = abs(self.slope - other.slope)
 
-        eqn = k_dist * dist + k_slope * slope + slope_penalty
+        eqn: float = k_dist * dist + k_slope * slope + slope_penalty
         return eqn
 
 
-def is_valid_checkpoint(point):
+# noinspection PyPep8Naming
+def is_valid_checkpoint(point: tuple[int, int]) -> bool:
     x, y = point[0], point[1]
     height = GRID[x][y][8]
     allowance = (height + 275)
@@ -59,16 +61,16 @@ def is_valid_checkpoint(point):
     for i in range(y, SIZE):
         if GRID[x][i][8] > allowance:
             return False
-
     return True
-
 
 # Helper to break out of all loops at once
 class BreakIt(Exception):
     pass
 
+# noinspection PyGlobalUndefined
+# noinspection PyPep8Naming
 @timeit
-def generate_comm_path(comm_path):
+def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int, int, int]], List[Tuple[int, int]]]:
     for index, point in enumerate(comm_path):
 
         print(f"\rgenerating communication checkpoints: {round(index / len(comm_path) * 100, 2)}% complete", end="")
@@ -106,9 +108,10 @@ def generate_comm_path(comm_path):
     print("\n")
 
     # Now we generate a new path.
-    final_path = []
+    final_path: List[Tuple[int, int, int]] = []
     for i in range(len(comm_path) - 1):
-        (start_x, start_y), (goal_x, goal_y) = (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
+        (start_x, start_y), (goal_x, goal_y) = \
+            (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
         global start_node
         global goal_node
         start_node = Node(start_x, start_y)
@@ -121,8 +124,8 @@ def generate_comm_path(comm_path):
 
 
 # noinspection SpellCheckingInspection
-def astar():
-    nodes = []
+def astar() -> Union[List[Tuple[int, int, int]], None]:
+    nodes: List[Node] = []
 
     heapq.heappush(nodes, start_node)
     visited = set()
@@ -154,30 +157,33 @@ def astar():
     return None
 
 
-def update_image(image_path: str, mvmt_path: list, comm_path: list):
-    path = image_path
-    img = Image.open(path)
+# noinspection SpellCheckingInspection
+def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]):
+    path: str = image_path
+    img: Image.Image = Image.open(path)
 
-    print('updating path image')
+    print("updating path image")
     for i in range(len(mvmt_path)):
-        color = (255, 0, 0)
-        x = mvmt_path[i][0]
-        y = mvmt_path[i][1]
+        color: tuple = (255, 0, 0)
+        x: int = mvmt_path[i][0]
+        y: int = mvmt_path[i][1]
         img.putpixel((x, y), color)
 
     if comm_path is not None:
         for i in range(len(comm_path)):
-            draw = ImageDraw.Draw(img)
-            color = (0, 255, 0)
-            radius = 3
+            draw: ImageDraw.ImageDraw = ImageDraw.Draw(img)
+            color: tuple = (0, 255, 0)
+            radius: int = 3
             draw.ellipse((comm_path[i][0] - radius, comm_path[i][1] - radius,
                           comm_path[i][0] + radius, comm_path[i][1] + radius), fill=color)
 
     img.save(save.astar_path_image)
 
 
-def run_astar(sv):
-    print('finding a suitable lunar path')
+# noinspection SpellCheckingInspection
+# noinspection PyGlobalUndefined
+def run_astar(sv) -> None:
+    print("finding a suitable lunar path")
     global save
     save = sv
 
@@ -188,16 +194,13 @@ def run_astar(sv):
 
     (start_x, start_y), (goal_x, goal_y), checkpoints = get_pathfinding_endpoints(save)
 
-    # For Future Testing
-    #(start_x, start_y), (goal_x, goal_y), checkpoints = (306, 1013), (669, 273), True
-
     global start_node
     global goal_node
     start_node = Node(start_x, start_y)
     goal_node = Node(goal_x, goal_y)
 
     final_path = astar()
-    print('initial path generated')
+    print("initial path generated")
     sub_10_path = None
 
     if checkpoints:
@@ -218,6 +221,4 @@ def run_astar(sv):
 
 if __name__ == "__main__":
     pass
-    #start_node: Node
-    #goal_node: Node
-    #run_astar()
+
