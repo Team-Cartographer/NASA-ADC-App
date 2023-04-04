@@ -251,6 +251,7 @@ def new_site_name() -> str:
                 window.close()
                 return name
 
+            check -= 1
             window.reappear()
 
 
