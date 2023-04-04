@@ -150,7 +150,7 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
     path: str = image_path
     img: Image.Image = Image.open(path)
 
-    print('updating path image')
+    print("updating path image")
     for i in range(len(mvmt_path)):
         color: tuple = (255, 0, 0)
         x: int = mvmt_path[i][0]
@@ -169,7 +169,7 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
 
 
 def run_astar(sv) -> None:
-    print('finding a suitable lunar path')
+    print("finding a suitable lunar path")
     global save
     save = sv
 
@@ -189,7 +189,7 @@ def run_astar(sv) -> None:
     goal_node = Node(goal_x, goal_y)
 
     final_path = astar()
-    print('initial path generated')
+    print("initial path generated")
     sub_10_path = None
 
     if checkpoints:
