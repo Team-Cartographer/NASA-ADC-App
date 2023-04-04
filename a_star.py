@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 import heapq
 from numpy import sqrt, load
-from utils import show_warning, subdivide_path, height_from_rect
+from utils import show_warning, subdivide_path, timeit
 from ui import get_pathfinding_endpoints
 
 
@@ -53,22 +53,21 @@ class Node:
 
 def is_valid_checkpoint(point):
     x, y = point[0], point[1]
-    height = height_from_rect(x, y, GRID)
-    # azi, elev = get_azi_elev(x, y, GRID)
-
-    ALLOWANCE = 275  # Change this to change the stringency of checkpoint validity
+    height = GRID[x][y][8]
+    allowance = (height + 275)
 
     for i in range(y, SIZE):
-        # TODO Swap this with Elevation to be Rubric-Accurate
-        # _, check_elev = get_azi_elev(x, i, GRID)
-        # if check_elev > elev:
-        #    return False
-        if height_from_rect(x, i, GRID) > (height + ALLOWANCE):
+        if GRID[x][i][8] > allowance:
             return False
 
     return True
 
 
+# Helper to break out of all loops at once
+class BreakIt(Exception):
+    pass
+
+@timeit
 def generate_comm_path(comm_path):
     for index, point in enumerate(comm_path):
 
@@ -80,21 +79,29 @@ def generate_comm_path(comm_path):
             continue
 
         # Define the bounds of the square, using max/min as point validity fail safes.
-        SEARCH_AREA = 150
-        left_bound = max(0, x - SEARCH_AREA)
-        right_bound = min(SIZE - 1, x + SEARCH_AREA)
-        top_bound = max(0, y - SEARCH_AREA)
-        bottom_bound = min(SIZE - 1, y + SEARCH_AREA)
+        search_area = 10
+        left_bound = max(0, x - search_area)
+        right_bound = min(SIZE - 1, x + search_area)
+        top_bound = max(0, y)
+        bottom_bound = min(SIZE - 1, y + search_area)
+        try:
+            for i in range(4):
+                for i in range(left_bound, right_bound + 1):
+                    for j in range(top_bound, bottom_bound + 1):
+                        test_point = (i, j)
+                        #print(test_point)
+                        if is_valid_checkpoint(test_point):
+                            comm_path[index] = test_point
+                            raise BreakIt
 
-        # Loop through each square per each checkpoint. If it's valid, then replace it.
-        for i in range(left_bound, right_bound + 1):
-            for j in range(top_bound, bottom_bound + 1):
-                test_point = (i, j)
-                if is_valid_checkpoint(test_point):
-                    comm_path[index] = test_point
-                # else:
-                #    show_warning("Pathfinding Error", "No valid path with checkpoints was found.")
-                #    quit(1)
+                old_search_area = search_area
+                search_area *= 2
+                left_bound = max(0, x - search_area)
+                right_bound = min(SIZE - 1, x + search_area)
+                top_bound = max(0, y + old_search_area)
+                bottom_bound = min(SIZE - 1, x + old_search_area + search_area)
+        except BreakIt:
+            pass
 
     print("\n")
 
@@ -211,7 +218,6 @@ def run_astar(sv):
 
 if __name__ == "__main__":
     pass
-
     #start_node: Node
     #goal_node: Node
     #run_astar()

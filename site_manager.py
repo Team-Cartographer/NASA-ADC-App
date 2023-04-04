@@ -7,7 +7,6 @@ from a_star import run_astar
 from subprocess import run
 import sys
 from time import time
-import cProfile as cpf
 
 
 class Save:
@@ -102,7 +101,7 @@ def run_smpy():
     print(f'loading {save.site_name} visualization')
 
     result = run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True, capture_output=True)
-    #print(result.stdout)
+    print(result.stdout)
 
     print(f'cleared temporary files and paths')
     print(f'ended {save.site_name} visualization.')
@@ -114,9 +113,7 @@ def run_smpy():
 
 
 if __name__ == '__main__':
-    with cpf.Profile() as pr:
-        while True:
-            reset = run_smpy()
-            if not reset:
-                break
-    #pr.print_stats()
+    while True:
+        reset = run_smpy()
+        if not reset:
+            break
