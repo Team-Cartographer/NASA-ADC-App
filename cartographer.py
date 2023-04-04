@@ -3,10 +3,9 @@ from concurrent.futures import ProcessPoolExecutor
 from PIL import Image
 from utils import resize
 import seaborn as sb
-from numpy import load
+import numpy as np
 import matplotlib.pyplot as plt
 from time import time
-import random
 
 
 Image.MAX_IMAGE_PIXELS = None
@@ -32,21 +31,17 @@ def sb_heatmap(arr, cmap, path):
 def create_surface_texture(save, slopes):
     print(f'creating surface texture')
     start = time()
-    texture = Image.new("RGBA", (save.size, save.size))
 
-    for y in range(len(slopes)):
-        for x in range(len(slopes[y])):
-            color = 255
+    random_array = np.random.uniform(low=2, high=3, size=slopes.shape)
 
-            for i in range(int(slopes[y][x])):
-                color -= random.randint(2, 5)
+    new_array = 255 - (slopes * random_array)
+    new_array[new_array < 0] = 0
 
-            if color < 0:
-                color = 0
+    # Multiplying by 3 gives us (color, color, color) [Not exactly but it kind of represents the RGB values]
+    image_array = np.stack([new_array] * 3, axis=-1)
+    texture = Image.fromarray(np.uint8(image_array), mode='RGB')
 
-            texture.putpixel((x, y), (color, color, color))
-
-    print(f'{save.moon_surface_texture_image} created in {round(time()-start, 2)}s')
+    print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
     texture.save(save.moon_surface_texture_image)
 
 
@@ -54,7 +49,7 @@ def create_surface_texture(save, slopes):
 # Creates RAW_Heightmap, Slopemap, and Heightkey with Threading
 def draw_maps(save):
 
-    parsed_arr = load(save.data_file)
+    parsed_arr = np.load(save.data_file)
     heights = parsed_arr[:, :, 8]
     slopes = parsed_arr[:, :, 3]
 
