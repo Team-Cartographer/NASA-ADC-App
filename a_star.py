@@ -87,7 +87,7 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         top_bound = max(0, y)
         bottom_bound = min(SIZE - 1, y + search_area)
         try:
-            for i in range(4):
+            for j in range(4): #TODO Fix iterative searches
                 for i in range(left_bound, right_bound + 1):
                     for j in range(top_bound, bottom_bound + 1):
                         test_point = (i, j)
