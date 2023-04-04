@@ -16,9 +16,8 @@ class Save:
             self.folder_path = folder_path
             self.site_name = os.path.basename(folder_path).split('_')[-1].strip()  # Parse name from <folder_path>
         else:
-            site_name = ui.new_site_name()
-            self.folder_path = folder_path + "/Save_" + site_name
-            self.site_name = site_name
+            self.site_name = ui.new_site_name()
+            self.folder_path = folder_path + "/Save_" + self.site_name
             self.size = None
 
         self.data_folder = self.folder_path + "/Data"
@@ -33,8 +32,8 @@ class Save:
         self.raw_heightmap_image = self.images_folder + "/RAW_heightmap.png"
         self.slopemap_image = self.images_folder + "/slopemap.png"
         self.processed_heightmap = self.images_folder + "/processed_heightmap.png"
-        self.info_json = self.data_folder + '/info.json'
-        self.data_file = self.data_folder + f"/AStarRawData.npy"
+        self.info_json = self.data_folder + "/info.json"
+        self.data_file = self.data_folder + "/AStarRawData.npy"
         self.latitude_path, self.longitude_path, self.height_path, self.slope_path = None, None, None, None
 
         if load:
