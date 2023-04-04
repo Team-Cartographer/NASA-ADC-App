@@ -211,7 +211,7 @@ def on_start():
                 window.close()
                 return path
             else:
-                show_error("load error", "you done goofed")
+                show_error("Load Error", "Something went wrong, and we aren't sure what. Please contact a dev.")
 
         if event == "-New-":
             window.close()
@@ -237,8 +237,22 @@ def new_site_name() -> str:
             exit()
 
         elif event == "Submit":
-            window.close()
-            return values["-SaveNameIN-"]
+            name = values["-SaveNameIN-"]
+            invalids = r'#%&{}\$!:@;<>*?/+`|=' + '\"\''
+            check = 0
+
+            for letter in name:
+                if letter in invalids:
+                    show_error("Save Error", f"Invalid File Name, Please remove: {letter}")
+                    check = 1
+                    break
+
+            if not check == 1:
+                window.close()
+                return name
+
+            window.reappear()
+
 
 
 if __name__ == "__main__":

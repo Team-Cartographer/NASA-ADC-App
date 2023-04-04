@@ -7,6 +7,7 @@ from a_star import run_astar
 from subprocess import run
 import sys
 from time import time
+import cProfile as cpf
 
 
 class Save:
@@ -88,10 +89,10 @@ def check_save():
     else:
         save_ = Save(folder_path=save_folder, load=False)
 
-    if save_ is None:
-        exit(1)
-    else:
+    if save_:
         return save_
+
+    exit(1)
 
 
 def run_smpy():
@@ -105,17 +106,16 @@ def run_smpy():
     print(f'cleared temporary files and paths')
     print(f'ended {save.site_name} visualization.')
 
-    if result.returncode == 2:
-        return True
-    else:
+    if not result.returncode == 2:
         return False
+
+    return True
 
 
 if __name__ == '__main__':
-    # rerun the file until the user wants to quit
-    while True:
-        reset = run_smpy()
-        if reset:
-            continue
-        else:
-            break
+    with cpf.Profile() as pr:
+        while True:
+            reset = run_smpy()
+            if not reset:
+                break
+    #pr.print_stats()
