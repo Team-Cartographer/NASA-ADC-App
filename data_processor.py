@@ -11,6 +11,7 @@ EARTH_Z = -42100 * 1000
 EARTH_LAT = -0.11609607854640751
 EARTH_LONG = 1.5707963267948966
 
+
 @timeit
 def process_data(save_):
     print('processing data')
@@ -39,11 +40,8 @@ def process_data(save_):
     formatted_data = format_array(processed_data, save_.size)
     save(save_.data_file, formatted_data)
 
-    #formatted_data = ndarray2list(formatted_data)
 
-    #push_to_json(save.astar_json, formatted_data)
-
-
+# noinspection SpellCheckingInspection
 def load_file(file_path, delimiter=',', dtype=float):
     return loadtxt(file_path, delimiter=delimiter, dtype=dtype, encoding='utf-8')
 
@@ -89,6 +87,7 @@ def calculate_azimuth(latitude, longitude):
     return degrees(arctan2(c1, c2))
 
 
+# noinspection SpellCheckingInspection
 @timeit
 def format_array(array, size):
     num_arrays = len(array) // size + (1 if len(array) % size > 0 else 0)
@@ -107,11 +106,12 @@ def format_array(array, size):
     return formatted_array
 
 
+# noinspection SpellCheckingInspection
 @timeit
 def ndarray2list(array):
     return [arr.tolist() for arr in array]
 
 
 if __name__ == "__main__":
-    #process_data()
+    # process_data()
     pass
