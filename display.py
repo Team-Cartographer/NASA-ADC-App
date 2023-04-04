@@ -1,3 +1,5 @@
+import sys
+
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
@@ -9,6 +11,7 @@ from a_star import run_astar
 from shutil import move, copytree, rmtree
 from site_manager import Save
 from atexit import register
+
 
 
 # Window Declarations and Formatting --------------
@@ -31,9 +34,7 @@ def cleanup():
     except FileNotFoundError:
         pass
 
-
 register(cleanup)
-
 
 # Display Specific Constants --------------
 Y_HEIGHT : int = 128  # Default Value
@@ -43,18 +44,15 @@ PLAYER_SIZE : int = 12770
 RESET_LOC : tuple[int, int, int] = (0, 400, 0)  # Default PLAYER Positional Value
 VOLUME : int = 0.15
 
-
 # Load the Data -----------------
 try:
     a_star_data = load(save.data_file)
     info_data = load_json(save.info_json)
 except FileNotFoundError:
-    show_error("Display Error", "Incorrect Save Selected!")
+    show_error("Display Error", "Selected Save is either Incomplete or Nonexistent!")
     exit(1)
 
-
 # Declaration of Entities --------------
-
 # FirstPersonController Ground Plane
 ground_player = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
