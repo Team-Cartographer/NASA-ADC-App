@@ -18,7 +18,7 @@ window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
-save = Save(sys.argv[1], bool(sys.argv[2]))
+save :Save = Save(sys.argv[1], bool(sys.argv[2]))
 
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
 copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
@@ -36,12 +36,12 @@ register(cleanup)
 
 
 # Display Specific Constants --------------
-Y_HEIGHT = 128  # Default Value
-SIZE_CONSTANT = save.size
-EDITOR_SIZE = 3831
-PLAYER_SIZE = 12770
-RESET_LOC = (0, 400, 0)  # Default PLAYER Positional Value
-VOLUME = 0.15
+Y_HEIGHT : int = 128  # Default Value
+SIZE_CONSTANT : int= save.size
+EDITOR_SIZE : int = 3831
+PLAYER_SIZE : int = 12770
+RESET_LOC : tuple[int, int, int] = (0, 400, 0)  # Default PLAYER Positional Value
+VOLUME : int = 0.15
 
 
 # Load the Data -----------------
@@ -162,10 +162,10 @@ player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
 
 # Music Functionality --------------
-track_list = ['assets/Night_Sky-Petter_Amland.mp3',
-              'assets/Buffalo-Petter_Amland.mp3.mp3',
-              'assets/Seraph-Petter_Amland.mp3']
-menu_track_list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
+track_list : list = ['assets/Night_Sky-Petter_Amland.mp3',
+                     'assets/Buffalo-Petter_Amland.mp3.mp3',
+                     'assets/Seraph-Petter_Amland.mp3']
+menu_track_list : list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
 
 run_music = Audio(
     choice(track_list),  # Change this for different tracks.
@@ -309,7 +309,7 @@ def update():
     run_music.volume = VOLUME
 
     # Map Failsafe
-    bound = 6190
+    bound : int = 6190
     if -bound > player.position.x or player.position.x > bound or \
             -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
