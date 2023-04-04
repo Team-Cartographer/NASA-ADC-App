@@ -9,6 +9,7 @@ from typing import List, Tuple, Union
 GRID = load("pathfinding/grid.npy")
 SIZE = len(GRID)
 
+
 class Node:
     def __init__(self, x: int, y: int, parent: "Node" = None) -> None:
         self.x = x
@@ -55,6 +56,7 @@ class Node:
         return eqn
 
 
+# noinspection PyPep8Naming
 def is_valid_checkpoint(point: tuple[int, int]) -> bool:
     x, y = point[0], point[1]
     height = height_from_rect(x, y, GRID)
@@ -68,6 +70,8 @@ def is_valid_checkpoint(point: tuple[int, int]) -> bool:
     return True
 
 
+# noinspection PyGlobalUndefined
+# noinspection PyPep8Naming
 def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int, int, int]], List[Tuple[int, int]]]:
     for index, point in enumerate(comm_path):
 
@@ -100,7 +104,8 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
     # Now we generate a new path.
     final_path: List[Tuple[int, int, int]] = []
     for i in range(len(comm_path) - 1):
-        (start_x, start_y), (goal_x, goal_y) = (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
+        (start_x, start_y), (goal_x, goal_y) = \
+            (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
         global start_node
         global goal_node
         start_node = Node(start_x, start_y)
@@ -146,6 +151,7 @@ def astar() -> Union[List[Tuple[int, int, int]], None]:
     return None
 
 
+# noinspection SpellCheckingInspection
 def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]):
     path: str = image_path
     img: Image.Image = Image.open(path)
@@ -168,6 +174,8 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
     img.save(save.astar_path_image)
 
 
+# noinspection SpellCheckingInspection
+# noinspection PyGlobalUndefined
 def run_astar(sv) -> None:
     print("finding a suitable lunar path")
     global save
@@ -210,7 +218,3 @@ def run_astar(sv) -> None:
 
 if __name__ == "__main__":
     pass
-
-    # start_node: Node
-    # goal_node: Node
-    # run_astar()
