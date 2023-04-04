@@ -55,7 +55,6 @@ class Node:
 # noinspection PyPep8Naming
 def is_valid_checkpoint(point: tuple[int, int]) -> bool:
     x, y = point[0], point[1]
-    height = GRID[x][y][8]
     allowance = (height + 275)
 
     for i in range(y, SIZE):
