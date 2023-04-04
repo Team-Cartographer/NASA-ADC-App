@@ -32,6 +32,29 @@ def create_surface_texture(save, slopes):
     print(f'creating surface texture')
     start = time()
 
+    max_value_index = np.unravel_index(slopes.argmax(), slopes.shape)
+    max_value = slopes[max_value_index[0]][max_value_index[1]]
+
+    colors = np.full(slopes.shape, 255.0)
+    for i in range(int(max_value)):
+        random_array = np.random.uniform(low=2, high=5, size=slopes.shape)
+
+        slopes -= 1
+        non_zero_mask = slopes > 0
+        colors = np.where(non_zero_mask, colors - random_array, colors)
+
+    colors[colors < 0] = 0
+
+    # Multiplying by 3 gives us (color, color, color) [Not exactly but it kind of represents the RGB values]
+    image_array = np.stack([colors] * 3, axis=-1)
+    texture = Image.fromarray(np.uint8(image_array), mode='RGB')
+
+    print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
+    texture.save(save.moon_surface_texture_image)
+    '''
+    print(f'creating surface texture')
+    start = time()
+
     random_array = np.random.uniform(low=2, high=3, size=slopes.shape)
 
     new_array = 255 - (slopes * random_array)
@@ -43,6 +66,7 @@ def create_surface_texture(save, slopes):
 
     print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
     texture.save(save.moon_surface_texture_image)
+    '''
 
 
 # noinspection SpellCheckingInspection
