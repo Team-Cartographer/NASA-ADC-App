@@ -53,8 +53,7 @@ class Node:
 
 
 # noinspection PyPep8Naming
-def is_valid_checkpoint(point: tuple[int, int]) -> bool:
-    x, y = point[0], point[1]
+def is_valid_checkpoint(x:int, y:int) -> bool:
     height = GRID[x][y][8]
     allowance = (height + 275)
 
@@ -72,27 +71,26 @@ class BreakIt(Exception):
 @timeit
 def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int, int, int]], List[Tuple[int, int]]]:
     for index, point in enumerate(comm_path):
-
         print(f"\rgenerating communication checkpoints: {round(index / len(comm_path) * 100, 2)}% complete", end="")
 
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
-        if is_valid_checkpoint(point):
+        if is_valid_checkpoint(x, y):
             continue
 
         # Define the bounds of the square, using max/min as point validity fail safes.
-        search_area = 10
+        search_area = 15
         left_bound = max(0, x - search_area)
         right_bound = min(SIZE - 1, x + search_area)
         top_bound = max(0, y)
         bottom_bound = min(SIZE - 1, y + search_area)
         try:
-            for j in range(4): #TODO Fix iterative searches
-                for i in range(left_bound, right_bound + 1):
-                    for j in range(top_bound, bottom_bound + 1):
-                        test_point = (i, j)
+            for k in range(4): # TODO Fix iterative searches
+                for x_ in range(left_bound, right_bound + 1):
+                    for y_ in range(top_bound, bottom_bound + 1):
+                        test_point = (x_, y_)
                         #print(test_point)
-                        if is_valid_checkpoint(test_point):
+                        if is_valid_checkpoint(x_, y_):
                             comm_path[index] = test_point
                             raise BreakIt
 
@@ -120,6 +118,7 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         path_btw = astar()
         final_path.extend(path_btw)
 
+    #print(comm_path)
     return final_path, comm_path
 
 
