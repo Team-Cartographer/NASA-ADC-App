@@ -19,7 +19,7 @@ window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
-save :Save = Save(sys.argv[1], bool(sys.argv[2]))
+save: Save = Save(sys.argv[1], bool(sys.argv[2]))
 
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
 copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
@@ -35,12 +35,12 @@ def cleanup():
 register(cleanup)
 
 # Display Specific Constants --------------
-Y_HEIGHT : int = 128  # Default Value
-SIZE_CONSTANT : int= save.size
-EDITOR_SIZE : int = 3831
-PLAYER_SIZE : int = 12770
-RESET_LOC : tuple[int, int, int] = (0, 400, 0)  # Default PLAYER Positional Value
-VOLUME : int = 0.15
+Y_HEIGHT: int = 128  # Default Value
+SIZE_CONSTANT: int= save.size
+EDITOR_SIZE: int = 3831
+PLAYER_SIZE: int = 12770
+RESET_LOC: tuple[int, int, int] = (0, 400, 0)  # Default PLAYER Positional Value
+VOLUME: float = 0.8
 
 # Load the Data -----------------
 try:
@@ -483,7 +483,7 @@ repath_button = Button(text="Re-Run Pathfinding", color=color.gray, highlight_co
                        scale=(0.25, 0.06), x=0, y=-0.08, enabled=False, on_click=repath_init)
 new_site_button = Button(text="Switch Lunar Site", color=color.gray, highlight_color=color.dark_gray,
                          enabled=False, on_click=on_new_site_quit, scale=(0.25, 0.06), x=0, y=-0.16)
-volume_slider = ThinSlider(text='Volume', value=0.15, dynamic=True,
+volume_slider = ThinSlider(text='Volume', value=0.4, dynamic=True,
                            on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.27)
 sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True,
                          on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.35)

@@ -94,7 +94,6 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
                 for x_ in range(left_bound, right_bound):
                     for y_ in range(top_bound, bottom_bound):
                         test_point = (x_, y_)
-                        # print(test_point)
                         if is_valid_checkpoint(x_, y_):
                             comm_path[index] = test_point
                             raise BreakIt
@@ -105,8 +104,6 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
                 right_bound = min(SIZE - 1, x + search_area)
                 top_bound = max(0, y + old_search_area)
                 bottom_bound = min(SIZE - 1, x + old_search_area + search_area)
-                print("OLD, SEARCH, LEFT, RIGHT, TOP, BOTTOM ")
-                print(f"{old_search_area}, {search_area}, {left_bound}, {right_bound}, {top_bound}, {bottom_bound}")
         except BreakIt:
             pass
 
@@ -126,7 +123,6 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         path_btw = astar()
         final_path.extend(path_btw)
 
-    print(comm_path)
     return final_path, comm_path
 
 
