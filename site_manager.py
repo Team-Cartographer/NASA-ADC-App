@@ -101,7 +101,7 @@ def run_smpy():
     print(f'loading {save.site_name} visualization')
 
     result = run([sys.executable, 'display.py'] + [save.folder_path, str(True)], text=True, capture_output=True)
-    #print(result.stdout)
+    print(result.stdout)
 
     print(f'cleared temporary files and paths')
     print(f'ended {save.site_name} visualization.')

@@ -13,8 +13,8 @@ class Node:
 
         self.parent = parent
 
-        self.height = GRID[y][x][2]
-        self.slope = GRID[y][x][3]
+        self.height = GRID[x][y][8]
+        self.slope = GRID[x][y][3]
 
         self.g: float = 0
         self.h: float = 0
@@ -41,7 +41,7 @@ class Node:
 
         slope_penalty: float = 0  # we could perhaps allow the user to change how much they want to penalize slopes #
         if other.slope >= 15:
-            slope_penalty = 25
+            slope_penalty = 100
         elif other.slope >= 8:
             slope_penalty = 5  # see above to do
 
@@ -58,7 +58,8 @@ def is_valid_checkpoint(x:int, y:int) -> bool:
     allowance = (height + 275)
 
     for i in range(y, SIZE):
-        if GRID[x][i][8] > allowance:
+        # check both height and slope
+        if GRID[x][i][8] > allowance and GRID[x][y][3] > 15:
             return False
     return True
 
@@ -76,6 +77,10 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
         if is_valid_checkpoint(x, y):
+            if x >= SIZE:
+                comm_path[index] = (SIZE-2, y)
+            if y >= SIZE:
+                comm_path[index] = (x, SIZE-2)
             continue
 
         # Define the bounds of the square, using max/min as point validity fail safes.
@@ -85,11 +90,11 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         top_bound = max(0, y)
         bottom_bound = min(SIZE - 1, y + search_area)
         try:
-            for k in range(4): # TODO Fix iterative searches
-                for x_ in range(left_bound, right_bound + 1):
-                    for y_ in range(top_bound, bottom_bound + 1):
+            for k in range(10):
+                for x_ in range(left_bound, right_bound):
+                    for y_ in range(top_bound, bottom_bound):
                         test_point = (x_, y_)
-                        #print(test_point)
+                        # print(test_point)
                         if is_valid_checkpoint(x_, y_):
                             comm_path[index] = test_point
                             raise BreakIt
@@ -100,8 +105,11 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
                 right_bound = min(SIZE - 1, x + search_area)
                 top_bound = max(0, y + old_search_area)
                 bottom_bound = min(SIZE - 1, x + old_search_area + search_area)
+                print("OLD, SEARCH, LEFT, RIGHT, TOP, BOTTOM ")
+                print(f"{old_search_area}, {search_area}, {left_bound}, {right_bound}, {top_bound}, {bottom_bound}")
         except BreakIt:
             pass
+
 
     print("\n")
 
@@ -118,7 +126,7 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         path_btw = astar()
         final_path.extend(path_btw)
 
-    #print(comm_path)
+    print(comm_path)
     return final_path, comm_path
 
 
@@ -161,9 +169,15 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
     path: str = image_path
     img: Image.Image = Image.open(path)
 
+    for i in range(len(mvmt_path)):
+        if mvmt_path[i][0] >= SIZE:
+            mvmt_path[i][0] = SIZE - 5
+        if mvmt_path[i][1] >= SIZE:
+            mvmt_path[i][1] = SIZE - 5
+
     print("updating path image")
     for i in range(len(mvmt_path)):
-        color: tuple = (255, 0, 0)
+        color: tuple = (0, 0, 255)
         x: int = mvmt_path[i][0]
         y: int = mvmt_path[i][1]
         img.putpixel((x, y), color)
@@ -185,9 +199,15 @@ def run_astar(sv) -> None:
     print("finding a suitable lunar path")
     global save
     save = sv
+    #img = Image.open(save.astar_path_image)
 
     global SIZE
     global GRID
+
+    #if not img.size[0] == img.size[1]:
+    #    show_error("Pathfinding Error", "Image Processed Incorrectly")
+    #    exit(1)
+
     SIZE = save.size
     GRID = load(save.data_file)
 
