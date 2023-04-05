@@ -3,6 +3,7 @@ from __future__ import annotations
 import PySimpleGUI as sg
 from utils import show_error, are_you_sure
 from os import getcwd, listdir
+from sys import exit
 
 
 def path_fetcher():
@@ -162,9 +163,11 @@ def load_site() -> tuple[str | None, int]:
     save_folder = getcwd() + "/Saves"
     files = listdir(save_folder)
 
-    if files is None:
+    if len(files) == 0:
         if are_you_sure("Save Loading Error", "No previous saves exist. Press OK to make a new save"):
             return None, 0
+        else:
+            exit(0)
 
     parsed_sites = []
     for file in files:
