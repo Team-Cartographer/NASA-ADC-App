@@ -15,10 +15,10 @@ if not path.exists(venv_folder):
 
     start = time()
 
-    print("creating virtual environment")
+    print("Creating virtual environment")
     venv.create("subprocess_venv", with_pip=True)
 
-    print("installing dependencies...")
+    print("Installing dependencies...")
 
     # Activate the virtual environment
     activate_script = path.join(venv_folder, "Scripts", "activate.bat")
@@ -33,13 +33,13 @@ if not path.exists(venv_folder):
     print(f"venv creation completed in {round(time()-start, 2)}s")
 
 
-print("running application")
+print("\nRunning application")
 
 # runs site_manager.py
 program_path = getcwd() + "/site_manager.py"
 program = run([sys.executable, program_path])
 
-print("deactivating")
+print("\nDeactivating")
 
 # end
 run("deactivate", shell=True, check=True)
