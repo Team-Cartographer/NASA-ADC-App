@@ -125,15 +125,14 @@ credits = Entity(
     )
 
 
-# Temporarily Disabled
-# # Earth Entity (Scales to Player Position)
-# earth = Entity(
-#    model='sphere',
-#    scale=(500, 500, 500),
-#    position=(0, 600, 1000),
-#    texture='earth_texture.jpg',
-#    enabled=True
-#    )
+# Earth Entity (Scales to Player Position)
+earth = Entity(
+   model='sphere',
+   scale=(500, 500, 500),
+   position=(0, 600, 1000),
+   texture='earth_texture.jpg',
+   enabled=False
+   )
 
 
 # Information Textboxes  -------------
@@ -288,6 +287,7 @@ def input(key):
         return_button.enable()
         pause_music.play()
         credits.disable()
+        earth.disable()
         run_music.stop(destroy=False)
 
 
@@ -381,6 +381,7 @@ def start_game():
     volume_slider.disable()
     sens_slider.disable()
     new_site_button.disable()
+    earth.enable()
     play_run_music()
     pause_music.stop(destroy=False)
 
@@ -404,6 +405,7 @@ def on_unpause():
     minimap.enable()
     mini_dot.enable()
     t_pos.enable()
+    earth.enable()
     return_button.disable()
     pause_music.stop(destroy=False)
     play_run_music()
@@ -424,6 +426,7 @@ def main_menu_returner():
     pause_music.play()
     volume_slider.enable()
     sens_slider.enable()
+    earth.disable()
     new_site_button.enable()
 
 
