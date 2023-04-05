@@ -1,5 +1,3 @@
-import sys
-
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
@@ -15,7 +13,7 @@ from atexit import register
 
 
 # Window Declarations and Formatting --------------
-app = Ursina()#fullscreen=True)
+app = Ursina()
 window.set_title('Team Cartographer\'s ADC Application')
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
