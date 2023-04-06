@@ -195,15 +195,9 @@ def run_astar(sv) -> None:
     print("finding a suitable lunar path")
     global save
     save = sv
-    #img = Image.open(save.astar_path_image)
 
     global SIZE
     global GRID
-
-    #if not img.size[0] == img.size[1]:
-    #    show_error("Pathfinding Error", "Image Processed Incorrectly")
-    #    exit(1)
-
     SIZE = save.size
     GRID = load(save.data_file)
 
