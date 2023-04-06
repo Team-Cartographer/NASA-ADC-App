@@ -1,4 +1,5 @@
 from ursina import *
+from ursina import Entity
 from ursina.prefabs.first_person_controller import FirstPersonController
 from utils import get_azi_elev, \
     latitude_from_rect, longitude_from_rect, \
@@ -40,7 +41,7 @@ register(cleanup)
 
 # Display Specific Constants --------------
 Y_HEIGHT: int = 128  # Default Value
-SIZE_CONSTANT: int= save.size
+SIZE_CONSTANT: int = save.size
 EDITOR_SIZE: int = 3831
 PLAYER_SIZE: int = 12770
 RESET_LOC: tuple[int, int, int] = (0, 400, 0)  # Default PLAYER Positional Value
@@ -123,7 +124,7 @@ color_key = Entity(
     enabled=False
 )
 
-credits = Entity(
+credits: Entity = Entity(
     parent=camera.ui,
     model='quad',
     scale=(1.75, 1),
@@ -136,7 +137,7 @@ credits = Entity(
 earth = Entity(
    model='sphere',
    scale=(500, 500, 500),
-   position=(0, EARTH_HEIGHT, -10000),
+   position=(0, EARTH_HEIGHT, -11000),
    texture='earth_texture.png',
    enabled=False,
    shader=lit_with_shadows_shader
@@ -224,10 +225,6 @@ def input(key):
     if key == 'r':
         player.set_position(RESET_LOC)
 
-    # Disable Earth
-    if key == 'e':
-        earth.enabled = not earth.enabled
-
     # Slopemap Toggle
     if key == '4':
         ground_player.texture = 'Images/slopemap.png'
@@ -265,10 +262,7 @@ def input(key):
         ground_player.enabled = not ground_player.enabled
         ground_perspective.enabled = not ground_perspective.enabled
         view_cam_player_loc.enabled = not view_cam_player_loc.enabled
-        if view_cam_player_loc.enabled:
-            earth.set_position((0, 320, -4950))
-        else:
-            earth.set_position((0, EARTH_HEIGHT, -10000))
+        earth.enabled = not earth.enabled
 
     # Quit App
     if held_keys['left shift', 'q']:
@@ -323,7 +317,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 10 # Mesh Y Scaling
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 45 # Mesh Y Scaling
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
@@ -336,6 +330,9 @@ def update():
     ex, ez = x/(10/3), z/(10/3)
     ey = terraincast(Vec3(ex, 0, ez), ground_perspective, ec_height_vals)
     view_cam_player_loc.position = (ex, ey, ez)
+
+    # Update Earth Position
+    earth.set_position((x, EARTH_HEIGHT, z-8500))
 
     # Calculating Data
     lat = float(latitude_from_rect(nx, nz, a_star_data))
