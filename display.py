@@ -190,14 +190,9 @@ start_menu_music = Audio(
     loop=True
 )
 
-
-# TODO Add Music Switch Statement
-# hahaha -JL
 def play_run_music():
-    # run_music.clip(choice(track_list))
     t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     run_music.play()
-
 
 # Texture Reloader
 def reload_textures():
