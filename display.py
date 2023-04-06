@@ -166,10 +166,9 @@ player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
 
 # Music Functionality --------------
-track_list : list = ['assets/Night_Sky-Petter_Amland.mp3',
-                     'assets/Buffalo-Petter_Amland.mp3.mp3',
-                     'assets/Seraph-Petter_Amland.mp3']
-menu_track_list : list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
+track_list: list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amland.mp3.mp3',
+                    'assets/Seraph-Petter_Amland.mp3']
+menu_track_list: list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
 
 run_music = Audio(
     choice(track_list),  # Change this for different tracks.
@@ -318,7 +317,7 @@ def update():
     run_music.volume = VOLUME
 
     # Map Failsafe
-    bound : int = 6190
+    bound: int = 6190
     if -bound > player.position.x or player.position.x > bound or \
             -bound > player.position.z or player.position.z > bound:
         player.set_position(RESET_LOC)
