@@ -479,7 +479,8 @@ def on_new_site_quit():
     quit(2)
 
 
-t_current_site = Text(text=f"  Currently Visiting: \"{save.site_name}\"", x=-0.25, y=0.1, scale=1.25, enabled=False)
+t_current_site = Text(text=f"Currently Visiting: \"{save.site_name}\"", y=0.1, scale=1.25, enabled=False)
+t_current_site.x = (0 - t_current_site.width/2)
 launch_button = Button(text="Visualize Site",  color=color.gray, highlight_color=color.dark_gray,
                        scale=(0.25, 0.06), x=0, y=0.0, enabled=False, on_click=start_game)
 repath_button = Button(text="Re-Run Pathfinding", color=color.gray, highlight_color=color.dark_gray,
