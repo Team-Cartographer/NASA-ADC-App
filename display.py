@@ -221,6 +221,10 @@ def input(key):
     if key == 'r':
         player.set_position(RESET_LOC)
 
+    # Disable Earth
+    if key == 'e':
+        earth.enabled = not earth.enabled
+
     # Slopemap Toggle
     if key == '4':
         ground_player.texture = 'Images/slopemap.png'
