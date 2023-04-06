@@ -9,6 +9,7 @@ from a_star import run_astar
 from shutil import move, copytree, rmtree
 from site_manager import Save
 from atexit import register
+from ursina.shaders import lit_with_shadows_shader, unlit_shader
 
 
 
@@ -58,7 +59,8 @@ ground_player = Entity(
     texture='Images/moon_surface_texture.png',
     collider='mesh',
     scale=(PLAYER_SIZE, PLAYER_SIZE/10, PLAYER_SIZE),
-    enabled=False
+    enabled=False,
+    shader=unlit_shader
     )
 
 
@@ -69,7 +71,8 @@ ground_perspective = Entity(
     texture='Images/moon_surface_texture.png',
     collider='box',
     scale=(EDITOR_SIZE, EDITOR_SIZE/10, EDITOR_SIZE),
-    enabled=False
+    enabled=False,
+    shader=unlit_shader
     )
 
 
@@ -79,6 +82,7 @@ view_cam_player_loc = Entity(
     scale=(30, 30, 30),
     color=color.red,
     enabled=False,
+    shader=unlit_shader
     )
 
 
@@ -129,10 +133,15 @@ credits = Entity(
 earth = Entity(
    model='sphere',
    scale=(500, 500, 500),
-   position=(0, 600, 1000),
-   texture='earth_texture.jpg',
-   enabled=False
+   position=(0, 650, -10000),
+   texture='earth_texture.png',
+   enabled=False,
+   shader=lit_with_shadows_shader
    )
+d = DirectionalLight()
+d.look_at(Vec3(1, -1, 1))
+
+
 
 
 # Information Textboxes  -------------
@@ -256,6 +265,10 @@ def input(key):
         ground_player.enabled = not ground_player.enabled
         ground_perspective.enabled = not ground_perspective.enabled
         view_cam_player_loc.enabled = not view_cam_player_loc.enabled
+        if view_cam_player_loc.enabled:
+            earth.set_position((0, 320, -5000))
+        else:
+            earth.set_position((0, 650, -10000))
 
     # Quit App
     if held_keys['left shift', 'q']:
