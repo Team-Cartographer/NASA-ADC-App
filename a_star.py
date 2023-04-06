@@ -53,7 +53,7 @@ class Node:
 
 
 # noinspection PyPep8Naming
-def is_valid_checkpoint(x:int, y:int) -> bool:
+def is_valid_checkpoint(x: int, y: int) -> bool:
     height = GRID[x][y][8]
 
     for i in range(y, SIZE):
@@ -62,9 +62,11 @@ def is_valid_checkpoint(x:int, y:int) -> bool:
             return False
     return True
 
+
 # Helper to break out of all loops at once
 class BreakIt(Exception):
     pass
+
 
 # noinspection PyGlobalUndefined
 # noinspection PyPep8Naming
@@ -105,7 +107,6 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
                 bottom_bound = min(SIZE - 1, x + old_search_area + search_area)
         except BreakIt:
             pass
-
 
     print("\n")
 
@@ -229,4 +230,3 @@ def run_astar(sv) -> None:
 
 if __name__ == "__main__":
     pass
-
