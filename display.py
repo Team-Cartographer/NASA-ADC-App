@@ -20,7 +20,10 @@ window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
+EARTH_HEIGHT = 1000
 save: Save = Save(sys.argv[1], bool(sys.argv[2]))
+if save.site_name == 'Shackleton':
+    EARTH_HEIGHT = 750
 
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
 copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
@@ -133,7 +136,7 @@ credits = Entity(
 earth = Entity(
    model='sphere',
    scale=(500, 500, 500),
-   position=(0, 650, -10000),
+   position=(0, EARTH_HEIGHT, -10000),
    texture='earth_texture.png',
    enabled=False,
    shader=lit_with_shadows_shader
@@ -263,9 +266,9 @@ def input(key):
         ground_perspective.enabled = not ground_perspective.enabled
         view_cam_player_loc.enabled = not view_cam_player_loc.enabled
         if view_cam_player_loc.enabled:
-            earth.set_position((0, 320, -5000))
+            earth.set_position((0, 320, -4950))
         else:
-            earth.set_position((0, 650, -10000))
+            earth.set_position((0, EARTH_HEIGHT, -10000))
 
     # Quit App
     if held_keys['left shift', 'q']:
@@ -320,7 +323,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 60  # Sets correct height
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 10 # Mesh Y Scaling
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
@@ -351,9 +354,9 @@ def update():
 
     # Sprint Key
     if held_keys['left shift']:
-        player.speed = 1250
+        player.speed = 600
     else:
-        player.speed = 500
+        player.speed = 250
 
     # Mini-Map Dot Positioning
     mx, mz = (x/PLAYER_SIZE) + 0.5, (z/PLAYER_SIZE) - 0.5

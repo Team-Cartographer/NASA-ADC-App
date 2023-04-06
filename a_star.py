@@ -55,11 +55,10 @@ class Node:
 # noinspection PyPep8Naming
 def is_valid_checkpoint(x:int, y:int) -> bool:
     height = GRID[x][y][8]
-    allowance = (height + 275)
 
     for i in range(y, SIZE):
         # check both height and slope
-        if GRID[x][i][8] > allowance and GRID[x][y][3] > 15:
+        if GRID[x][i][8] > height and GRID[x][y][3] > 15:
             return False
     return True
 
