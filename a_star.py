@@ -78,10 +78,6 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
         if is_valid_checkpoint(x, y):
-            if x >= SIZE:
-                comm_path[index] = (SIZE-2, y)
-            if y >= SIZE:
-                comm_path[index] = (x, SIZE-2)
             continue
 
         # Define the bounds of the square, using max/min as point validity fail safes.
@@ -164,12 +160,6 @@ def astar() -> Union[List[Tuple[int, int, int]], None]:
 def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]):
     path: str = image_path
     img: Image.Image = Image.open(path)
-
-    for i in range(len(mvmt_path)):
-        if mvmt_path[i][0] >= SIZE:
-            mvmt_path[i][0] = SIZE - 5
-        if mvmt_path[i][1] >= SIZE:
-            mvmt_path[i][1] = SIZE - 5
 
     print("updating path image")
     for i in range(len(mvmt_path)):
