@@ -217,7 +217,6 @@ def reload_textures():
 
 # Input Functions and Toggles -------------
 def input(key):
-
     # Reset Player
     if key == 'r':
         player.set_position(RESET_LOC)
@@ -238,7 +237,9 @@ def input(key):
         color_key.enable()
         color_key.texture = 'heightKey.png'
 
+    # AStar Texture Toggle
     if key == '2':
+        view_cam_player_loc.color = color.red
         ground_player.texture = 'Images/AStar_Path.png'
         ground_perspective.texture = 'Images/AStar_Path.png'
         color_key.disable()
@@ -297,10 +298,8 @@ def input(key):
 
 
 # Game Loop Update() Functions -------------
-
 height_vals = ground_player.model.height_values
 ec_height_vals = ground_perspective.model.height_values
-
 
 def update():
     # assets Update
