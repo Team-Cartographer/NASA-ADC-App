@@ -207,9 +207,7 @@ def reload_textures():
             continue
 
         if e.texture.path.parent.name == application.compressed_textures_folder.name:
-            # print('texture is made from .psd file', e.texture.path.stem + '.psd')
             texture_importer.compress_textures(e.texture.path.stem)
-        # print('reloaded texture:', e.texture.path)
         e.texture._texture.reload()
         reloaded_textures.append(e.texture.name)
 
@@ -357,13 +355,6 @@ def update():
     # Mini-Map Dot Positioning
     mx, mz = (x/PLAYER_SIZE) + 0.5, (z/PLAYER_SIZE) - 0.5
     mini_dot.position = (mx, mz, 0)
-
-    # # Earth Positioning
-    # earth.position = (earth.x, 420+elevation*100, earth.z)
-    # if view_cam_player_loc.enabled is True:
-    #     earth.z = -4000
-    # else:
-    #     earth.z = -9000
 
 
 # All Button Functions --------------
