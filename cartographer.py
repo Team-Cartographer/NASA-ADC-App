@@ -20,16 +20,16 @@ def sb_heatmap(arr, cmap, path):
     sb.heatmap(arr, square=True, cbar=False, xticklabels=False,
                yticklabels=False, cmap=cmap)
     plt.tight_layout()
-    plt.savefig(path, dpi=2048, transparent=True, format='png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(path, dpi=2048, transparent=True, format="png", bbox_inches="tight", pad_inches=0)
 
     # Convert to RGBA for Ursina.
-    print(f'{path} created in {round(time() - start_time, 2)}s')
+    print(f"{path} created in {round(time() - start_time, 2)}s")
 
     return path
 
 
 def create_surface_texture(save, slopes):
-    print(f'creating surface texture')
+    print(f"creating surface texture")
     start = time()
 
     max_value_index = np.unravel_index(slopes.argmax(), slopes.shape)
@@ -47,9 +47,9 @@ def create_surface_texture(save, slopes):
 
     # Multiplying by 3 gives us (color, color, color) [Not exactly but it kind of represents the RGB values]
     image_array = np.stack([colors] * 3, axis=-1)
-    texture = Image.fromarray(np.uint8(image_array), mode='RGB')
+    texture = Image.fromarray(np.uint8(image_array), mode="RGB")
 
-    print(f'{save.moon_surface_texture_image} created in {round(time() - start, 2)}s')
+    print(f"{save.moon_surface_texture_image} created in {round(time() - start, 2)}s")
     texture.save(save.moon_surface_texture_image)
 
 
@@ -78,7 +78,7 @@ def draw_maps(save):
 
 # noinspection PyUnusedLocal
 def create_images(save):
-    print('creating all images')
+    print("creating all images")
     start = time()
 
     # Create the essential images.
@@ -137,7 +137,7 @@ def create_images(save):
         scale=500
     )
 
-    print(f'cartographer created images in {round(time() - start, 2)}s')
+    print(f"cartographer created images in {round(time() - start, 2)}s")
 
 
 if __name__ == "__main__":
