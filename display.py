@@ -13,7 +13,6 @@ from atexit import register
 from ursina.shaders import lit_with_shadows_shader, unlit_shader
 
 
-
 # Window Declarations and Formatting --------------
 app = Ursina()
 window.set_title('Team Cartographer\'s ADC Application')
@@ -36,6 +35,7 @@ def cleanup():
         move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
     except FileNotFoundError:
         pass
+
 
 register(cleanup)
 
@@ -122,6 +122,7 @@ color_key = Entity(
     enabled=False
 )
 
+# noinspection PyShadowingBuiltins
 credits: Entity = Entity(
     parent=camera.ui,
     model='quad',
@@ -142,8 +143,6 @@ earth = Entity(
    )
 d = DirectionalLight()
 d.look_at(Vec3(1, -1, 1))
-
-
 
 
 # Information Textboxes  -------------
@@ -192,9 +191,11 @@ start_menu_music = Audio(
     loop=True
 )
 
+
 def play_run_music():
     t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
     run_music.play()
+
 
 # Texture Reloader
 def reload_textures():
@@ -218,6 +219,7 @@ def reload_textures():
 
 
 # Input Functions and Toggles -------------
+# noinspection PyShadowingBuiltins
 def input(key):
     # Reset Player
     if key == 'r':
@@ -300,6 +302,8 @@ def input(key):
 height_vals = ground_player.model.height_values
 ec_height_vals = ground_perspective.model.height_values
 
+
+# noinspection PyShadowingNames,PyPep8Naming
 def update():
     # assets Update
     VOLUME = volume_change()
@@ -315,7 +319,7 @@ def update():
 
     # Positions
     x, y, z = player.position.x, player.position.y, player.position.z
-    player.y = terraincast(player.world_position, ground_player, height_vals) + 45 # Mesh Y Scaling
+    player.y = terraincast(player.world_position, ground_player, height_vals) + 45  # Mesh Y Scaling
 
     # Corrected X and Z values for Calculations
     # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
@@ -456,7 +460,7 @@ def volume_change():
 
 
 def sens_change():
-    sens = sens_slider.value * 65 # Sensitivity Scaler
+    sens = sens_slider.value * 65  # Sensitivity Scaler
     player.mouse_sensitivity = Vec2(sens, sens)
 
 
@@ -504,6 +508,3 @@ return_button = Button(text='Main Menu', color=color.gray, highlight_color=color
 t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
 app.run(info=False)
-
-
-
