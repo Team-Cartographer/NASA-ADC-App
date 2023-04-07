@@ -14,7 +14,7 @@ EARTH_LONG = 1.5707963267948966
 
 @timeit
 def process_data(save_):
-    print('processing data')
+    print("\nProcessing data")
     latitude_list, longitude_list, height_list, height_list, slope_list = \
         load_files(save_.latitude_path, save_.longitude_path, save_.height_path, save_.slope_path)
 
@@ -42,8 +42,8 @@ def process_data(save_):
 
 
 # noinspection SpellCheckingInspection
-def load_file(file_path, delimiter=',', dtype=float):
-    return loadtxt(file_path, delimiter=delimiter, dtype=dtype, encoding='utf-8')
+def load_file(file_path, delimiter=",", dtype=float):
+    return loadtxt(file_path, delimiter=delimiter, dtype=dtype, encoding="utf-8")
 
 
 def load_files(lat_path, long_path, height_path, slope_path):
