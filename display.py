@@ -15,14 +15,14 @@ from ursina.shaders import lit_with_shadows_shader, unlit_shader
 
 # Window Declarations and Formatting --------------
 app = Ursina()
-window.set_title('Team Cartographer\'s ADC Application')
+window.set_title("Team Cartographer\'s ADC Application")
 window.cog_button.disable()
 window.exit_button.color = color.dark_gray
 
 # Load the Save (ESSENTIAL)
 EARTH_HEIGHT = 1000
 save: Save = Save(sys.argv[1], bool(sys.argv[2]))
-if save.site_name == 'Shackleton':
+if save.site_name == "Shackleton":
     EARTH_HEIGHT = 750
 
 move(src=save.processed_heightmap, dst=os.getcwd() + "/processed_heightmap.png")
@@ -32,7 +32,7 @@ copytree(src=save.images_folder, dst=os.getcwd() + "/Images")
 def cleanup():
     try:
         rmtree(path=os.getcwd() + "/Images")
-        move(src=os.getcwd() + '/processed_heightmap.png', dst=save.processed_heightmap)
+        move(src=os.getcwd() + "/processed_heightmap.png", dst=save.processed_heightmap)
     except FileNotFoundError:
         pass
 
@@ -59,8 +59,8 @@ except FileNotFoundError:
 # FirstPersonController Ground Plane
 ground_player = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
-    texture='Images/moon_surface_texture.png',
-    collider='mesh',
+    texture="Images/moon_surface_texture.png",
+    collider="mesh",
     scale=(PLAYER_SIZE, PLAYER_SIZE/10, PLAYER_SIZE),
     enabled=False,
     shader=unlit_shader
@@ -70,8 +70,8 @@ ground_player = Entity(
 # EditorCamera Ground Plane
 ground_perspective = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
-    texture='Images/moon_surface_texture.png',
-    collider='box',
+    texture="Images/moon_surface_texture.png",
+    collider="box",
     scale=(EDITOR_SIZE, EDITOR_SIZE/10, EDITOR_SIZE),
     enabled=False,
     shader=unlit_shader
@@ -80,7 +80,7 @@ ground_perspective = Entity(
 
 # ViewCamera Player Location Beacon
 view_cam_player_loc = Entity(
-    model='cube',
+    model="cube",
     scale=(30, 30, 30),
     color=color.red,
     enabled=False,
@@ -96,7 +96,7 @@ minimap = Entity(
     scale=(0.3, 0.3),
     origin=(-0.5, 0.5),
     position=window.top_left,
-    texture='Images/minimap.png',
+    texture="Images/minimap.png",
     enabled=False
     )
 
@@ -104,7 +104,7 @@ minimap = Entity(
 # Minimap Dot Entity
 mini_dot = Entity(
     parent=minimap,
-    model='circle',
+    model="circle",
     scale=(0.03, 0.03),
     position=(0, 0, 0),
     color=color.red,
@@ -115,29 +115,29 @@ mini_dot = Entity(
 # Color Key Entity (Activates on Heightmap/Slopemap Toggle)
 color_key = Entity(
     parent=camera.ui,
-    model='quad',
+    model="quad",
     scale=(0.4, 0.11),
     position=(-0.69, 0.09, 0),
-    texture='slopeKey.png',
+    texture="slopeKey.png",
     enabled=False
 )
 
 # noinspection PyShadowingBuiltins
 credits: Entity = Entity(
     parent=camera.ui,
-    model='quad',
+    model="quad",
     scale=(1.75, 1),
-    texture='credits.mp4',
+    texture="credits.mp4",
     enabled=False
     )
 
 
 # Earth Entity (Scales to Player Position)
 earth = Entity(
-   model='sphere',
+   model="sphere",
    scale=(500, 500, 500),
    position=(0, EARTH_HEIGHT, -11000),
-   texture='earth_texture.png',
+   texture="earth_texture.png",
    enabled=False,
    shader=lit_with_shadows_shader
    )
@@ -146,30 +146,31 @@ d.look_at(Vec3(1, -1, 1))
 
 
 # Information Textboxes  -------------
-t_lat = Text(text='Latitude:', x=-.54, y=.48, scale=1.1, enabled=False)
-t_lon = Text(text='Longitude:', x=-.54, y=.43, scale=1.1, enabled=False)
-t_ht = Text(text='Height:', x=-.54, y=.38, scale=1.1, enabled=False)
-t_slope = Text(text='Slope:', x=-.54, y=.33, scale=1.1, enabled=False)
-t_azi = Text(text='Azimuth:', x=-.54, y=.28, scale=1.1, enabled=False)
-t_elev = Text(text='Elevation:', x=-.54, y=.23, scale=1.1, enabled=False)
-t_pos = Text(text='positional data', x=-0.883, y=0.185, z=0, enabled=False)
-t_song = Text(text=f'Currently Playing: {None}', x=-0.88, y=-0.450, enabled=True, scale=(0.8, 0.8))
+t_lat = Text(text="Latitude:", x=-.54, y=.48, scale=1.1, enabled=False)
+t_lon = Text(text="Longitude:", x=-.54, y=.43, scale=1.1, enabled=False)
+t_ht = Text(text="Height:", x=-.54, y=.38, scale=1.1, enabled=False)
+t_slope = Text(text="Slope:", x=-.54, y=.33, scale=1.1, enabled=False)
+t_azi = Text(text="Azimuth:", x=-.54, y=.28, scale=1.1, enabled=False)
+t_elev = Text(text="Elevation:", x=-.54, y=.23, scale=1.1, enabled=False)
+t_pos = Text(text="positional data", x=-0.883, y=0.185, z=0, enabled=False)
+t_song = Text(text=f"Currently Playing: {None}", x=-0.88, y=-0.450, enabled=True, scale=(0.8, 0.8))
 
 
 # Player Interactable Declarations -------------
 sky = Sky()
-sky.color = '000000'  # Black
+sky.color = "000000"  # Black
 
-vc = EditorCamera(enabled=False, zoom_speed=2)  # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON'T WORK.
+vc = EditorCamera(enabled=False, zoom_speed=2)  # Note: THIS MUST BE INITIALIZED BEFORE <player> OR ZOOMS WON"T WORK.
 player = FirstPersonController(position=RESET_LOC, speed=500, mouse_sensitivity=Vec2(25, 25),
                                enabled=False, gravity=False)
 player.cursor.scale = 0.00000000001  # Hides the Cursor from the App Display
 
 
 # Music Functionality --------------
-track_list: list = ['assets/Night_Sky-Petter_Amland.mp3', 'assets/Buffalo-Petter_Amland.mp3.mp3',
-                    'assets/Seraph-Petter_Amland.mp3']
-menu_track_list: list = ['assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3', 'OSU!_Pause_Menu_Track.mp3']
+track_list: list = ["assets/Night_Sky-Petter_Amland.mp3", "assets/Buffalo-Petter_Amland.mp3.mp3",
+                    "assets/Seraph-Petter_Amland.mp3", "assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3",
+                    "assets/Sonata_in-C-Sharp_Minor-John_Bouyer.mp3"]
+menu_track_list: list = ["assets/Lonely_Wasteland-John_Bouyer_ft._Natalie_Kwok.mp3", "OSU!_Pause_Menu_Track.mp3"]
 
 run_music = Audio(
     choice(track_list),  # Change this for different tracks.
@@ -193,7 +194,7 @@ start_menu_music = Audio(
 
 
 def play_run_music():
-    t_song.text = f"Currently Playing: {str(run_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+    t_song.text = f'Currently Playing: {str(run_music.clip).split()[1].replace("_", " ").replace(".mp3", "")}'
     run_music.play()
 
 
@@ -203,7 +204,7 @@ def reload_textures():
     reloaded_textures = list()
 
     for e in textured_entities:
-        if str(e.texture.name) == 'credits':
+        if str(e.texture.name) == "credits":
             continue
 
         if e.texture.name in reloaded_textures:
@@ -222,41 +223,41 @@ def reload_textures():
 # noinspection PyShadowingBuiltins
 def input(key):
     # Reset Player
-    if key == 'r':
+    if key == "r":
         player.set_position(RESET_LOC)
 
     # Slopemap Toggle
-    if key == '4':
-        ground_player.texture = 'Images/slopemap.png'
-        ground_perspective.texture = 'Images/slopemap.png'
+    if key == "4":
+        ground_player.texture = "Images/slopemap.png"
+        ground_perspective.texture = "Images/slopemap.png"
         view_cam_player_loc.color = color.green
         color_key.enable()
-        color_key.texture = 'slopeKey.png'
+        color_key.texture = "slopeKey.png"
 
     # Heightkey Toggle
-    if key == '3':
-        ground_player.texture = 'Images/heightkey_surface.png'
-        ground_perspective.texture = 'Images/heightkey_surface.png'
+    if key == "3":
+        ground_player.texture = "Images/heightkey_surface.png"
+        ground_perspective.texture = "Images/heightkey_surface.png"
         view_cam_player_loc.color = color.white
         color_key.enable()
-        color_key.texture = 'heightKey.png'
+        color_key.texture = "heightKey.png"
 
     # AStar Texture Toggle
-    if key == '2':
+    if key == "2":
         view_cam_player_loc.color = color.red
-        ground_player.texture = 'Images/AStar_Path.png'
-        ground_perspective.texture = 'Images/AStar_Path.png'
+        ground_player.texture = "Images/AStar_Path.png"
+        ground_perspective.texture = "Images/AStar_Path.png"
         color_key.disable()
 
     # Moon Texture Toggle (Default)
-    if key == '1':
-        ground_player.texture = 'Images/moon_surface_texture.png'
-        ground_perspective.texture = 'Images/moon_surface_texture.png'
+    if key == "1":
+        ground_player.texture = "Images/moon_surface_texture.png"
+        ground_perspective.texture = "Images/moon_surface_texture.png"
         view_cam_player_loc.color = color.red
         color_key.disable()
 
     # Toggle between Player and EditorCamera
-    if key == 'x' and start_button.enabled is False:
+    if key == "x" and start_button.enabled is False:
         player.enabled = not player.enabled
         vc.enabled = not vc.enabled
         ground_player.enabled = not ground_player.enabled
@@ -265,13 +266,13 @@ def input(key):
         earth.enabled = not earth.enabled
 
     # Quit App
-    if held_keys['left shift', 'q']:
+    if held_keys["left shift", "q"]:
         exit(0)
 
     # Pause
-    if key == 'escape' and pause_button.enabled is False \
+    if key == "escape" and pause_button.enabled is False \
             and volume_slider.enabled is False and start_button.enabled is False:
-        t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+        t_song.text = f'Currently Playing: {str(pause_music.clip).split()[1].replace("_", " ").replace(".mp3", "")}'
         start_menu_music.stop(destroy=True)
         t_lat.disable()
         t_lon.disable()
@@ -322,11 +323,11 @@ def update():
     player.y = terraincast(player.world_position, ground_player, height_vals) + 45  # Mesh Y Scaling
 
     # Corrected X and Z values for Calculations
-    # Note that in Ursina, 'x' and 'z' are the Horizontal (Plane) Axes, and 'y' is vertical.
+    # Note that in Ursina, "x" and "z" are the Horizontal (Plane) Axes, and "y" is vertical.
     nx, nz = int(x / 10 + int(SIZE_CONSTANT/2)), abs(int(z / 10 - int(SIZE_CONSTANT)/2))
 
     # Updating Position and Viewer Cam Position Labels
-    t_pos.text = f'Position: ({int(x)}, {int(y)}, {int(z)})'
+    t_pos.text = f"Position: ({int(x)}, {int(y)}, {int(z)})"
 
     # EditorCamera Scaling
     ex, ez = x/(10/3), z/(10/3)
@@ -344,15 +345,15 @@ def update():
     azimuth, elevation = get_azi_elev(nx, nz, a_star_data)
 
     # Updating Variables
-    t_lat.text = f'Latitude: {round(lat, 2)}° N'
-    t_lon.text = f'Longitude: {round(long, 2)}° E'
-    t_ht.text = 'Height: ' + str(round(height, 2)) + 'm'
-    t_slope.text = 'Slope: ' + str(round(slope, 2)) + '°'
-    t_azi.text = 'Azimuth: ' + str(round(azimuth, 2)) + '°'
-    t_elev.text = 'Elevation: ' + str(round(elevation, 2)) + '°'
+    t_lat.text = f"Latitude: {round(lat, 2)}° N"
+    t_lon.text = f"Longitude: {round(long, 2)}° E"
+    t_ht.text = "Height: " + str(round(height, 2)) + "m"
+    t_slope.text = "Slope: " + str(round(slope, 2)) + "°"
+    t_azi.text = "Azimuth: " + str(round(azimuth, 2)) + "°"
+    t_elev.text = "Elevation: " + str(round(elevation, 2)) + "°"
 
     # Sprint Key
-    if held_keys['left shift']:
+    if held_keys["left shift"]:
         player.speed = 600
     else:
         player.speed = 250
@@ -390,7 +391,7 @@ def start_game():
 
 
 def on_unpause():
-    if str(ground_player.texture) == 'heightkey_surface.png' or str(ground_player.texture) == 'slopemap.png':
+    if str(ground_player.texture) == "heightkey_surface.png" or str(ground_player.texture) == "slopemap.png":
         color_key.enable()
 
     ground_player.enable()
@@ -415,7 +416,7 @@ def on_unpause():
 
 
 def main_menu_returner():
-    t_song.text = f"Currently Playing: {str(pause_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+    t_song.text = f'Currently Playing: {str(pause_music.clip).split()[1].replace("_", " ").replace(".mp3", "")}'
     t_start_menu.disable(), t_start_menu_creds.disable(), start_button.disable()
     creds_button.disable()
     start_menu_music.stop(destroy=False)
@@ -471,9 +472,9 @@ t_start_menu = Text(text="Welcome to Team Cartographer's 2023 NASA ADC Applicati
 t_start_menu_creds = Text(
     text="https://github.com/abhi-arya1/NASA-ADC-App \n \n      https://github.com/pokepetter/ursina",
     x=-0.275, y=-0.135, color=color.dark_gray)
-start_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray,
+start_button = Button(text="Main Menu", color=color.gray, highlight_color=color.dark_gray,
                       scale=(0.2, 0.05), y=-0.01, on_click=main_menu_returner)
-creds_button = Button(text='Credits', color=color.gray, highlight_color=color.dark_gray,
+creds_button = Button(text="Credits", color=color.gray, highlight_color=color.dark_gray,
                       scale=(0.2, 0.05), y=-0.07, on_click=creds_init)
 
 
@@ -490,21 +491,21 @@ repath_button = Button(text="Re-Run Pathfinding", color=color.gray, highlight_co
                        scale=(0.25, 0.06), x=0, y=-0.08, enabled=False, on_click=repath_init)
 new_site_button = Button(text="Switch Lunar Site", color=color.gray, highlight_color=color.dark_gray,
                          enabled=False, on_click=on_new_site_quit, scale=(0.25, 0.06), x=0, y=-0.16)
-volume_slider = ThinSlider(text='Volume', value=0.4, dynamic=True,
+volume_slider = ThinSlider(text="Volume", value=0.4, dynamic=True,
                            on_value_changed=volume_change, enabled=False, x=-0.23, y=-0.27)
-sens_slider = ThinSlider(text='Sensitivity', value=0.5, dynamic=True,
+sens_slider = ThinSlider(text="Sensitivity", value=0.5, dynamic=True,
                          on_value_changed=sens_change, enabled=False, x=-0.23, y=-0.35)
 
 # Pause Menu Text and Buttons
 t_pause = Text(text="You are Currently Paused...", x=-0.16, y=0.08, enabled=False)
-pause_button = Button(text='Click to Unpause', color=color.gray, highlight_color=color.dark_gray,
+pause_button = Button(text="Click to Unpause", color=color.gray, highlight_color=color.dark_gray,
                       scale=(0.23, 0.05), enabled=False, on_click=on_unpause)
-t_quit = Text(text="Press 'LShift+Q' to quit.", x=-0.14, y=-0.135, enabled=False)
-return_button = Button(text='Main Menu', color=color.gray, highlight_color=color.dark_gray,
+t_quit = Text(text='Press "LShift+Q" to quit.', x=-0.14, y=-0.135, enabled=False)
+return_button = Button(text="Main Menu", color=color.gray, highlight_color=color.dark_gray,
                        scale=(0.23, 0.06), enabled=False, x=0, y=-0.07, on_click=main_menu_returner)
 
 
 # Runs display.py -------------
-t_song.text = f"Currently Playing: {str(start_menu_music.clip).split()[1].replace('_', ' ').replace('.mp3', '')}"
+t_song.text = f'Currently Playing: {str(start_menu_music.clip).split()[1].replace("_", " ").replace(".mp3", "")}'
 input_handler.rebind("f", "k")  # Gets rid of EditorCamera Input Issue
 app.run(info=False)
