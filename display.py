@@ -57,9 +57,8 @@ except FileNotFoundError:
 
 # Declaration of Entities --------------
 # FirstPersonController Ground Plane
-ground_player = Entity(
+surface = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
-    # color = color.gray,
     texture='Images/moon_surface_texture.png',
     collider='mesh',
     scale=(PLAYER_SIZE, PLAYER_SIZE/10, PLAYER_SIZE),
@@ -71,7 +70,6 @@ ground_player = Entity(
 # EditorCamera Ground Plane
 ground_perspective = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
-    # color=color.gray,
     texture='Images/moon_surface_texture.png',
     collider='box',
     scale=(EDITOR_SIZE, EDITOR_SIZE/10, EDITOR_SIZE),
