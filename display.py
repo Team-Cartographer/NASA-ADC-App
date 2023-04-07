@@ -57,7 +57,7 @@ except FileNotFoundError:
 
 # Declaration of Entities --------------
 # FirstPersonController Ground Plane
-surface = Entity(
+ground_player = Entity(
     model=Terrain(heightmap="/processed_heightmap.png"),
     texture='Images/moon_surface_texture.png',
     collider='mesh',
