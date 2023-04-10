@@ -73,7 +73,7 @@ class BreakIt(Exception):
 @timeit
 def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int, int, int]], List[Tuple[int, int]]]:
     for index, point in enumerate(comm_path):
-        print(f"\rgenerating communication checkpoints: {round(index / len(comm_path) * 100, 2)}% complete", end="")
+        print(f"\rGenerating communication checkpoints: {round(index / len(comm_path) * 100, 2)}% complete", end="")
 
         x, y = point[0], point[1]
         # If a point is already valid, then just leave it.
@@ -161,7 +161,7 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
     path: str = image_path
     img: Image.Image = Image.open(path)
 
-    print("updating path image")
+    print("Updating path image")
     for i in range(len(mvmt_path)):
         color: tuple = (0, 0, 255)
         x: int = mvmt_path[i][0]
@@ -182,7 +182,7 @@ def update_image(image_path: str, mvmt_path: List[tuple], comm_path: List[tuple]
 # noinspection SpellCheckingInspection
 # noinspection PyGlobalUndefined
 def run_astar(sv) -> None:
-    print("finding a suitable lunar path")
+    print("Finding a suitable lunar path")
     global save
     save = sv
 
@@ -199,7 +199,7 @@ def run_astar(sv) -> None:
     goal_node = Node(goal_x, goal_y)
 
     final_path = astar()
-    print("initial path generated")
+    print("Initial path generated")
     sub_10_path = None
 
     if checkpoints:
