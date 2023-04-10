@@ -210,7 +210,7 @@ def run_astar(sv) -> None:
     if final_path is not None:
         update_image(save.moon_surface_texture_image, final_path, sub_10_path)
     else:
-        show_warning("A* Pathfinding Error", "No Valid Path found between points.")
+        show_warning("Congrats on finding a bug!", "This shouldn't happen, contact a developer ASAP!")
 
     if checkpoints:
         print("Created Path with Communication Checkpoints")
