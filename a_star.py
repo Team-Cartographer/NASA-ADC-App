@@ -108,6 +108,8 @@ def generate_comm_path(comm_path: List[Tuple[int, int]]) -> Tuple[List[Tuple[int
 
     # Now we generate a new path.
     final_path: List[Tuple[int, int, int]] = []
+    comm_path = sorted(comm_path, key=lambda ele: (ele[0], ele[1]))
+    
     for i in range(len(comm_path) - 1):
         (start_x, start_y), (goal_x, goal_y) = \
             (comm_path[i][0], comm_path[i][1]), (comm_path[i+1][0], comm_path[i+1][1])
